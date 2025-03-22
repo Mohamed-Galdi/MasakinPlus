@@ -75,5 +75,6 @@ function handleImageFileReverted() {
         </div>
         <Status :status="'yes'" />
         <i class="pi pi-user"></i>
+        <Icon class="text-red-500 w-16 h-16" icon="fa-regular fa-comment" />
     </div>
 </template>

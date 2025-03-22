@@ -11,6 +11,8 @@ import ToastService from "primevue/toastservice";
 import ConfirmationService from "primevue/confirmationservice";
 import Tooltip from "primevue/tooltip";
 import "primeicons/primeicons.css";
+import { FontAwesomeIcon } from "./plugins/fontawesome";
+
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -38,6 +40,7 @@ createInertiaApp({
             .use(ToastService)
             .use(ConfirmationService)
             .directive("tooltip", Tooltip)
+            .component("Icon", FontAwesomeIcon) // Register FontAwesome component globally
             .mount(el);
     },
     progress: {
