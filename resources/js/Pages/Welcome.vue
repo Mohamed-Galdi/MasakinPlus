@@ -74,5 +74,6 @@ function handleImageFileReverted() {
             />
         </div>
         <Status :status="'yes'" />
+        <i class="pi pi-user"></i>
     </div>
 </template>
