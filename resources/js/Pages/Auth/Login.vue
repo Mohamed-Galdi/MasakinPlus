@@ -1,100 +1,73 @@
 <script setup>
-import Checkbox from '@/Components/Checkbox.vue';
-import GuestLayout from '@/Layouts/GuestLayout.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
-import { Head, Link, useForm } from '@inertiajs/vue3';
+import { Head, useForm } from "@inertiajs/vue3";
+import InputText from "primevue/inputtext";
+import Password from "primevue/password";
+import Button from "primevue/button";
+import { useToast } from "primevue/usetoast";
+import Toast from "primevue/toast";
 
-defineProps({
-    canResetPassword: {
-        type: Boolean,
-    },
-    status: {
-        type: String,
-    },
+const toast = useToast();
+
+const loginForm = useForm({
+    email: "",
+    password: "",
 });
 
-const form = useForm({
-    email: '',
-    password: '',
-    remember: false,
-});
-
-const submit = () => {
-    form.post(route('login'), {
-        onFinish: () => form.reset('password'),
+function submit() {
+    loginForm.post(route("login"), {
+        onSuccess: () => {
+            loginForm.reset();
+        },
+        onError: () => {
+            const errorMessage = Object.values(loginForm.errors)[0];
+            toast.add({
+                severity: "error",
+                summary: "Erreur",
+                detail: errorMessage,
+                life: 3000,
+            });
+        },
     });
-};
+}
 </script>
 
 <template>
-    <GuestLayout>
-        <Head title="Log in" />
+    <div class="container h-screen bg-teal-900">
+        <Head title="| Log in" />
+        <Toast position="top-center" />
 
-        <div v-if="status" class="mb-4 text-sm font-medium text-green-600">
-            {{ status }}
-        </div>
-
-        <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="email" value="Email" />
-
-                <TextInput
+        <div class="flex items-center justify-center h-full">
+            <form @submit.prevent="submit" class="w-1/4 flex flex-col gap-4">
+                <InputText
                     id="email"
+                    v-model="loginForm.email"
                     type="email"
-                    class="mt-1 block w-full"
-                    v-model="form.email"
-                    required
-                    autofocus
-                    autocomplete="username"
+                    placeholder="Email"
                 />
-
-                <InputError class="mt-2" :message="form.errors.email" />
-            </div>
-
-            <div class="mt-4">
-                <InputLabel for="password" value="Password" />
-
-                <TextInput
+                <Password
                     id="password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    v-model="form.password"
-                    required
-                    autocomplete="current-password"
+                    v-model="loginForm.password"
+                    placeholder="Password"
+                    :feedback="false"
+                    toggleMask
                 />
 
-                <InputError class="mt-2" :message="form.errors.password" />
-            </div>
-
-            <div class="mt-4 block">
-                <label class="flex items-center">
-                    <Checkbox name="remember" v-model:checked="form.remember" />
-                    <span class="ms-2 text-sm text-gray-600"
-                        >Remember me</span
-                    >
-                </label>
-            </div>
-
-            <div class="mt-4 flex items-center justify-end">
-                <Link
-                    v-if="canResetPassword"
-                    :href="route('password.request')"
-                    class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                >
-                    Forgot your password?
-                </Link>
-
-                <PrimaryButton
-                    class="ms-4"
-                    :class="{ 'opacity-25': form.processing }"
-                    :disabled="form.processing"
-                >
-                    Log in
-                </PrimaryButton>
-            </div>
-        </form>
-    </GuestLayout>
+                <Button
+                    severity="contrast"
+                    type="button"
+                    label="Login"
+                    :loading="loginForm.processing"
+                    @click="submit"
+                />
+            </form>
+        </div>
+    </div>
 </template>
+<style scoped>
+.container {
+    background-image: url("../../../../public/assets/images/bg-waves.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+</style>

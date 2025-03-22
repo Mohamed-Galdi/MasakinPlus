@@ -6,7 +6,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/', fn () => Inertia::render('Welcome'));
+Route::get('/', fn () => Inertia::render('Welcome'))->name('welcome');
 
 // file upload
 Route::post('/upload', [TempFileController::class, 'upload'])->name('file.upload');
