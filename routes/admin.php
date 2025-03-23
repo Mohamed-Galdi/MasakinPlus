@@ -6,20 +6,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
 
+    Route::redirect('/', '/admin/products/dialog-crud')->name('dashboard');
+
     // Products
     Route::prefix('products')->group(function () {
-        Route::get('/', [ProductController::class, 'index'])->name('admin.products.index');
-        Route::get('/abc', [ProductController::class, 'abc'])->name('admin.products.abc');
-    });
-
-    // Orders
-    Route::prefix('orders')->group(function () {
-        Route::get('/', [ProductController::class, 'orders'])->name('admin.orders.index');
-    });
-
-    // Packages
-    Route::prefix('packages')->group(function () {
-        Route::get('/', [ProductController::class, 'packages'])->name('admin.packages.index');
+        Route::get('/dialog-crud', [ProductController::class, 'dialogCrud'])->name('admin.products.dialog-crud');
+        Route::get('/drawer-crud', [ProductController::class, 'drawerCrud'])->name('admin.products.drawer-crud');
     });
 
     // Account

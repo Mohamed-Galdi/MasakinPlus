@@ -1,5 +1,5 @@
 <script setup>
-import { Head, useForm } from "@inertiajs/vue3";
+import { Head, useForm, Link } from "@inertiajs/vue3";
 import InputText from "primevue/inputtext";
 import Password from "primevue/password";
 import Button from "primevue/button";
@@ -34,12 +34,13 @@ function submit() {
 </script>
 
 <template>
-    <div class="container h-screen bg-teal-900">
+    <div class="fixed top-0 left-0 w-screen h-screen bg-teal-900 bg-cover bg-center" 
+        style="background-image: url('/assets/images/bg-waves.png');">
         <Head title="| Register" />
         <Toast position="top-center" />
 
         <div class="flex items-center justify-center h-full">
-            <form @submit.prevent="submit" class="w-1/4 flex flex-col gap-4">
+            <form @submit.prevent="submit" class="w-[22rem] flex flex-col gap-4  p-4 rounded-md bg-white/10 backdrop-blur-sm">
                 <InputText
 
                     id="name"
@@ -75,15 +76,10 @@ function submit() {
                     :loading="registerForm.processing"
                     @click="submit"
                 />
+                <div>
+                    <p>Already have an account? <Link :href="route('login')" class="text-gray-200 hover:text-gray-50 font-semibold">Login</Link></p>
+                </div>
             </form>
         </div>
     </div>
 </template>
-<style scoped>
-.container {
-    background-image: url("../../../../public/assets/images/bg-waves.png");
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
-}
-</style>

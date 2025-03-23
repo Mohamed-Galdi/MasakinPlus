@@ -1,12 +1,9 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TempFileController;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
-Route::get('/', fn () => Inertia::render('Welcome'))->name('welcome');
+Route::get('/', fn () => inertia('Home'))->name('home');
 
 // file upload
 Route::post('/upload', [TempFileController::class, 'upload'])->name('file.upload');

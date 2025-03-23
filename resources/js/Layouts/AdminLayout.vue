@@ -9,23 +9,18 @@ const toggleSidebar = () => {
 
 const navigationItems = [
     {
-        title: "Orders",
-        path: route("admin.orders.index"),
-        icon: "pi-shopping-cart",
-    },
-    {
         title: "Products",
         icon: "pi-box",
         subItems: [
             {
-                title: "Stock",
-                path: route("admin.products.index"),
-                icon: "pi-list",
+                title: "Dialog Crud",
+                path: route("admin.products.dialog-crud"),
+                icon: "pi-window-maximize",
             },
             {
-                title: "Packages",
-                path: route("admin.packages.index"),
-                icon: "pi-gift",
+                title: "Drawer Crud",
+                path: route("admin.products.drawer-crud"),
+                icon: "pi-angle-double-left",
             },
         ],
     },
@@ -80,7 +75,7 @@ const logout = () => {
 </script>
 
 <template>
-    <div class="flex min-h-screen">
+    <div class="flex min-h-screen" dir="ltr">
         <!-- Sidebar -->
         <aside
             :class="[
@@ -95,7 +90,7 @@ const logout = () => {
             <div
                 class="flex items-center justify-between p-3 sidebar-border-bottom gap-1 min-h-[64px] flex-shrink-0"
             >
-                <div class="flex items-center gap-3">
+                <Link :href="route('home')" class="flex items-center gap-3">
                     <div class="flex-shrink-0 w-[30px] h-[30px] relative">
                         <img
                             src="../../../public/assets/images/logo.png"
@@ -108,7 +103,7 @@ const logout = () => {
                         class="font-semibold text-lg whitespace-nowrap"
                         >Admin Panel</span
                     >
-                </div>
+                </Link>
                 <button
                     @click="toggleSidebar"
                     class="bg-transparent border-none py-4 sidebar-text cursor-pointer w-6 h-6 flex items-center justify-center rounded sidebar-hover"
