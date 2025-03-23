@@ -1,2 +1,7 @@
 *
 !.gitignore
+
+
+!users_images/
+users_images/*
+!users_images/takamura.jpg

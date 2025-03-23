@@ -7,15 +7,6 @@ const toggleSidebar = () => {
     isSidebarCollapsed.value = !isSidebarCollapsed.value;
 };
 
-// Track expanded menu groups
-const expandedGroups = ref({});
-const toggleGroup = (groupTitle) => {
-    expandedGroups.value[groupTitle] = !expandedGroups.value[groupTitle];
-};
-const isGroupExpanded = (groupTitle) => {
-    return expandedGroups.value[groupTitle] || false;
-};
-
 const navigationItems = [
     {
         title: "Orders",
@@ -39,6 +30,22 @@ const navigationItems = [
         ],
     },
 ];
+
+// Track expanded menu groups - initialize with all groups closed by default
+const expandedGroups = ref(
+    Object.fromEntries(
+        navigationItems
+            .filter((item) => item.subItems)
+            .map((item) => [item.title, false])
+    )
+);
+
+const toggleGroup = (groupTitle) => {
+    expandedGroups.value[groupTitle] = !expandedGroups.value[groupTitle];
+};
+const isGroupExpanded = (groupTitle) => {
+    return expandedGroups.value[groupTitle] || false;
+};
 
 const currentPath = computed(() => {
     const path = usePage().url;
@@ -65,10 +72,8 @@ const isGroupActive = (item) => {
     return false;
 };
 
-// Get current user
 const user = computed(() => usePage().props.auth.user || { name: "John Doe" });
 
-// Logout
 const logout = () => {
     router.post(route("logout"));
 };
@@ -76,33 +81,46 @@ const logout = () => {
 
 <template>
     <div class="flex min-h-screen">
-        <!-- Mobile sidebar toggle button - visible only when sidebar is collapsed on mobile -->
         <button
             v-if="isSidebarCollapsed"
             @click="toggleSidebar"
-            class="mobile-toggle-button"
+            class="fixed top-4 left-4 z-[60] bg-blue-500 text-white border-none rounded w-10 h-10 text-xl cursor-pointer flex items-center justify-center shadow-lg md:hidden"
         >
             <i class="pi pi-bars"></i>
         </button>
 
-        <aside :class="['sidebar', { collapsed: isSidebarCollapsed }]">
-            <div class="sidebar-header">
-                <div class="flex items-center gap-2">
-                    <div class="w-8 h-8 overflow-hidden">
+        <aside
+            :class="[
+                'flex flex-col bg-slate-800 text-slate-200 transition-all duration-300 overflow-x-hidden fixed h-full z-50 md:static md:h-auto',
+                {
+                    'w-0 md:w-[70px]': isSidebarCollapsed,
+                    'w-[250px]': !isSidebarCollapsed,
+                },
+            ]"
+        >
+            <!-- Header (fixed at top) -->
+            <div
+                class="flex items-center justify-between p-3 border-b border-slate-700 gap-1 min-h-[64px] flex-shrink-0"
+            >
+                <div class="flex items-center gap-3">
+                    <div class="flex-shrink-0 w-[30px] h-[30px] relative">
                         <img
                             src="../../../public/assets/images/logo.png"
                             alt="Logo"
-                            class="w-full h-full object-contain"
+                            class="absolute inset-0 w-full h-full object-contain"
                         />
                     </div>
-                    <span v-if="!isSidebarCollapsed" class="project-name"
+                    <span
+                        v-if="!isSidebarCollapsed"
+                        class="font-semibold text-lg whitespace-nowrap"
                         >Admin Panel</span
                     >
                 </div>
-                <button @click="toggleSidebar" class="pt-2 ps-1" >
+                <button
+                    @click="toggleSidebar"
+                    class="bg-transparent border-none py-4 text-slate-200 cursor-pointer w-6 h-6 flex items-center justify-center rounded hover:bg-slate-700"
+                >
                     <i
-                    style="font-size: 1.5rem"
-                    class=""
                         :class="[
                             'pi',
                             isSidebarCollapsed
@@ -113,28 +131,37 @@ const logout = () => {
                 </button>
             </div>
 
-            <div class="navigation">
-                <ul class="nav-list">
+            <!-- Scrollable navigation items -->
+            <div class="flex-1 overflow-y-auto py-4">
+                <ul class="list-none p-0 m-0">
                     <li
                         v-for="item in navigationItems"
                         :key="item.title"
-                        :class="['nav-item', { active: isGroupActive(item) }]"
+                        class="mb-1"
                     >
-                        <!-- Items with subitems -->
                         <template v-if="item.subItems">
-                            <!-- Group header (only shown in expanded state) -->
+                            <!-- Group header (expanded state) -->
                             <div
+                                :title="item.title"
                                 v-if="!isSidebarCollapsed"
                                 :class="[
-                                    'nav-link group-header',
-                                    { 'group-active': isGroupActive(item) },
+                                    'flex items-center gap-2 p-2 mx-2 rounded cursor-pointer transition-colors',
+                                    isGroupActive(item)
+                                        ? 'text-blue-500 bg-blue-500/10'
+                                        : 'hover:bg-slate-700',
                                 ]"
                                 @click="toggleGroup(item.title)"
                             >
-                                <i :class="['pi', item.icon]"></i>
+                                <i
+                                    :class="[
+                                        'pi',
+                                        item.icon,
+                                        'w-5 h-5 flex items-center justify-center',
+                                    ]"
+                                ></i>
                                 <span
                                     :class="[
-                                        'nav-title',
+                                        'nav-title flex-1',
                                         {
                                             'font-semibold':
                                                 isGroupActive(item),
@@ -145,7 +172,7 @@ const logout = () => {
                                 </span>
                                 <i
                                     :class="[
-                                        'pi pi-chevron-down expand-icon',
+                                        'pi pi-chevron-down transition-transform w-5 h-5 flex items-center justify-center',
                                         {
                                             'rotate-180': isGroupExpanded(
                                                 item.title
@@ -155,82 +182,88 @@ const logout = () => {
                                 ></i>
                             </div>
 
-                            <!-- Group header (collapsed state) - just shows icon -->
+                            <!-- Group header (collapsed state) -->
                             <div
+                                :title="item.title"
                                 v-else
                                 :class="[
-                                    'nav-link group-header',
-                                    { 'group-active': isGroupActive(item) },
+                                    'flex items-center justify-center p-2 mx-2 rounded cursor-pointer transition-colors',
+                                    isGroupActive(item)
+                                        ? 'text-blue-500 bg-blue-500/10'
+                                        : 'hover:bg-slate-700',
                                 ]"
                                 @click="toggleGroup(item.title)"
                             >
-                                <i :class="['pi', item.icon]"></i>
+                                <i :class="['pi', item.icon, 'w-5 h-5']"></i>
                             </div>
 
-                            <!-- Subitems for expanded sidebar -->
+                            <!-- Subitems -->
                             <ul
-                                v-if="
-                                    !isSidebarCollapsed &&
-                                    isGroupExpanded(item.title)
-                                "
-                                class="subnav-list"
+                                v-if="isGroupExpanded(item.title)"
+                                :class="[
+                                    'list-none p-1 m-0',
+                                    isSidebarCollapsed ? '' : 'pl-6',
+                                ]"
                             >
                                 <li
                                     v-for="subItem in item.subItems"
                                     :key="subItem.title"
-                                    :class="[
-                                        'subnav-item',
-                                        { active: isPathActive(subItem.path) },
-                                    ]"
-                                >
-                                    <Link :href="subItem.path" class="nav-link">
-                                        <i :class="['pi', subItem.icon]"></i>
-                                        <span class="nav-title">{{
-                                            subItem.title
-                                        }}</span>
-                                    </Link>
-                                </li>
-                            </ul>
-
-                            <!-- Subitems for collapsed sidebar - show directly under the group -->
-                            <template
-                                v-else-if="
-                                    isSidebarCollapsed &&
-                                    isGroupExpanded(item.title)
-                                "
-                            >
-                                <li
-                                    v-for="subItem in item.subItems"
-                                    :key="subItem.title"
-                                    class="nav-item"
+                                    class="mb-1"
                                 >
                                     <Link
+                                        :title="subItem.title"
                                         :href="subItem.path"
                                         :class="[
-                                            'nav-link',
+                                            'flex items-center gap-3 p-2 mx-2 rounded text-slate-200 no-underline transition-colors',
+                                            isSidebarCollapsed
+                                                ? 'justify-center'
+                                                : 'justify-start',
                                             {
-                                                active: isPathActive(
-                                                    subItem.path
-                                                ),
+                                                'bg-blue-500 text-white':
+                                                    isPathActive(subItem.path),
+                                                'hover:bg-slate-700':
+                                                    !isPathActive(subItem.path),
                                             },
                                         ]"
                                     >
-                                        <i :class="['pi', subItem.icon]"></i>
+                                        <i
+                                            :class="[
+                                                'pi',
+                                                subItem.icon,
+                                                'w-5 h-5',
+                                            ]"
+                                        ></i>
+                                        <span
+                                            v-if="!isSidebarCollapsed"
+                                            class="nav-title"
+                                            >{{ subItem.title }}</span
+                                        >
                                     </Link>
                                 </li>
-                            </template>
+                            </ul>
                         </template>
 
                         <!-- Regular items -->
                         <Link
+                            :title="item.title"
                             v-else
                             :href="item.path"
                             :class="[
-                                'nav-link',
-                                { active: isPathActive(item.path) },
+                                'flex items-center gap-3 p-2 mx-2 rounded text-slate-200 no-underline transition-colors',
+                                isSidebarCollapsed
+                                    ? 'justify-center'
+                                    : 'justify-start',
+                                {
+                                    'bg-blue-500 text-white': isPathActive(
+                                        item.path
+                                    ),
+                                    'hover:bg-slate-700': !isPathActive(
+                                        item.path
+                                    ),
+                                },
                             ]"
                         >
-                            <i :class="['pi', item.icon]"></i>
+                            <i :class="['pi', item.icon, 'w-5 h-5']"></i>
                             <span
                                 v-if="!isSidebarCollapsed"
                                 class="nav-title"
@@ -241,287 +274,117 @@ const logout = () => {
                 </ul>
             </div>
 
-            <div class="user-section">
-                <!-- Regular user section for expanded state -->
-                <button
-                    v-if="!isSidebarCollapsed"
-                    @click="logout"
-                    class="logout-btn"
-                >
-                    <div class="user-info">
-                        <div class="user-avatar">
-                            <i class="pi pi-user"></i>
+            <!-- Footer (fixed at bottom) -->
+            <div class="border-t border-slate-700 p-2 flex-shrink-0">
+                <!-- Expanded state -->
+                <div v-if="!isSidebarCollapsed" class="space-y-2">
+                    <!-- Account Link -->
+                    <Link
+                        :href="route('welcome')"
+                        class="flex items-center justify-between w-full px-3 py-2 bg-slate-700 rounded-lg text-slate-200 no-underline transition-colors hover:bg-slate-600"
+                    >
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="bg-blue-500 w-8 h-8 rounded-full flex items-center justify-center overflow-hidden"
+                            >
+                                <img
+                                    v-if="user.image"
+                                    :src="user.image"
+                                    alt="User avatar"
+                                    class="w-full h-full object-cover"
+                                />
+                                <i v-else class="pi pi-user text-white"></i>
+                            </div>
+                            <span class="font-medium whitespace-nowrap">{{
+                                user.name
+                            }}</span>
                         </div>
-                        <div class="flex flex-col gap-1 items-start justify-start text-start">
-                            <p class=" text-sm">{{ user.name }}</p>
-                            <p class="text-xs">{{ user.email }}</p>
-                        </div>
-                    </div>
-                    <i class="pi pi-sign-out logout-icon"></i>
-                </button>
+                        <i class="pi pi-cog"></i>
+                    </Link>
 
-                <!-- Stacked user avatar and logout for collapsed state -->
-                <div v-else class="collapsed-user-section">
-                    <div class="user-avatar">
-                        <i class="pi pi-user"></i>
-                    </div>
-                    <button @click="logout" class="collapsed-logout-btn">
+                    <!-- Logout Button -->
+                    <button
+                        @click="logout"
+                        class="flex items-center justify-between w-full px-3 py-2 bg-red-900/50 border-none rounded-lg text-slate-200 cursor-pointer transition-colors hover:bg-red-900"
+                    >
+                        <span class="font-medium">Logout</span>
+                        <i class="pi pi-sign-out"></i>
+                    </button>
+                </div>
+
+                <!-- Collapsed state -->
+                <div v-else class="flex flex-col items-center gap-2">
+                    <!-- Account Link -->
+                    <Link
+                        :href="route('welcome')"
+                        class="bg-slate-700 rounded-full text-slate-200 no-underline w-8 h-8 flex items-center justify-center transition-colors hover:bg-slate-600 overflow-hidden"
+                    >
+                        <img
+                            v-if="user.image"
+                            :src="user.image"
+                            alt="User avatar"
+                            class="w-full h-full object-cover"
+                        />
+                        <i v-else class="pi pi-user"></i>
+                    </Link>
+
+                    <!-- Logout Button -->
+                    <button
+                        @click="logout"
+                        class="bg-red-900/50 border-none rounded-full text-slate-200 cursor-pointer w-8 h-8 flex items-center justify-center transition-colors hover:bg-red-900"
+                    >
                         <i class="pi pi-sign-out"></i>
                     </button>
                 </div>
             </div>
         </aside>
 
-        <main class="main-content">
+        <main class="flex-1 bg-slate-100 p-6 overflow-y-auto md:ml-0">
             <slot></slot>
         </main>
     </div>
 </template>
 
 <style scoped>
-.sidebar {
+aside {
     display: flex;
     flex-direction: column;
-    width: 250px;
-    background-color: #1e293b;
-    color: #e2e8f0;
-    transition: width 0.3s ease;
-    overflow-x: hidden;
+    height: 100vh;
 }
 
-.sidebar.collapsed {
-    width: 70px;
-}
-
-.sidebar-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1rem;
-    border-bottom: 1px solid #334155;
-}
-
-.logo-container {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-}
-
-.project-name {
-    font-weight: 600;
-    font-size: 1.1rem;
-    white-space: nowrap;
-}
-
-.toggle-button {
-    background: transparent;
-    border: none;
-    color: #e2e8f0;
-    cursor: pointer;
-    width: 24px;
-    height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 4px;
-}
-
-.toggle-button:hover {
-    background-color: #334155;
-}
-
-.navigation {
+.nav-title {
     flex: 1;
-    overflow-y: auto;
-    padding: 1rem 0;
 }
 
-.nav-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+.overflow-y-auto {
+    scrollbar-width: thin; /* Firefox */
+    scrollbar-color: #4b5563 #1e293b; /* thumb: slate-600, track: slate-800 */
 }
 
-.nav-item {
-    margin-bottom: 0.25rem;
+/* Webkit browsers (Chrome, Safari, Edge) */
+.overflow-y-auto::-webkit-scrollbar {
+    width: 6px; /* Slim scrollbar */
 }
 
-.nav-link {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 0.75rem 1rem;
-    text-decoration: none;
-    color: #e2e8f0;
-    border-radius: 4px;
-    margin: 0 0.5rem;
-    transition: background-color 0.2s;
+.overflow-y-auto::-webkit-scrollbar-track {
+    background: #1e293b; /* slate-800 */
 }
 
-.nav-link:hover {
-    background-color: #334155;
+.overflow-y-auto::-webkit-scrollbar-thumb {
+    background: #4b5563; /* slate-600 */
+    border-radius: 3px;
 }
 
-.nav-link.active,
-.subnav-item.active .nav-link {
-    background-color: #3b82f6;
-    color: white;
+.overflow-y-auto::-webkit-scrollbar-thumb:hover {
+    background: #64748b; /* slate-500 for hover effect */
 }
 
-/* Styles for active group */
-.group-active {
-    color: #3b82f6;
+/* Hide scrollbar for all browsers */
+/* .overflow-y-auto {
+    -ms-overflow-style: none; 
+    scrollbar-width: none; 
 }
-
-.group-active:not(.active) {
-    background-color: rgba(59, 130, 246, 0.1);
-}
-
-.font-semibold {
-    font-weight: 600;
-}
-
-.group-header {
-    cursor: pointer;
-    justify-content: space-between;
-}
-
-.group-header .expand-icon {
-    margin-left: auto;
-    transition: transform 0.2s;
-}
-
-.group-header .expand-icon.rotate-180 {
-    transform: rotate(180deg);
-}
-
-.subnav-list {
-    list-style: none;
-    padding: 0.25rem 0 0.25rem 1.5rem;
-    margin: 0;
-}
-
-.subnav-item .nav-link {
-    padding: 0.5rem 1rem;
-}
-
-.user-section {
-    border-top: 1px solid #334155;
-    padding: 1rem;
-}
-
-.logout-btn {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    padding: 0.75rem 1rem;
-    background-color: #334155;
-    border: none;
-    border-radius: 8px;
-    color: #e2e8f0;
-    cursor: pointer;
-    transition: background-color 0.2s;
-}
-
-.logout-btn:hover {
-    background-color: #475569;
-}
-
-.user-info {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-}
-
-.user-avatar {
-    background-color: #3b82f6;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.user-name {
-    font-weight: 500;
-    white-space: nowrap;
-}
-
-/* Collapsed user section */
-.collapsed-user-section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-}
-
-.collapsed-logout-btn {
-    background-color: #334155;
-    border: none;
-    border-radius: 50%;
-    color: #e2e8f0;
-    cursor: pointer;
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background-color 0.2s;
-}
-
-.collapsed-logout-btn:hover {
-    background-color: #475569;
-}
-
-.main-content {
-    flex: 1;
-    background-color: #f1f5f9;
-    padding: 1.5rem;
-    overflow-y: auto;
-}
-
-/* Mobile toggle button */
-.mobile-toggle-button {
+.overflow-y-auto::-webkit-scrollbar {
     display: none;
-    position: fixed;
-    top: 1rem;
-    left: 1rem;
-    z-index: 60;
-    background-color: #3b82f6;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    width: 40px;
-    height: 40px;
-    font-size: 1.2rem;
-    cursor: pointer;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-}
-
-@media (max-width: 768px) {
-    .sidebar {
-        position: fixed;
-        z-index: 50;
-        height: 100%;
-        box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-    }
-
-    .sidebar.collapsed {
-        width: 0;
-        padding: 0;
-    }
-
-    .main-content {
-        margin-left: 0;
-        width: 100%;
-    }
-
-    .mobile-toggle-button {
-        display: flex;
-    }
-}
+} */
 </style>
