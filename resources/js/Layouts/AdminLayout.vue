@@ -81,14 +81,7 @@ const logout = () => {
 
 <template>
     <div class="flex min-h-screen">
-        <button
-            v-if="isSidebarCollapsed"
-            @click="toggleSidebar"
-            class="fixed top-4 left-4 z-[60] bg-blue-500 text-white border-none rounded w-10 h-10 text-xl cursor-pointer flex items-center justify-center shadow-lg md:hidden"
-        >
-            <i class="pi pi-bars"></i>
-        </button>
-
+        <!-- Sidebar -->
         <aside
             :class="[
                 'flex flex-col bg-slate-800 text-slate-200 transition-all duration-300 overflow-x-hidden fixed h-full z-50 md:static md:h-auto',
@@ -280,7 +273,7 @@ const logout = () => {
                 <div v-if="!isSidebarCollapsed" class="space-y-2">
                     <!-- Account Link -->
                     <Link
-                        :href="route('welcome')"
+                        :href="route('admin.account.index')"
                         class="flex items-center justify-between w-full px-3 py-2 bg-slate-700 rounded-lg text-slate-200 no-underline transition-colors hover:bg-slate-600"
                     >
                         <div class="flex items-center gap-3">
@@ -316,7 +309,7 @@ const logout = () => {
                 <div v-else class="flex flex-col items-center gap-2">
                     <!-- Account Link -->
                     <Link
-                        :href="route('welcome')"
+                        :href="route('admin.account.index')"
                         class="bg-slate-700 rounded-full text-slate-200 no-underline w-8 h-8 flex items-center justify-center transition-colors hover:bg-slate-600 overflow-hidden"
                     >
                         <img
@@ -339,7 +332,23 @@ const logout = () => {
             </div>
         </aside>
 
-        <main class="flex-1 bg-slate-100 p-6 overflow-y-auto md:ml-0">
+        <!-- Mobile Navbar -->
+        <nav
+            class="bg-slate-50 w-full h-14 py-2 px-4 fixed md:hidden shadow-md"
+        >
+            <button
+                v-if="isSidebarCollapsed"
+                @click="toggleSidebar"
+                class="top-4 left-4 z-[60] bg-blue-500 text-white border-none rounded w-10 h-10 text-xl cursor-pointer flex items-center justify-center shadow-lg md:hidden"
+            >
+                <i class="pi pi-bars"></i>
+            </button>
+        </nav>
+
+        <!-- Main Content -->
+        <main
+            class="flex-1 bg-slate-100 p-6 overflow-y-auto md:ml-0 md:mt-0 mt-12"
+        >
             <slot></slot>
         </main>
     </div>

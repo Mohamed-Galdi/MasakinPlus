@@ -26,4 +26,9 @@ class ProductController extends Controller
     {
         return inertia('Admin/Packages/Index');
     }
+
+    public function account()
+    {
+        return inertia('Admin/Account/Index');
+    }
 }

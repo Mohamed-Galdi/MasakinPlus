@@ -22,4 +22,9 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
         Route::get('/', [ProductController::class, 'packages'])->name('admin.packages.index');
     });
 
+    // Account
+    Route::prefix('account')->group(function () {
+        Route::get('/', [ProductController::class, 'account'])->name('admin.account.index');
+    });
+
 });
