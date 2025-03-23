@@ -84,7 +84,7 @@ const logout = () => {
         <!-- Sidebar -->
         <aside
             :class="[
-                'flex flex-col bg-slate-800 text-slate-200 transition-all duration-300 overflow-x-hidden fixed h-full z-50 md:static md:h-auto',
+                'flex flex-col sidebar-bg sidebar-text transition-all duration-300 overflow-x-hidden fixed h-full z-50 md:static md:h-auto',
                 {
                     'w-0 md:w-[70px]': isSidebarCollapsed,
                     'w-[250px]': !isSidebarCollapsed,
@@ -93,7 +93,7 @@ const logout = () => {
         >
             <!-- Header (fixed at top) -->
             <div
-                class="flex items-center justify-between p-3 border-b border-slate-700 gap-1 min-h-[64px] flex-shrink-0"
+                class="flex items-center justify-between p-3 sidebar-border-bottom gap-1 min-h-[64px] flex-shrink-0"
             >
                 <div class="flex items-center gap-3">
                     <div class="flex-shrink-0 w-[30px] h-[30px] relative">
@@ -111,7 +111,7 @@ const logout = () => {
                 </div>
                 <button
                     @click="toggleSidebar"
-                    class="bg-transparent border-none py-4 text-slate-200 cursor-pointer w-6 h-6 flex items-center justify-center rounded hover:bg-slate-700"
+                    class="bg-transparent border-none py-4 sidebar-text cursor-pointer w-6 h-6 flex items-center justify-center rounded sidebar-hover"
                 >
                     <i
                         :class="[
@@ -140,8 +140,8 @@ const logout = () => {
                                 :class="[
                                     'flex items-center gap-2 p-2 mx-2 rounded cursor-pointer transition-colors',
                                     isGroupActive(item)
-                                        ? 'text-blue-500 bg-blue-500/10'
-                                        : 'hover:bg-slate-700',
+                                        ? 'active-subtle'
+                                        : 'sidebar-hover',
                                 ]"
                                 @click="toggleGroup(item.title)"
                             >
@@ -182,8 +182,8 @@ const logout = () => {
                                 :class="[
                                     'flex items-center justify-center p-2 mx-2 rounded cursor-pointer transition-colors',
                                     isGroupActive(item)
-                                        ? 'text-blue-500 bg-blue-500/10'
-                                        : 'hover:bg-slate-700',
+                                        ? 'active-subtle'
+                                        : 'sidebar-hover',
                                 ]"
                                 @click="toggleGroup(item.title)"
                             >
@@ -207,15 +207,17 @@ const logout = () => {
                                         :title="subItem.title"
                                         :href="subItem.path"
                                         :class="[
-                                            'flex items-center gap-3 p-2 mx-2 rounded text-slate-200 no-underline transition-colors',
+                                            'flex items-center gap-3 p-2 mx-2 rounded sidebar-text no-underline transition-colors',
                                             isSidebarCollapsed
                                                 ? 'justify-center'
                                                 : 'justify-start',
                                             {
-                                                'bg-blue-500 text-white':
-                                                    isPathActive(subItem.path),
-                                                'hover:bg-slate-700':
-                                                    !isPathActive(subItem.path),
+                                                'active-item': isPathActive(
+                                                    subItem.path
+                                                ),
+                                                'sidebar-hover': !isPathActive(
+                                                    subItem.path
+                                                ),
                                             },
                                         ]"
                                     >
@@ -242,17 +244,13 @@ const logout = () => {
                             v-else
                             :href="item.path"
                             :class="[
-                                'flex items-center gap-3 p-2 mx-2 rounded text-slate-200 no-underline transition-colors',
+                                'flex items-center gap-3 p-2 mx-2 rounded sidebar-text no-underline transition-colors',
                                 isSidebarCollapsed
                                     ? 'justify-center'
                                     : 'justify-start',
                                 {
-                                    'bg-blue-500 text-white': isPathActive(
-                                        item.path
-                                    ),
-                                    'hover:bg-slate-700': !isPathActive(
-                                        item.path
-                                    ),
+                                    'active-item': isPathActive(item.path),
+                                    'sidebar-hover': !isPathActive(item.path),
                                 },
                             ]"
                         >
@@ -268,17 +266,17 @@ const logout = () => {
             </div>
 
             <!-- Footer (fixed at bottom) -->
-            <div class="border-t border-slate-700 p-2 flex-shrink-0">
+            <div class="sidebar-border-top p-2 flex-shrink-0">
                 <!-- Expanded state -->
                 <div v-if="!isSidebarCollapsed" class="space-y-2">
                     <!-- Account Link -->
                     <Link
                         :href="route('admin.account.index')"
-                        class="flex items-center justify-between w-full px-3 py-2 bg-slate-700 rounded-lg text-slate-200 no-underline transition-colors hover:bg-slate-600"
+                        class="flex items-center justify-between w-full px-3 py-2 footer-item rounded-lg sidebar-text no-underline transition-colors footer-hover"
                     >
                         <div class="flex items-center gap-3">
                             <div
-                                class="bg-blue-500 w-8 h-8 rounded-full flex items-center justify-center overflow-hidden"
+                                class="avatar-bg w-8 h-8 rounded-full flex items-center justify-center overflow-hidden"
                             >
                                 <img
                                     v-if="user.image"
@@ -298,7 +296,7 @@ const logout = () => {
                     <!-- Logout Button -->
                     <button
                         @click="logout"
-                        class="flex items-center justify-between w-full px-3 py-2 bg-red-900/50 border-none rounded-lg text-slate-200 cursor-pointer transition-colors hover:bg-red-900"
+                        class="flex items-center justify-between w-full px-3 py-2 logout-bg border-none rounded-lg sidebar-text cursor-pointer transition-colors logout-hover"
                     >
                         <span class="font-medium">Logout</span>
                         <i class="pi pi-sign-out"></i>
@@ -310,7 +308,7 @@ const logout = () => {
                     <!-- Account Link -->
                     <Link
                         :href="route('admin.account.index')"
-                        class="bg-slate-700 rounded-full text-slate-200 no-underline w-8 h-8 flex items-center justify-center transition-colors hover:bg-slate-600 overflow-hidden"
+                        class="footer-item rounded-full sidebar-text no-underline w-8 h-8 flex items-center justify-center transition-colors footer-hover overflow-hidden"
                     >
                         <img
                             v-if="user.image"
@@ -324,7 +322,7 @@ const logout = () => {
                     <!-- Logout Button -->
                     <button
                         @click="logout"
-                        class="bg-red-900/50 border-none rounded-full text-slate-200 cursor-pointer w-8 h-8 flex items-center justify-center transition-colors hover:bg-red-900"
+                        class="logout-bg border-none rounded-full sidebar-text cursor-pointer w-8 h-8 flex items-center justify-center transition-colors logout-hover"
                     >
                         <i class="pi pi-sign-out"></i>
                     </button>
@@ -339,7 +337,7 @@ const logout = () => {
             <button
                 v-if="isSidebarCollapsed"
                 @click="toggleSidebar"
-                class="top-4 left-4 z-[60] bg-blue-500 text-white border-none rounded w-10 h-10 text-xl cursor-pointer flex items-center justify-center shadow-lg md:hidden"
+                class="top-4 left-4 z-[60] mobile-btn text-white border-none rounded w-10 h-10 text-xl cursor-pointer flex items-center justify-center shadow-lg md:hidden"
             >
                 <i class="pi pi-bars"></i>
             </button>
@@ -355,6 +353,68 @@ const logout = () => {
 </template>
 
 <style scoped>
+/* Dynamic color classes */
+.sidebar-bg {
+    background-color: var(--sidebar-bg);
+}
+
+.sidebar-text {
+    color: var(--sidebar-text);
+}
+
+.sidebar-border-bottom,
+.sidebar-border-top {
+    border-color: var(--sidebar-border);
+}
+
+.sidebar-border-bottom {
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+}
+
+.sidebar-border-top {
+    border-top-width: 1px;
+    border-top-style: solid;
+}
+
+.sidebar-hover:hover {
+    background-color: var(--sidebar-hover-bg);
+}
+
+.active-item {
+    background-color: var(--active-bg) !important;
+    color: var(--active-text) !important;
+}
+
+.active-subtle {
+    color: var(--active-bg);
+    background-color: var(--active-bg-opacity);
+}
+
+.footer-item {
+    background-color: var(--footer-item-bg);
+}
+
+.footer-hover:hover {
+    background-color: var(--footer-hover-bg);
+}
+
+.logout-bg {
+    background-color: var(--logout-bg);
+}
+
+.logout-hover:hover {
+    background-color: var(--logout-hover-bg);
+}
+
+.avatar-bg {
+    background-color: var(--avatar-bg);
+}
+
+.mobile-btn {
+  background-color: var(--mobile-btn-bg);
+}
+
 aside {
     display: flex;
     flex-direction: column;
@@ -367,7 +427,7 @@ aside {
 
 .overflow-y-auto {
     scrollbar-width: thin; /* Firefox */
-    scrollbar-color: #4b5563 #1e293b; /* thumb: slate-600, track: slate-800 */
+    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
 }
 
 /* Webkit browsers (Chrome, Safari, Edge) */
@@ -376,16 +436,16 @@ aside {
 }
 
 .overflow-y-auto::-webkit-scrollbar-track {
-    background: #1e293b; /* slate-800 */
+    background: var(--scrollbar-track);
 }
 
 .overflow-y-auto::-webkit-scrollbar-thumb {
-    background: #4b5563; /* slate-600 */
+    background: var(--scrollbar-thumb);
     border-radius: 3px;
 }
 
 .overflow-y-auto::-webkit-scrollbar-thumb:hover {
-    background: #64748b; /* slate-500 for hover effect */
+    background: var(--scrollbar-hover);
 }
 
 /* Hide scrollbar for all browsers */
