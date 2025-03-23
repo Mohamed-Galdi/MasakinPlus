@@ -11,4 +11,19 @@ class ProductController extends Controller
     {
         return inertia('Admin/Products/Index');
     }
+
+    public function abc()
+    {
+        return inertia('Admin/Products/Abc');
+    }
+
+    public function orders()
+    {
+        return inertia('Admin/Orders/Index');
+    }
+
+    public function packages()
+    {
+        return inertia('Admin/Packages/Index');
+    }
 }

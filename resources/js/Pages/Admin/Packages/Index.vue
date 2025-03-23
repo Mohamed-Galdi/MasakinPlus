@@ -4,12 +4,10 @@ import AdminLayout from '@/Layouts/AdminLayout.vue';
 defineOptions({
     layout: AdminLayout,
 });
-
-
 </script>
 
 <template>
-    <p>Products</p>
-
-    
+<div>
+    <p>Packages</p>
+</div>
 </template>
