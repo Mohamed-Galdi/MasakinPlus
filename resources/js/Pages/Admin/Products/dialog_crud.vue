@@ -81,7 +81,7 @@ function handleFileReverted() {
     tempFile.value = null;
 }
 
-// ############################################## Create Modal
+// ############################################## Create Section
 const openCreateModal = ref(false);
 const createProductForm = useForm({
     name: "",
@@ -120,6 +120,84 @@ function handleCreateProduct() {
         },
     });
 }
+
+// ############################################## Edit Section
+const openEditModal = ref(false);
+
+const editProductForm = useForm({
+    id: null,
+    name: "",
+    price: "",
+    image: "",
+    status: "",
+});
+
+const productImageToEdit = ref(null);
+
+function handleOpenEditModal(product) {
+    editProductForm.id = product.id;
+    editProductForm.name = product.name;
+    editProductForm.price = product.price;
+    editProductForm.status = product.status;
+    productImageToEdit.value = product.image;
+    openEditModal.value = true;
+}
+
+function handleEditProduct() {
+    editProductForm.image = tempFile.value ?? null;
+    editProductForm.post(route("admin.products.update", { id: editProductForm.id }), {
+        preserveState: false,
+        onSuccess: () => {
+            toast.add({
+                severity: "success",
+                summary: "Success",
+                detail: "Product updated successfully",
+                life: 3000,
+            });
+            openEditModal.value = false;
+            search.value = "";
+            productFilter.value = "all";
+        },
+        onError: () => {
+            const errorMessage = Object.values(editProductForm.errors)[0];
+            toast.add({
+                severity: "error",
+                summary: "Erreur",
+                detail: errorMessage,
+                life: 3000,
+            });
+        },
+    });
+}
+
+// ############################################## Delete Section
+const deleteProduct = (productId) => {
+    confirm.require({
+        group: "templating",
+        message: "Are you sure you want to delete this product?",
+        header: "Confirm Deletion",
+        rejectProps: {
+            label: "Cancel",
+            severity: "secondary",
+            outlined: true,
+        },
+        acceptProps: {
+            label: "Delete",
+            severity: "danger",
+        },
+        accept: () => {
+            router.post(route("admin.products.delete", { id: productId }));
+            setTimeout(() => {
+                toast.add({
+                    severity: "success",
+                    summary: "Succes",
+                    detail: "Product deleted successfully",
+                    life: 3000,
+                });
+            }, 500);
+        },
+    });
+};
 </script>
 
 <template>
@@ -183,6 +261,92 @@ function handleCreateProduct() {
             </form>
         </Dialog>
 
+        <!-- Edit Modal -->
+        <Dialog
+            class="mx-2"
+            v-model:visible="openEditModal"
+            modal
+            header="Edit Product"
+            :style="{ width: '40rem' }"
+        >
+            <form class="p-2 space-y-6" @submit.prevent="handleEditProduct">
+                <FloatLabel variant="on" class="w-full">
+                    <InputText
+                        v-model="editProductForm.name"
+                        id="name"
+                        type="text"
+                        name="name"
+                        class="w-full"
+                    />
+                    <label for="name">Product Name</label>
+                </FloatLabel>
+                <FloatLabel variant="on" class="w-full">
+                    <InputNumber
+                        v-model="editProductForm.price"
+                        mode="currency"
+                        currency="USD"
+                        locale="en-US"
+                        fluid
+                    />
+                    <label for="price">Price</label>
+                </FloatLabel>
+                <Select
+                    v-model="editProductForm.status"
+                    :options="statusOptions"
+                    optionLabel="label"
+                    optionValue="value"
+                    placeholder="Select a status"
+                    class="w-full"
+                />
+                <div>
+                    <p class="ms-1 text-sm text-slate-600">Product Image</p>
+                    <FileUpload
+                        :initial-file="productImageToEdit"
+                        @file-uploaded="handleFileUploaded"
+                        @file-reverted="handleFileReverted"
+                    />
+                </div>
+
+                <Button
+                    type="submit"
+                    label="Update"
+                    :loading="editProductForm.processing"
+                    severity="contrast"
+                    class="w-full"
+                />
+            </form>
+        </Dialog>
+
+        <!-- Confirm Dialog -->
+        <ConfirmDialog group="templating" class="w-full md:w-1/2 lg:w-1/3 mx-8">
+            <template #message="slotProps">
+                <div class="flex flex-col items-center justify-center w-full">
+                    <div class="bg-rose-500 rounded-full p-3 mb-4">
+                        <svg
+                            class="h-8 w-8 text-white"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                            />
+                        </svg>
+                    </div>
+                    <div class="w-full">
+                        <h2
+                            class="text-xl font-bold text-gray-800 mb-4 text-center"
+                        >
+                            Confirm Deletion
+                        </h2>
+                        <p>Are you sure you want to delete this product?</p>
+                    </div>
+                </div>
+            </template>
+        </ConfirmDialog>
         <!-- Main Content -->
         <div>
             <!-- Create and Search -->
@@ -255,11 +419,13 @@ function handleCreateProduct() {
                         </div>
                         <div class="flex justify-end gap-2 mt-2">
                             <button
+                                @click="handleOpenEditModal(product)"
                                 class="bg-gray-200 text-gray-700 rounded-full w-9 h-9 flex items-center justify-center hover:bg-yellow-500 hover:text-yellow-200 transition-colors"
                             >
                                 <i class="pi pi-pencil text-sm"></i>
                             </button>
                             <button
+                                @click="deleteProduct(product.id)"
                                 class="bg-gray-200 text-gray-700 rounded-full w-9 h-9 flex items-center justify-center hover:bg-rose-500 hover:text-rose-200 transition-colors"
                             >
                                 <i class="pi pi-trash text-sm"></i>

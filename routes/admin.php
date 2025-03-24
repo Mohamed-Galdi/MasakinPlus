@@ -14,6 +14,8 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
         Route::get('/drawer-crud', [ProductController::class, 'drawerCrud'])->name('admin.products.drawer-crud');
 
         Route::post('/store', [ProductController::class, 'store'])->name('admin.products.store');
+        Route::post('/update/{id}', [ProductController::class, 'update'])->name('admin.products.update');
+        Route::post('/delete/{id}', [ProductController::class, 'delete'])->name('admin.products.delete');
     });
 
     // Account
