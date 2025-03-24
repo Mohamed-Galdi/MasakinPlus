@@ -12,6 +12,8 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::prefix('products')->group(function () {
         Route::get('/dialog-crud', [ProductController::class, 'dialogCrud'])->name('admin.products.dialog-crud');
         Route::get('/drawer-crud', [ProductController::class, 'drawerCrud'])->name('admin.products.drawer-crud');
+
+        Route::post('/store', [ProductController::class, 'store'])->name('admin.products.store');
     });
 
     // Account

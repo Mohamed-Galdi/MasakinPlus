@@ -7,45 +7,21 @@ const props = defineProps({
 
 // Define styles and labels for all statuses
 const options = {
-    yes: {
-        label: "بسي",
+    available: {
+        label: "Available",
         bg: "bg-green-100",
         text: "text-green-800",
         border: "border-green-400",
         darkBg: "bg-green-900",
         darkText: "text-green-300",
     },
-    no: {
-        label: "No",
+    outofstock: {
+        label: "Out of Stock",
         bg: "bg-red-100",
         text: "text-red-800",
         border: "border-red-400",
         darkBg: "bg-red-900",
         darkText: "text-red-300",
-    },
-    undefined: {
-        label: "Undefined",
-        bg: "bg-blue-100",
-        text: "text-blue-800",
-        border: "border-blue-400",
-        darkBg: "bg-blue-900",
-        darkText: "text-blue-300",
-    },
-    unused: {
-        label: "Unused",
-        bg: "bg-gray-100",
-        text: "text-gray-800",
-        border: "border-gray-400",
-        darkBg: "bg-gray-900",
-        darkText: "text-gray-300",
-    },
-    pending: {
-        label: "Pending",
-        bg: "bg-yellow-100",
-        text: "text-yellow-800",
-        border: "border-yellow-400",
-        darkBg: "bg-yellow-900",
-        darkText: "text-yellow-300",
     },
 };
 

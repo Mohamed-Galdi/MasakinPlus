@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->float('price', 8, 2);
             $table->string('image');
+            $table->enum('status', ['available', 'outofstock'])->default('available');
             $table->timestamps();
         });
     }

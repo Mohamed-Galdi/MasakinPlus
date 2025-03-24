@@ -79,7 +79,7 @@ const logout = () => {
         <!-- Sidebar -->
         <aside
             :class="[
-                'flex flex-col sidebar-bg sidebar-text transition-all duration-300 overflow-x-hidden fixed h-full z-50 md:static md:h-auto',
+                'flex flex-col sidebar-bg sidebar-text transition-all duration-300 overflow-x-hidden fixed h-screen z-50', // Changed h-full to h-screen, removed md:static and md:h-auto
                 {
                     'w-0 md:w-[70px]': isSidebarCollapsed,
                     'w-[250px]': !isSidebarCollapsed,
@@ -340,7 +340,11 @@ const logout = () => {
 
         <!-- Main Content -->
         <main
-            class="flex-1 bg-slate-100 p-6 overflow-y-auto md:ml-0 md:mt-0 mt-12"
+            :class="[
+                'flex-1 bg-slate-100 p-6 overflow-y-auto', // Kept overflow-y-auto
+                isSidebarCollapsed ? 'ml-0 md:ml-[70px]' : 'ml-[250px]', // Dynamic margin-left based on sidebar state
+                'mt-12 md:mt-0' // Adjusted for mobile navbar
+            ]"
         >
             <slot></slot>
         </main>
@@ -416,6 +420,10 @@ aside {
     height: 100vh;
 }
 
+main {
+    height: 100vh; /* Full viewport height */
+}
+
 .nav-title {
     flex: 1;
 }
@@ -451,4 +459,10 @@ aside {
 .overflow-y-auto::-webkit-scrollbar {
     display: none;
 } */
+
+@media (max-width: 767px) {
+    main {
+        height: calc(100vh - 3.5rem); /* Adjust for mobile navbar height (h-14 = 3.5rem) */
+    }
+}
 </style>

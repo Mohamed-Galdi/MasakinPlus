@@ -2,9 +2,11 @@
 
 namespace Database\Seeders;
 
+use App\Models\Product;
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Http;
+
 
 class DatabaseSeeder extends Seeder
 {
@@ -20,5 +22,17 @@ class DatabaseSeeder extends Seeder
             'email' => 'primevilt@gmail.com',
             'type' => 'admin',
         ]);
+
+        $response = Http::get('https://fakestoreapi.com/products');
+        $products = $response->json();
+
+        foreach ($products as $product) {
+            Product::create([
+                'name' => $product['title'],
+                'price' => $product['price'],
+                'image' => $product['image'],
+                'status' => fake()->randomElement(['available', 'outofstock']),
+            ]);
+        }
     }
 }

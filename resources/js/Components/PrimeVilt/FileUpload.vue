@@ -35,10 +35,10 @@ const props = defineProps({
         type: Number,
         default: 1,
     },
-    locale: {
-        type: Object,
-        default: () => ar_AR,
-    },
+    // locale: {
+    //     type: Object,
+    //     default: () => fr_FR,
+    // },
 });
 
 // Reactive variables
@@ -104,7 +104,7 @@ const serverOptions = {
             :accepted-file-types="allowedFileTypes"
             :max-files="maxFiles"
             credits="false"
-            :locale="locale"
+            :locale="null"
             :files="files"
         />
     </div>

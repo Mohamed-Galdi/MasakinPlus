@@ -22,7 +22,7 @@ class FileService
             Storage::disk('public')->deleteDirectory("TempFiles/{$tempFile->folder}");
             $tempFile->delete();
 
-            $finalFilePath = 'storage/' . $filePath;
+            $finalFilePath = '/storage/' . $filePath;
 
             return $finalFilePath;
         }
