@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AccountController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\TempFileController;
 use Illuminate\Support\Facades\Route;
@@ -21,7 +22,10 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
 
     // Account
     Route::prefix('account')->group(function () {
-        Route::get('/', [ProductController::class, 'account'])->name('admin.account.index');
+        Route::get('/', [AccountController::class, 'index'])->name('admin.account.index');
+        Route::post('/change-image', [AccountController::class, 'changeImage'])->name('admin.account.changeImage');
+        Route::post('/edit-account', [AccountController::class, 'editAccount'])->name('admin.account.editAccount');
+        Route::post('/update-password', [AccountController::class, 'updatePassword'])->name('admin.account.updatePassword');
     });
 
 });

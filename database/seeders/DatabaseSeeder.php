@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'Prime Vilt',
             'email' => 'primevilt@gmail.com',
             'type' => 'admin',
+            'image' => '/storage/users_images/takamura.jpg'
         ]);
 
         $response = Http::get('https://fakestoreapi.com/products');

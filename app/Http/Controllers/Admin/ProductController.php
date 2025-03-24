@@ -129,9 +129,4 @@ class ProductController extends Controller
 
         return '';
     }
-
-    public function account()
-    {
-        return inertia('Admin/Account/Index');
-    }
 }
