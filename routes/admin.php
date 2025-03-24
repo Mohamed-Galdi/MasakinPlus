@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\TempFileController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -24,3 +25,7 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     });
 
 });
+
+// file upload
+Route::post('/upload', [TempFileController::class, 'upload'])->name('file.upload');
+Route::post('/revert/{id}', [TempFileController::class, 'revert'])->name('file.revert');

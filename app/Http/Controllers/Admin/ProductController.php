@@ -36,12 +36,32 @@ class ProductController extends Controller
         return inertia('Admin/Products/dialog_crud', compact('products', 'productFilter', 'search'));
     }
 
-    public function drawerCrud()
+    public function drawerCrud(Request $request)
     {
-        return inertia('Admin/Products/drawer_crud');
+        $products = Product::when($request->productFilter && $request->productFilter !== 'all', function ($query) use ($request) {
+            $query->where('status', $request->productFilter);
+        })
+            ->when($request->search && $request->search !== 'all', function ($query) use ($request) {
+                $query->where('name', 'like', '%' . $request->search . '%');
+            })
+            ->orderBy('created_at', 'desc')
+            ->paginate(12)
+            ->withQueryString()
+            ->through(function ($product) {
+                return [
+                    ...$product->toArray(),
+                    'created_at' => $product->created_at->format('Y-m-d'),
+                ];
+            });
+
+        $productFilter = $request->get('productFilter') ?? '';
+        $search = $request->get('search') ?? '';
+
+        return inertia('Admin/Products/drawer_crud', compact('products', 'productFilter', 'search'));
     }
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         request()->validate([
             'name' => 'required|string|max:255',
             'price' => 'required|numeric|min:0',
@@ -62,7 +82,6 @@ class ProductController extends Controller
         $product->save();
 
         return '';
-        
     }
 
     public function update(Request $request)
@@ -73,7 +92,7 @@ class ProductController extends Controller
             'image' => '',
             'status' => 'required|string|max:255',
         ]);
-        
+
         $product = Product::find($request->id);
 
         $product->name = $request->name;
