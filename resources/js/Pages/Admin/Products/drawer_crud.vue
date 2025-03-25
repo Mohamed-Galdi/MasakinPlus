@@ -1,7 +1,7 @@
 <script setup>
 import AdminLayout from "@/Layouts/AdminLayout.vue";
+import { Head, Link, router, useForm } from "@inertiajs/vue3";
 import { ref, watch, computed } from "vue";
-import { Link, router, useForm } from "@inertiajs/vue3";
 import { useTextHelpers } from "@/plugins/textHelpers";
 import { debounce } from "lodash";
 import ProductStatus from "@/Components/PrimeVilt/Status/ProductStatus.vue";
@@ -207,6 +207,8 @@ const deleteProduct = (productId) => {
     <div
         class="max-w-7xl mx-auto px-6 flex flex-col justify-between min-h-screen"
     >
+            <Head title="| Drawer Crud" />
+
         <Toast position="top-center" />
 
         <!-- Create Drawer -->

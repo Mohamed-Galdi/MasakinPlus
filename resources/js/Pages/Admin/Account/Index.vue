@@ -1,7 +1,7 @@
 <script setup>
 import AdminLayout from "@/Layouts/AdminLayout.vue";
+import { Head, useForm } from "@inertiajs/vue3";
 import { ref } from "vue";
-import { useForm } from "@inertiajs/vue3";
 import FileUpload from "@/Components/PrimeVilt/FileUpload.vue";
 import InputText from "primevue/inputtext";
 import { useToast } from "primevue/usetoast";
@@ -146,6 +146,8 @@ function updateImage() {
 
 <template>
     <div class="container mx-auto px-4 py-8">
+        <Head title="| Account" />
+
         <Toast position="top-center" />
 
         <!-- Image Update Modal -->
@@ -242,12 +244,14 @@ function updateImage() {
 
             <!-- Main Content Area -->
             <div class="lg:w-3/4 w-full">
-                <div class="bg-white border border-slate-500/50 shadow-sm h-[22rem] rounded-lg overflow-hidden">
+                <div
+                    class="bg-white border border-slate-500/50 shadow-sm h-[22rem] rounded-lg overflow-hidden"
+                >
                     <TabView class="h-full">
                         <!-- Profile Info Tab -->
                         <TabPanel header="Profile">
                             <div
-                                class=" h-[17rem] flex flex-col justify-between py-2"
+                                class="h-[17rem] flex flex-col justify-between py-2"
                             >
                                 <div>
                                     <h2
@@ -301,7 +305,9 @@ function updateImage() {
                                         Security Settings
                                     </h2>
                                     <div class="space-y-4">
-                                        <div class="bg-slate-100 p-4 rounded-lg">
+                                        <div
+                                            class="bg-slate-100 p-4 rounded-lg"
+                                        >
                                             <h3
                                                 class="font-medium text-gray-700"
                                             >
