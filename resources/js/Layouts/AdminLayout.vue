@@ -79,7 +79,7 @@ const logout = () => {
         <!-- Sidebar -->
         <aside
             :class="[
-                'flex flex-col sidebar-bg sidebar-text transition-all duration-300 overflow-x-hidden fixed h-screen z-50', // Changed h-full to h-screen, removed md:static and md:h-auto
+                'flex flex-col sidebar-bg sidebar-text transition-all duration-300 overflow-x-hidden fixed h-screen z-[9999]', // Changed h-full to h-screen, removed md:static and md:h-auto
                 {
                     'w-0 md:w-[70px]': isSidebarCollapsed,
                     'w-[250px]': !isSidebarCollapsed,
@@ -327,7 +327,7 @@ const logout = () => {
 
         <!-- Mobile Navbar -->
         <nav
-            class="bg-slate-50 w-full h-14 py-2 px-4 fixed md:hidden shadow-md"
+            class="bg-slate-50 w-full h-14 py-2 px-4 fixed md:hidden shadow-md z-[9998]"
         >
             <button
                 v-if="isSidebarCollapsed"
