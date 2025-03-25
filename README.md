@@ -2,7 +2,8 @@
 ### A Laravel Starter Kit for Quick Project Setup  
 
 **PrimeVilt** is a pre-configured Laravel starter kit I created to simplify my freelance web development projects. It bundles the tools and features I rely on, all set up and ready to use, so I can jump straight into building without repetitive configuration.
-
+---
+![video](video.gif)
 ---
 
 ## Features  
