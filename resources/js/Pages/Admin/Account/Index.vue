@@ -125,8 +125,8 @@ function updateImage() {
         onSuccess: () => {
             toast.add({
                 severity: "success",
-                summary: "Success",
-                detail: "Image updated successfully",
+                summary: "نجاح",
+                detail: "تم تحديث الصورة بنجاح",
                 life: 3000,
             });
             updateImageForm.reset();
@@ -135,7 +135,7 @@ function updateImage() {
         onError: () => {
             toast.add({
                 severity: "error",
-                summary: "Error",
+                summary: "خطأ",
                 detail: Object.values(updateImageForm.errors)[0],
                 life: 3000,
             });
@@ -145,7 +145,7 @@ function updateImage() {
 </script>
 
 <template>
-    <div class="container mx-auto px-4 py-8">
+    <div class="container mx-auto px-4 py-8 max-w-7xl">
         <Head title="| Account" />
 
         <Toast position="top-center" />
@@ -154,7 +154,7 @@ function updateImage() {
         <Dialog
             v-model:visible="updateImageModal"
             modal
-            header="Update Profile Image"
+            header="تحديث صورة الملف الشخصي"
             :style="{ width: '32rem' }"
             class="m-2"
         >
@@ -167,7 +167,7 @@ function updateImage() {
             />
             <Button
                 type="button"
-                label="Update"
+                label="تحديث"
                 :loading="updateImageForm.processing"
                 class="w-full bg-teal-800 hover:bg-teal-900 text-white"
                 @click="updateImage"
@@ -178,35 +178,35 @@ function updateImage() {
         <Dialog
             v-model:visible="updatePasswordModal"
             modal
-            header="Update Password"
+            header="تحديث كلمة المرور"
             :style="{ width: '32rem' }"
             class="m-2"
         >
             <form @submit.prevent="updatePassword" class="space-y-4 p-4">
                 <Password
                     v-model="updatePasswordForm.current_password"
-                    placeholder="Current Password"
+                    placeholder="كلمة المرور الحالية"
                     toggleMask
                     :feedback="false"
                     class="w-full"
                 />
                 <Password
                     v-model="updatePasswordForm.password"
-                    placeholder="New Password"
+                    placeholder="كلمة المرور الجديدة"
                     toggleMask
                     :feedback="false"
                     class="w-full"
                 />
                 <Password
                     v-model="updatePasswordForm.password_confirmation"
-                    placeholder="Confirm New Password"
+                    placeholder="تأكيد كلمة المرور الجديدة"
                     toggleMask
                     :feedback="false"
                     class="w-full"
                 />
                 <Button
                     type="submit"
-                    label="Update"
+                    label="تحديث"
                     :loading="updatePasswordForm.processing"
                     class="w-full bg-teal-800 hover:bg-teal-900 text-white"
                 />
@@ -235,7 +235,7 @@ function updateImage() {
                         </p>
                     </div>
                     <Button
-                        label="Update Image"
+                        label="تحديث الصورة"
                         class="w-full"
                         @click="openUpdateImageModal"
                     />
@@ -249,7 +249,7 @@ function updateImage() {
                 >
                     <TabView class="h-full">
                         <!-- Profile Info Tab -->
-                        <TabPanel header="Profile">
+                        <TabPanel header="الحساب">
                             <div
                                 class="h-[17rem] flex flex-col justify-between py-2"
                             >
@@ -257,18 +257,18 @@ function updateImage() {
                                     <h2
                                         class="text-xl font-semibold text-gray-800 mb-6"
                                     >
-                                        Profile Information
+                                        معلومات الحساب
                                     </h2>
                                     <div class="space-y-4">
                                         <InputText
                                             v-model="infosForm.name"
-                                            placeholder="Name"
+                                            placeholder="الاسم"
                                             :disabled="editFormDisabled"
                                             class="w-full"
                                         />
                                         <InputText
                                             v-model="infosForm.email"
-                                            placeholder="Email"
+                                            placeholder="البريد الإلكتروني"
                                             :disabled="editFormDisabled"
                                             class="w-full"
                                         />
@@ -277,7 +277,7 @@ function updateImage() {
                                 <div class="flex gap-3 mt-6">
                                     <Button
                                         :label="
-                                            editFormDisabled ? 'Edit' : 'Update'
+                                            editFormDisabled ? 'تحديث' : 'تأكيد'
                                         "
                                         :loading="infosForm.processing"
                                         class="w-full bg-teal-800 hover:bg-teal-900 text-white"
@@ -285,7 +285,7 @@ function updateImage() {
                                     />
                                     <Button
                                         v-if="!editFormDisabled"
-                                        label="Cancel"
+                                        label="إلغاء"
                                         class="w-full bg-gray-500 hover:bg-gray-600 text-white"
                                         @click="handleCancel"
                                     />
@@ -294,7 +294,7 @@ function updateImage() {
                         </TabPanel>
 
                         <!-- Security Tab -->
-                        <TabPanel header="Security">
+                        <TabPanel header="إعدادات الأمان">
                             <div
                                 class="py-2 h-[17rem] flex flex-col justify-between"
                             >
@@ -302,7 +302,7 @@ function updateImage() {
                                     <h2
                                         class="text-xl font-semibold text-gray-800 mb-6"
                                     >
-                                        Security Settings
+                                        إعدادات الأمان
                                     </h2>
                                     <div class="space-y-4">
                                         <div
@@ -311,21 +311,20 @@ function updateImage() {
                                             <h3
                                                 class="font-medium text-gray-700"
                                             >
-                                                Password
+                                                كلمة المرور
                                             </h3>
                                             <p
                                                 class="text-sm text-gray-600 mt-1"
                                             >
-                                                Update your password to keep
-                                                your account secure. You'll need
-                                                to log in again after changing
-                                                it.
+                                                حدّث كلمة مرورك للحفاظ على أمان
+                                                حسابك. ستحتاج إلى تسجيل الدخول
+                                                مرة أخرى بعد تغييرها.
                                             </p>
                                         </div>
                                     </div>
                                 </div>
                                 <Button
-                                    label="Change Password"
+                                    label="تغيير كلمة المرور"
                                     class="bg-teal-800 hover:bg-teal-900 text-white"
                                     @click="updatePasswordModal = true"
                                 />

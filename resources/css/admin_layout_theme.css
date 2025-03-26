@@ -1,66 +1,30 @@
-:root {
-    /* Theme Variables */
-    --sidebar-bg: #0f2630;
-    --sidebar-text: #e0f2f1;
-    --sidebar-border: #164e63;
-    --sidebar-hover-bg: #164e63;
 
-    /* Active item colors */
-    --active-bg: #0d9488;
-    --active-text: #ffffff;
-    --active-bg-opacity: rgba(13, 148, 136, 0.1);
+ :root { 
+     /* Theme Variables  */
+     --sidebar-bg: #1e293b; 
+     --sidebar-text: #e2e8f0; 
+     --sidebar-border: #334155; 
+     --sidebar-hover-bg: #334155; 
 
-    /* Footer colors */
-    --footer-item-bg: #164e63;
-    --footer-hover-bg: #155e75;
-    --logout-bg: rgba(127, 29, 29, 0.5);
-    --logout-hover-bg: #7f1d1d;
+     /* Active item color */
+     --active-bg: #0d9488; 
+     --active-text: #ffffff; 
+     --active-bg-opacity: rgba(59, 130, 246, 0.1); 
 
-    /* Avatar/icon background */
-    --avatar-bg: #0d9488;
+     /* Footer color */
+     --footer-item-bg: #334155; 
+     --footer-hover-bg: #475569; 
+     --logout-bg: rgba(127, 29, 29, 0.5); 
+     --logout-hover-bg: #7f1d1d; 
 
-    /* Mobile button colors */
-    --mobile-btn-bg: #0d9488;
+     /* Avatar/icon backgroun */
+     --avatar-bg: #0d9488; 
 
-    /* Scrollbar colors */
-    --scrollbar-track: #0f2630;
-    --scrollbar-thumb: #134e4a;
-    --scrollbar-hover: #115e59;
-}
+     /* Mobile button color */
+     --mobile-btn-bg: #0d9488; 
 
-/* Second theme (disabled line-by-line) */
-/* :root { */
-/*     /* Theme Variables */
-/*     --sidebar-bg: #1e293b; */
-/*     --sidebar-text: #e2e8f0; */
-/*     --sidebar-border: #334155; */
-/*     --sidebar-hover-bg: #334155; */
-/*  */
-/*     /* Active item colors */
-
-/*     --active-bg: #3b82f6; */
-/*     --active-text: #ffffff; */
-/*     --active-bg-opacity: rgba(59, 130, 246, 0.1); */
-/*  */
-/*     /* Footer colors */
-
-/*     --footer-item-bg: #334155; */
-/*     --footer-hover-bg: #475569; */
-/*     --logout-bg: rgba(127, 29, 29, 0.5); */
-/*     --logout-hover-bg: #7f1d1d; */
-/*  */
-/*     /* Avatar/icon background */
-
-/*     --avatar-bg: #3b82f6; */
-/*  */
-/*     /* Mobile button colors */
-
-/*     --mobile-btn-bg: #3b82f6; */
-/*  */
-/*     /* Scrollbar colors */
-
-/*     --scrollbar-track: #1e293b; */
-/*     --scrollbar-thumb: #4b5563; */
-/*     --scrollbar-hover: #64748b; */
-/* } 
-*/
+     /* Scrollbar color */
+     --scrollbar-track: #1e293b; 
+     --scrollbar-thumb: #4b5563; 
+     --scrollbar-hover: #64748b; 
+ }

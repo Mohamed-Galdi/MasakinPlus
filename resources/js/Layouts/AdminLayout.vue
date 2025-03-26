@@ -9,18 +9,23 @@ const toggleSidebar = () => {
 
 const navigationItems = [
     {
-        title: "Products",
-        icon: "pi-box",
+        title: "المستخدمين",
+        icon: "pi-users",
         subItems: [
             {
-                title: "Dialog Crud",
+                title: "الملاك",
                 path: route("admin.products.dialog-crud"),
-                icon: "pi-window-maximize",
+                icon: "pi-home",
             },
             {
-                title: "Drawer Crud",
+                title: "المستثمرين",
                 path: route("admin.products.drawer-crud"),
-                icon: "pi-angle-double-left",
+                icon: "pi-briefcase",
+            },
+            {
+                title: "المستأجرين",
+                path: route("admin.products.drawer-crud"),
+                icon: "pi-user",
             },
         ],
     },
@@ -75,7 +80,7 @@ const logout = () => {
 </script>
 
 <template>
-    <div class="flex min-h-screen" dir="ltr">
+    <div class="flex min-h-screen" dir="rtl">
         <!-- Sidebar -->
         <aside
             :class="[
@@ -101,7 +106,7 @@ const logout = () => {
                     <span
                         v-if="!isSidebarCollapsed"
                         class="font-semibold text-lg whitespace-nowrap"
-                        >Admin Panel</span
+                        >لوحة المشرف</span
                     >
                 </Link>
                 <button
@@ -112,15 +117,15 @@ const logout = () => {
                         :class="[
                             'pi',
                             isSidebarCollapsed
-                                ? 'pi-angle-right'
-                                : 'pi-angle-left',
+                                ? 'pi-angle-left'
+                                : 'pi-angle-right',
                         ]"
                     ></i>
                 </button>
             </div>
 
             <!-- Scrollable navigation items -->
-            <div class="flex-1 overflow-y-auto py-4">
+            <div class="flex-1 overflow-y-auto py-4 ">
                 <ul class="list-none p-0 m-0">
                     <li
                         v-for="item in navigationItems"
@@ -293,8 +298,8 @@ const logout = () => {
                         @click="logout"
                         class="flex items-center justify-between w-full px-3 py-2 logout-bg border-none rounded-lg sidebar-text cursor-pointer transition-colors logout-hover"
                     >
-                        <span class="font-medium">Logout</span>
-                        <i class="pi pi-sign-out"></i>
+                        <span class="font-medium">تسجيل الخروج</span>
+                        <i class="pi pi-sign-out "></i>
                     </button>
                 </div>
 
@@ -340,9 +345,10 @@ const logout = () => {
 
         <!-- Main Content -->
         <main
+            dir=""
             :class="[
                 'flex-1 bg-slate-100 p-6 overflow-y-auto', // Kept overflow-y-auto
-                isSidebarCollapsed ? 'ml-0 md:ml-[70px]' : 'ml-[250px]', // Dynamic margin-left based on sidebar state
+                isSidebarCollapsed ? ' md:mr-[70px]' : 'md:mr-[250px]', // Dynamic margin-left based on sidebar state
                 'mt-12 md:mt-0' // Adjusted for mobile navbar
             ]"
         >

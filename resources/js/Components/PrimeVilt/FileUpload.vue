@@ -35,10 +35,10 @@ const props = defineProps({
         type: Number,
         default: 1,
     },
-    // locale: {
-    //     type: Object,
-    //     default: () => fr_FR,
-    // },
+    locale: {
+        type: Object,
+        default: () => ar_AR,
+    },
 });
 
 // Reactive variables
