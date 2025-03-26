@@ -221,12 +221,17 @@ function updateImage() {
                     class="bg-white border border-slate-500/50 shadow-sm p-6 h-[22rem] flex flex-col justify-between rounded-lg overflow-hidden"
                 >
                     <div class="flex flex-col items-center">
+
                         <Image
+                            v-if="profileImage"
                             :src="profileImage"
                             alt="Profile Image"
                             class="w-32 h-32 rounded-md overflow-hidden mb-4 border-2 border-gray-500"
                             preview
                         />
+                        <div v-else class="flex items-center bg-teal-700 justify-center w-32 h-32 rounded-md overflow-hidden mb-4 border-2 border-gray-500">
+                            <i class="pi pi-user text-white" style="font-size: 3.5rem;"></i>
+                        </div>
                         <h2 class="text-xl font-semibold text-gray-800">
                             {{ infosForm.name }}
                         </h2>

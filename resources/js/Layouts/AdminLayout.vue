@@ -298,7 +298,7 @@ const logout = () => {
                         @click="logout"
                         class="flex items-center justify-between w-full px-3 py-2 logout-bg border-none rounded-lg sidebar-text cursor-pointer transition-colors logout-hover"
                     >
-                        <span class="font-medium">تسجيل الخروج</span>
+                        <span class="font-medium whitespace-nowrap">تسجيل الخروج</span>
                         <i class="pi pi-sign-out "></i>
                     </button>
                 </div>
@@ -316,7 +316,7 @@ const logout = () => {
                             alt="User avatar"
                             class="w-full h-full object-cover"
                         />
-                        <i v-else class="pi pi-user"></i>
+                        <div v-else class="avatar-bg w-8 h-8 rounded-full flex items-center justify-center overflow-hidden"><i  class="pi pi-user text-white"></i></div>
                     </Link>
 
                     <!-- Logout Button -->
