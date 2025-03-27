@@ -6,8 +6,40 @@
 @tailwind utilities;
 
 html {
-    direction: rtl
+    direction: rtl;
+    scroll-behavior: smooth;
 }
+
+/* fonts */
+
+@layer base {
+    @font-face {
+        font-family: "BlueOcean";
+        font-weight: 400;
+        src: url("../../public/fonts/BlueOcean.ttf");
+    }
+    @font-face {
+        font-family: "WasmFontBold";
+        font-weight: 400;
+        src: url("../../public/fonts/WasmFontBold.ttf");
+    }
+    @font-face {
+        font-family: "bein";
+        font-weight: 400;
+        src: url("../../public/fonts/Bein.ttf");
+    }
+    @font-face {
+        font-family: "BeinNormal";
+        font-weight: 400;
+        src: url("../../public/fonts/BeinNormal.ttf");
+    }
+    @font-face {
+        font-family: "Alarabiya";
+        font-weight: 400;
+        src: url("../../public/fonts/Alarabiya.ttf");
+    }
+}
+
 
 :root {
     --primary-color: oklch(0.554 0.046 257.417) !important;

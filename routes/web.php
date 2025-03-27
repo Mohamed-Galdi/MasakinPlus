@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', fn () => inertia('Home'))->name('home');
+Route::get('/', fn () => inertia('Home/Home'))->name('home');
 
 
 
