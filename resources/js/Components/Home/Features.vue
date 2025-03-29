@@ -172,9 +172,11 @@ onUnmounted(() => {
 <template>
     <section
         ref="sectionRef"
-        class="relative min-h-screen overflow-hidden bg-gradient-to-tl from-teal-700 to-teal-900"
+        class="relative min-h-screen overflow-hidden bg-gradient-to-l from-teal-700 to-teal-900"
     >
-        <div class="absolute -left-12 md:opacity-40 opacity-20 pointer-events-none">
+        <div
+            class="absolute -left-12 md:opacity-40 opacity-20 pointer-events-none"
+        >
             <img
                 src="/assets/home_images/mosiac.png"
                 alt="Mosaic Pattern"
@@ -222,6 +224,38 @@ onUnmounted(() => {
                     class="w-full h-auto max-w-md mx-auto md:max-w-full"
                 />
             </div>
+        </div>
+        <!-- diveder -->
+        <div style="overflow: hidden" class="bg-white relative">
+            <h2
+                class="w-full text-center text-4xl font-Bein text-teal-800 py-12 absolute z-10 md:top-12 top-16"
+            >
+                إكتشف منصة مساكن <span class="text-yellow-500">بلس</span>
+            </h2>
+            <svg
+                preserveAspectRatio="none"
+                viewBox="0 0 1200 120"
+                xmlns="http://www.w3.org/2000/svg"
+                style="width: 100%; height: 150px"
+                class="md:h-[237px] h-[150px]"
+            >
+                <defs>
+                    <linearGradient
+                        id="gradient"
+                        x1="100%"
+                        y1="0%"
+                        x2="0%"
+                        y2="0%"
+                    >
+                        <stop offset="0%" style="stop-color: #0f766e" />
+                        <stop offset="100%" style="stop-color: #134e4a" />
+                    </linearGradient>
+                </defs>
+                <path
+                    d="M321.39 56.44c58-10.79 114.16-30.13 172-41.86 82.39-16.72 168.19-17.73 250.45-.39C823.78 31 906.67 72 985.66 92.83c70.05 18.48 146.53 26.09 214.34 3V0H0v27.35a600.21 600.21 0 00321.39 29.09z"
+                    fill="url(#gradient)"
+                />
+            </svg>
         </div>
     </section>
 </template>
