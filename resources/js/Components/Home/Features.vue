@@ -35,6 +35,45 @@ const imageRef = ref(null);
 const textRefs = ref([]);
 const currentSlide = ref(slides[0]);
 let lastSlideIndex = 0;
+let lastUpdateTime = 0;
+const debounceDelay = 100; // ms
+
+const animateImage = (slideIndex) => {
+    gsap.to(imageRef.value, {
+        scale: 0.8,
+        rotation: 10,
+        opacity: 0,
+        duration: 0.5,
+        ease: "power2.in",
+        onComplete: () => {
+            currentSlide.value = slides[slideIndex];
+            gsap.to(imageRef.value, {
+                scale: 1,
+                rotation: 0,
+                opacity: 1,
+                duration: 0.5,
+                ease: "power2.out",
+            });
+        },
+    });
+};
+
+const animateMobileImage = (slideIndex) => {
+    gsap.to(imageRef.value, {
+        opacity: 0,
+        duration: 0.3,
+        onComplete: () => {
+            currentSlide.value = slides[slideIndex];
+            textRefs.value.forEach((textEl, idx) => {
+                gsap.to(textEl, {
+                    opacity: idx === slideIndex ? 1 : 0,
+                    duration: 0.3,
+                });
+            });
+            gsap.to(imageRef.value, { opacity: 1, duration: 0.3 });
+        },
+    });
+};
 
 onMounted(() => {
     if (!sectionRef.value || !imageRef.value || !textRefs.value.length) return;
@@ -42,6 +81,14 @@ onMounted(() => {
     const isMobile = window.innerWidth < 768;
 
     if (!isMobile) {
+        gsap.set(imageRef.value, { xPercent: 0, left: 0, right: "auto" });
+        gsap.set(textRefs.value[0], { yPercent: 0, opacity: 1 });
+        textRefs.value
+            .slice(1)
+            .forEach((textEl) =>
+                gsap.set(textEl, { yPercent: 100, opacity: 0 })
+            );
+
         const tl = gsap.timeline({
             scrollTrigger: {
                 trigger: sectionRef.value,
@@ -50,41 +97,20 @@ onMounted(() => {
                 scrub: 0.5,
                 pin: true,
                 onUpdate: (self) => {
+                    const now = Date.now();
+                    if (now - lastUpdateTime < debounceDelay) return;
                     const progress = self.progress;
                     const slideIndex = Math.round(
                         progress * (slides.length - 1)
                     );
                     if (slideIndex !== lastSlideIndex) {
-                        gsap.to(imageRef.value, {
-                            scale: 0.8,
-                            rotation: 10,
-                            opacity: 0,
-                            duration: 0.5,
-                            ease: "power2.in",
-                            onComplete: () => {
-                                currentSlide.value = slides[slideIndex];
-                                gsap.to(imageRef.value, {
-                                    scale: 1,
-                                    rotation: 0,
-                                    opacity: 1,
-                                    duration: 0.5,
-                                    ease: "power2.out",
-                                });
-                            },
-                        });
+                        animateImage(slideIndex);
                         lastSlideIndex = slideIndex;
+                        lastUpdateTime = now;
                     }
                 },
             },
         });
-
-        gsap.set(imageRef.value, { xPercent: 0, left: 0, right: "auto" });
-        gsap.set(textRefs.value[0], { yPercent: 0, opacity: 1 });
-        textRefs.value
-            .slice(1)
-            .forEach((textEl) =>
-                gsap.set(textEl, { yPercent: 100, opacity: 0 })
-            );
 
         slides.slice(1).forEach((slide, index) => {
             tl.to(
@@ -104,78 +130,60 @@ onMounted(() => {
             );
         });
     } else {
-        const tl = gsap.timeline({
-            scrollTrigger: {
-                trigger: sectionRef.value,
-                start: "top 80%",
-                end: "bottom 20%",
-                scrub: 1,
-                onUpdate: (self) => {
-                    const progress = self.progress;
-                    const slideIndex = Math.round(
-                        progress * (slides.length - 1)
-                    );
-                    if (slideIndex !== lastSlideIndex) {
-                        gsap.to(imageRef.value, {
-                            opacity: 0,
-                            duration: 0.3,
-                            onComplete: () => {
-                                currentSlide.value = slides[slideIndex];
-                                textRefs.value.forEach((textEl, idx) => {
-                                    gsap.to(textEl, {
-                                        opacity: idx === slideIndex ? 1 : 0,
-                                        duration: 0.3,
-                                    });
-                                });
-                                gsap.to(imageRef.value, {
-                                    opacity: 1,
-                                    duration: 0.3,
-                                });
-                            },
-                        });
-                        lastSlideIndex = slideIndex;
-                    }
-                },
-            },
-        });
-
         textRefs.value.forEach((textEl, index) => {
             gsap.set(textEl, {
                 position: "relative",
                 opacity: index === 0 ? 1 : 0,
             });
         });
+
+        gsap.timeline({
+            scrollTrigger: {
+                trigger: sectionRef.value,
+                start: "top 80%",
+                end: "bottom 20%",
+                scrub: 1,
+                onUpdate: (self) => {
+                    const now = Date.now();
+                    if (now - lastUpdateTime < debounceDelay) return;
+                    const progress = self.progress;
+                    const slideIndex = Math.round(
+                        progress * (slides.length - 1)
+                    );
+                    if (slideIndex !== lastSlideIndex) {
+                        animateMobileImage(slideIndex);
+                        lastSlideIndex = slideIndex;
+                        lastUpdateTime = now;
+                    }
+                },
+            },
+        });
     }
 });
 
 onUnmounted(() => {
-    const scrollTrigger = ScrollTrigger.getById(sectionRef.value?.id);
-    if (scrollTrigger) scrollTrigger.kill();
-    gsap.killTweensOf([imageRef.value, textRefs.value]);
+    ScrollTrigger.getAll().forEach((trigger) => {
+        if (trigger.trigger === sectionRef.value) trigger.kill();
+    });
+    gsap.killTweensOf([imageRef.value, ...textRefs.value]);
 });
 </script>
 
 <template>
     <section
         ref="sectionRef"
-        class="relative min-h-screen overflow-hidden bg-gradient-to-br from-teal-900 via-teal-800 to-teal-700"
+        class="relative min-h-screen overflow-hidden bg-gradient-to-tl from-teal-700 to-teal-900"
     >
-        <div
-            class="absolute inset-0 opacity-30 pointer-events-none overflow-hidden"
-        >
-            <div
-                class="absolute w-96 h-96 bg-white rounded-full filter blur-3xl -top-48 -left-48 animate-pulse-slow md:w-72 md:h-72"
-            ></div>
-            <div
-                class="absolute w-72 h-72 bg-teal-500 rounded-full filter blur-2xl top-0 right-1/3 animate-pulse-slow delay-1000 md:w-56 md:h-56"
-            ></div>
-            <div
-                class="absolute w-64 h-64 bg-white rounded-full filter blur-xl -bottom-32 right-44 animate-pulse-slow delay-500 md:w-48 md:h-48"
-            ></div>
+        <div class="absolute -left-12 md:opacity-40 opacity-20 pointer-events-none">
+            <img
+                src="/assets/home_images/mosiac.png"
+                alt="Mosaic Pattern"
+                class="h-screen"
+            />
         </div>
 
         <div
-            class="container mx-auto px-4 py-16 h-screen flex items-center justify-between max-w-7xl relative z-10 flex-col md:flex-row"
+            class="container mx-auto px-4 py-8 h-screen flex items-center justify-between max-w-7xl relative z-10 flex-col md:flex-row"
         >
             <div
                 class="relative w-full md:w-1/3 z-20 h-full flex items-center justify-center"
@@ -190,7 +198,7 @@ onUnmounted(() => {
                         class="space-y-4 text-center flex flex-col items-center"
                     >
                         <h2
-                            class="leading-[5rem] text-6xl font-Bein text-white "
+                            class="leading-[5rem] text-6xl font-Bein text-white"
                         >
                             {{ slide.title }}
                         </h2>
@@ -205,7 +213,7 @@ onUnmounted(() => {
             </div>
             <div
                 ref="imageRef"
-                class="relative w-full md:w-3/4 z-10 mt-8 md:mt-0"
+                class="relative w-full md:w-3/4 z-10 mt-8 md:mt-0 h-full flex items-end"
             >
                 <img
                     :src="currentSlide.image"
@@ -221,29 +229,5 @@ onUnmounted(() => {
 <style scoped>
 .text-slide {
     height: 100%;
-}
-
-@keyframes pulse-slow {
-    0%,
-    100% {
-        transform: scale(1);
-        opacity: 0.3;
-    }
-    50% {
-        transform: scale(1.1);
-        opacity: 0.5;
-    }
-}
-
-.animate-pulse-slow {
-    animation: pulse-slow 6s infinite ease-in-out;
-}
-
-.delay-500 {
-    animation-delay: 0.5s;
-}
-
-.delay-1000 {
-    animation-delay: 1s;
 }
 </style>
