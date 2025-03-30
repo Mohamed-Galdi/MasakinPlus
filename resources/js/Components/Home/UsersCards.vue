@@ -103,7 +103,12 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="md:h-[40rem] py-16">
+    <div class="min-h-screen py-20 ">
+        <h2
+                class="w-full text-center text-5xl font-Bein text-teal-800 pb-12"
+            >
+                إكتشف منصة مساكن <span class="text-yellow-500">بلس</span>
+            </h2>
         <div
             class="grid lg:grid-cols-3 grid-cols-1 justify-center w-full max-w-7xl mx-auto md:px-4 px-8"
         >

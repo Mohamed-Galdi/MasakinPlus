@@ -227,11 +227,6 @@ onUnmounted(() => {
         </div>
         <!-- diveder -->
         <div style="overflow: hidden" class="bg-white relative">
-            <h2
-                class="w-full text-center text-4xl font-Bein text-teal-800 py-12 absolute z-10 md:top-12 top-16"
-            >
-                إكتشف منصة مساكن <span class="text-yellow-500">بلس</span>
-            </h2>
             <svg
                 preserveAspectRatio="none"
                 viewBox="0 0 1200 120"

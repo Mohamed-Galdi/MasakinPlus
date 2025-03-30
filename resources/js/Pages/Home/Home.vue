@@ -4,6 +4,7 @@ import Features from "@/Components/Home/Features.vue";
 import UsersCards from "@/Components/Home/UsersCards.vue";
 import OurNumbers from "@/Components/Home/OurNumbers.vue";
 import Teaser from "@/Components/Home/Teaser.vue";
+import FAQs from "@/Components/Home/FAQs.vue";
 </script>
 
 <template>
@@ -12,17 +13,22 @@ import Teaser from "@/Components/Home/Teaser.vue";
         <Hero />
         <!-- <div class="h-screen bg-white w-full"></div> -->
 
-        <!-- Features -->
-        <Features />
+        <!-- Teaser -->
+        <Teaser />
 
         <!-- Users Cards -->
         <UsersCards />
 
-        <!-- Teaser -->
-        <Teaser />
+        <!-- Features -->
+        <Features />
 
         <!-- Our Numbers -->
         <OurNumbers />
+
+        <!-- FAQs -->
+        <FAQs />
+
+        <!-- Footer -->
     </div>
 </template>
 
