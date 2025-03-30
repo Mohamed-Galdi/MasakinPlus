@@ -3,6 +3,7 @@ import Hero from "@/Components/Home/Hero.vue";
 import Features from "@/Components/Home/Features.vue";
 import UsersCards from "@/Components/Home/UsersCards.vue";
 import OurNumbers from "@/Components/Home/OurNumbers.vue";
+import Teaser from "@/Components/Home/Teaser.vue";
 </script>
 
 <template>
@@ -16,6 +17,9 @@ import OurNumbers from "@/Components/Home/OurNumbers.vue";
 
         <!-- Users Cards -->
         <UsersCards />
+
+        <!-- Teaser -->
+        <Teaser />
 
         <!-- Our Numbers -->
         <OurNumbers />
