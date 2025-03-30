@@ -7,11 +7,11 @@ import UsersCards from "@/Components/Home/UsersCards.vue";
 <template>
     <div>
         <!-- hero -->
-        <!-- <Hero /> -->
+        <Hero />
         <!-- <div class="h-screen bg-white w-full"></div> -->
 
         <!-- Features -->
-        <!-- <Features /> -->
+        <Features />
 
         <!-- Users Cards -->
         <UsersCards />
