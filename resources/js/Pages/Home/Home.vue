@@ -2,6 +2,7 @@
 import Hero from "@/Components/Home/Hero.vue";
 import Features from "@/Components/Home/Features.vue";
 import UsersCards from "@/Components/Home/UsersCards.vue";
+import OurNumbers from "@/Components/Home/OurNumbers.vue";
 </script>
 
 <template>
@@ -15,6 +16,9 @@ import UsersCards from "@/Components/Home/UsersCards.vue";
 
         <!-- Users Cards -->
         <UsersCards />
+
+        <!-- Our Numbers -->
+        <OurNumbers />
     </div>
 </template>
 

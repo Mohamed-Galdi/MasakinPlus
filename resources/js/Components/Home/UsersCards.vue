@@ -103,9 +103,9 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="h-[40rem] py-16">
+    <div class="md:h-[40rem] py-16">
         <div
-            class="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 justify-center w-full max-w-7xl mx-auto md:px-4 px-8"
+            class="grid lg:grid-cols-3 grid-cols-1 justify-center w-full max-w-7xl mx-auto md:px-4 px-8"
         >
             <Link
                 href="#"
