@@ -33,6 +33,7 @@
         "lodash": "^4.17.21",
         "primeicons": "^7.0.0",
         "primevue": "^4.3.2",
+        "swiper": "^11.2.6",
         "vue-filepond": "^7.0.4"
     }
 }
