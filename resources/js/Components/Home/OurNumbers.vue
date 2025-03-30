@@ -78,7 +78,7 @@ onMounted(() => {
     <div class="bg-white pb-12">
         <div class="max-w-7xl mx-auto px-8">
             <h2
-                class="text-teal-800 font-Bein text-6xl text-center mb-16"
+                class="text-teal-800 font-Bein md:text-6xl text-4xl text-center mb-16 "
             >
                 إنجازاتنا في <span class="text-yellow-500">أرقام</span>
             </h2>

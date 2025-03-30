@@ -86,23 +86,22 @@ onMounted(() => {
     const cards = document.querySelectorAll(".property-card");
 
     gsap.utils.toArray(cards).forEach((card, index) => {
+        // Set initial state
+        gsap.set(card, { opacity: 0, y: 30 });
+
         const trigger = ScrollTrigger.create({
             trigger: card,
-            start: "top 90%",
+            start: "top 85%", // Trigger slightly earlier for smoother reveal
             onEnter: () => {
-                gsap.fromTo(
-                    card,
-                    { opacity: 0, y: 40 },
-                    {
-                        opacity: 1,
-                        y: 0,
-                        duration: 0.8,
-                        ease: "power2.out",
-                        delay: index * 0.1,
-                    }
-                );
+                gsap.to(card, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.6,
+                    ease: "power1.out",
+                    delay: index * 0.15, // Staggered delay for one-by-one effect
+                });
             },
-            once: true,
+            once: true, // Animation runs only once
         });
         triggers.value.push(trigger);
     });
@@ -197,7 +196,7 @@ onBeforeUnmount(() => {
                     </div>
                 </div>
 
-                <!-- Shadow Overlay restored -->
+                <!-- Shadow Overlay preserved -->
                 <div
                     class="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-slate-50 via-slate-50/90 to-transparent pointer-events-none"
                 ></div>

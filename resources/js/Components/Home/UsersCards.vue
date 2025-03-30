@@ -105,18 +105,18 @@ onMounted(() => {
 <template>
     <div class="min-h-screen py-20 ">
         <h2
-                class="w-full text-center text-5xl font-Bein text-teal-800 pb-12"
+                class="w-full text-center md:text-5xl text-3xl font-Bein text-teal-800 pb-12"
             >
                 إكتشف منصة مساكن <span class="text-yellow-500">بلس</span>
             </h2>
         <div
-            class="grid lg:grid-cols-3 grid-cols-1 justify-center w-full max-w-7xl mx-auto md:px-4 px-8"
+            class="grid lg:grid-cols-3 grid-cols-1 justify-center w-full max-w-7xl mx-auto md:px-4 px-4"
         >
             <Link
                 href="#"
                 v-for="(card, index) in cards"
                 :key="card.id"
-                class="group relative cursor-pointer h-[30rem]"
+                class="group relative cursor-pointer min-h-[30rem]"
             >
                 <!-- Background Layer -->
                 <div class="absolute w-full h-full z-0 bg-teal-950"></div>
