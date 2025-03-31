@@ -111,7 +111,7 @@ function submit() {
                                 </label>
                             </div>
                             <Link
-                                href="#"
+                                :href="route('forgot-password')"
                                 class="text-teal-600 hover:underline text-sm"
                             >
                                 نسيت كلمة المرور؟

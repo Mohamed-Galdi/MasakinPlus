@@ -22,6 +22,11 @@ Route::middleware('guest')->group(function () {
 
     Route::post('login', [AuthenticatedSessionController::class, 'store']);
 
+    Route::get('/otp', fn() => inertia('Auth/OTP'))->name('otp');
+    
+    Route::get('/forgot-password', fn() => inertia('Auth/ForgotPassword'))->name('forgot-password');
+
+
     // Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
     //     ->name('password.request');
 
