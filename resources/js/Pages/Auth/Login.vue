@@ -1,16 +1,25 @@
 <script setup>
+import { ref } from "vue";
 import { Head, useForm, Link } from "@inertiajs/vue3";
 import InputText from "primevue/inputtext";
+import FloatLabel from "primevue/floatlabel";
 import Password from "primevue/password";
 import Button from "primevue/button";
+import Checkbox from "primevue/checkbox";
 import { useToast } from "primevue/usetoast";
 import Toast from "primevue/toast";
+import HomeLayout from "@/Layouts/HomeLayout.vue";
+
+defineOptions({
+    layout: HomeLayout,
+});
 
 const toast = useToast();
 
 const loginForm = useForm({
     email: "",
     password: "",
+    remember: false,
 });
 
 function submit() {
@@ -22,7 +31,7 @@ function submit() {
             const errorMessage = Object.values(loginForm.errors)[0];
             toast.add({
                 severity: "error",
-                summary: "Erreur",
+                summary: "خطأ",
                 detail: errorMessage,
                 life: 3000,
             });
@@ -32,38 +41,105 @@ function submit() {
 </script>
 
 <template>
-    <div class="fixed top-0 left-0 w-screen h-screen bg-teal-900 bg-cover bg-center" 
-        style="background-image: url('/assets/images/bg-waves.png');">
-        <Head title="| Log in" />
+    <div
+        class="flex items-center justify-center font-BeinNormal bg-gray-50 h-[90vh]"
+    >
+        <Head title="| تسجيل الدخول" />
         <Toast position="top-center" />
 
-        <div class="flex items-center justify-center h-full">
-            <form @submit.prevent="submit" class="w-[22rem] flex flex-col gap-4 p-4 rounded-md bg-white/10 backdrop-blur-sm">
-                <InputText
-                    id="email"
-                    v-model="loginForm.email"
-                    type="email"
-                    placeholder="Email"
-                />
-                <Password
-                    id="password"
-                    v-model="loginForm.password"
-                    placeholder="Password"
-                    :feedback="false"
-                    toggleMask
-                />
+        <div class="relative w-full max-w-md">
+            <!-- Background overlay with subtle pattern -->
+            <div
+                class="absolute inset-0 bg-teal-800/10 rounded-2xl transform -rotate-2 scale-105 -z-10"
+            ></div>
 
-                <Button
-                    severity="contrast"
-                    type="button"
-                    label="Login"
-                    :loading="loginForm.processing"
-                    @click="submit"
-                />
+            <!-- Login Card -->
+            <div
+                class="shadow-xl border border-teal-600 bg-white/95 backdrop-blur-sm rounded-2xl p-6"
+            >
                 <div>
-                    <p>Don't have an account? <Link :href="route('register')" class="text-gray-200 hover:text-gray-50 font-semibold">Register</Link></p>
+                    <div class="text-center mb-6">
+                        <h1
+                            class="font-bold text-teal-800 font-Bein text-3xl mb-2"
+                        >
+                            تسجيل الدخول
+                        </h1>
+                        <p class="text-gray-600 text-sm">
+                            مرحبًا بعودتك! أدخل بياناتك للوصول إلى حسابك
+                        </p>
+                    </div>
+
+                    <form @submit.prevent="submit" class="flex flex-col gap-6">
+                        <!-- email -->
+                        <FloatLabel variant="on" class="w-full">
+                            <InputText
+                                id="email"
+                                v-model="loginForm.email"
+                                class="w-full border-gray-300 focus:border-teal-500 rounded-md"
+                            />
+                            <label for="email">البريد الإلكتروني</label>
+                        </FloatLabel>
+
+                        <!-- password -->
+                        <FloatLabel variant="on" class="w-full">
+                            <Password
+                                id="password"
+                                v-model="loginForm.password"
+                                :feedback="false"
+                                toggleMask
+                                class="w-full mt-1"
+                                inputClass="border-gray-300 focus:border-teal-500 rounded-md"
+                            />
+                            <label for="password">كلمة المرور</label>
+                        </FloatLabel>
+
+                        <div
+                            class="flex items-center justify-between flex-wrap gap-2"
+                        >
+                            <div class="flex items-center gap-2">
+                                <Checkbox
+                                    v-model="loginForm.remember"
+                                    inputId="remember"
+                                    name="remember"
+                                    :binary="true"
+                                />
+                                <label
+                                    for="remember"
+                                    class="text-sm text-gray-600"
+                                >
+                                    تذكرني
+                                </label>
+                            </div>
+                            <Link
+                                href="#"
+                                class="text-teal-600 hover:underline text-sm"
+                            >
+                                نسيت كلمة المرور؟
+                            </Link>
+                        </div>
+
+                        <Button
+                            severity="contrast"
+                            type="button"
+                            label="تسجيل الدخول"
+                            :loading="loginForm.processing"
+                            @click="submit"
+                        />
+
+                        <p class="text-center text-sm text-gray-600">
+                            ليس لديك حساب؟
+                            <Link
+                                :href="route('register')"
+                                class="text-teal-600 hover:underline font-semibold"
+                            >
+                                إنشاء حساب جديد
+                            </Link>
+                        </p>
+                    </form>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
 </template>
+
+<style scoped></style>
