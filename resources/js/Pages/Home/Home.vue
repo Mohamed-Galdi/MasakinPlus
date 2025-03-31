@@ -1,11 +1,11 @@
 <script setup>
-import Hero from "@/Components/Home/Hero.vue";
-import Features from "@/Components/Home/Features.vue";
-import UsersCards from "@/Components/Home/UsersCards.vue";
-import OurNumbers from "@/Components/Home/OurNumbers.vue";
-import Teaser from "@/Components/Home/Teaser.vue";
-import FAQs from "@/Components/Home/FAQs.vue";
-import Footer from "@/Components/Home/Footer.vue";
+import Hero from "@/Components/Home/Partials/Hero.vue";
+import Features from "@/Components/Home/Partials/Features.vue";
+import UsersCards from "@/Components/Home/Partials/UsersCards.vue";
+import OurNumbers from "@/Components/Home/Partials/OurNumbers.vue";
+import Teaser from "@/Components/Home/Partials/Teaser.vue";
+import FAQs from "@/Components/Home/Partials/FAQs.vue";
+import Footer from "@/Components/Home/Partials/Footer.vue";
 </script>
 
 <template>
