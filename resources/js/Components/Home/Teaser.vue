@@ -85,23 +85,23 @@ const triggers = ref([]);
 onMounted(() => {
     const cards = document.querySelectorAll(".property-card");
 
-    gsap.utils.toArray(cards).forEach((card, index) => {
-        // Set initial state
-        gsap.set(card, { opacity: 0, y: 30 });
+    // Set initial state for all cards immediately
+    gsap.set(cards, { opacity: 0, y: 20 });
 
+    gsap.utils.toArray(cards).forEach((card, index) => {
         const trigger = ScrollTrigger.create({
             trigger: card,
-            start: "top 85%", // Trigger slightly earlier for smoother reveal
+            start: "top 90%", // Slightly later to avoid premature triggering
             onEnter: () => {
                 gsap.to(card, {
                     opacity: 1,
                     y: 0,
-                    duration: 0.6,
+                    duration: 0.4, // Faster duration
                     ease: "power1.out",
-                    delay: index * 0.15, // Staggered delay for one-by-one effect
+                    delay: index * 0.05, // Much shorter stagger delay
                 });
             },
-            once: true, // Animation runs only once
+            once: true,
         });
         triggers.value.push(trigger);
     });

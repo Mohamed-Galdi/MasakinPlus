@@ -7,17 +7,17 @@ gsap.registerPlugin(ScrollTrigger);
 
 const stats = [
     {
-        label: "لدينا حتى الآن أكثر من ٦٠ مالك راضٍ",
+        label: "لدينا حتى الآن أكثر من 45 مالك راضٍ",
         number: 45,
         icon: "fa-solid fa-home",
     },
     {
-        label: "لدينا أكثر من ٤٥ مستثمر ناجح",
+        label: "لدينا أكثر من 68 مستثمر ناجح",
         number: 68,
         icon: "fa-solid fa-coins",
     },
     {
-        label: "لدينا أكثر من ١٨٠ مستأجر سعيد",
+        label: "لدينا أكثر من 180 مستأجر سعيد",
         number: 180,
         icon: "fa-solid fa-user",
     },

@@ -5,6 +5,7 @@ import UsersCards from "@/Components/Home/UsersCards.vue";
 import OurNumbers from "@/Components/Home/OurNumbers.vue";
 import Teaser from "@/Components/Home/Teaser.vue";
 import FAQs from "@/Components/Home/FAQs.vue";
+import Footer from "@/Components/Home/Footer.vue";
 </script>
 
 <template>
@@ -29,6 +30,7 @@ import FAQs from "@/Components/Home/FAQs.vue";
         <FAQs />
 
         <!-- Footer -->
+         <Footer />
     </div>
 </template>
 
