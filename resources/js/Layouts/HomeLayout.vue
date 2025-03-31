@@ -1,24 +1,27 @@
 <script setup>
-import Footer from "@/Components/Home/Footer.vue";
+import { Link } from "@inertiajs/vue3";
+import Footer from "@/Components/Home/Partials/Footer.vue";
 import HomeButton from "@/Components/Home/HomeButton.vue";
 </script>
 
 <template>
     <div class="relative">
         <!-- navbar -->
-        <nav class="absolute flex justify-between items-center text-white px-24 py-4 mx-auto z-50 w-full ">
-            <div class="nav-logo">
+        <nav
+            class="absolute flex justify-between items-center text-white md:px-24 px-4 py-4 mx-auto z-50 w-full bg-gradient-to-tl from-teal-700 to-teal-900"
+        >
+            <Link :href="route('home')" class="nav-logo">
                 <img
                     src="/assets/logos/logo_white.png"
                     alt="MasakinPlus"
                     class="w-16 h-16"
                 />
-            </div>
+            </Link>
             <div class="nav-join-btn"><HomeButton /></div>
         </nav>
 
         <!-- main content -->
-        <div class="bg-gray-50">
+        <div class="bg-gray-50 min-h-screen pt-24">
             <slot />
         </div>
 

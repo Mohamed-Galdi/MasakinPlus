@@ -74,29 +74,29 @@ const currentYear = new Date().getFullYear();
                 <!-- Social Icons Section -->
                 <div class="flex flex-col items-center">
                     <p
-                        class="text-yellow-500 font-BeinNormal text-base sm:text-lg mb-2"
+                        class="text-yellow-500 font-BeinNormal text-base sm:text-lg mb-5"
                     >
                         صفحاتنا الإجتماعية
                     </p>
-                    <ul class="flex items-center gap-3 sm:gap-4 text-white">
+                    <ul class="flex items-center gap-3 sm:gap-4 text-white ">
                         <li>
-                            <i
-                                class="pi pi-facebook hover:text-yellow-400 cursor-pointer text-xl sm:text-2xl transition-colors"
+                            <i style="font-size: 1.3rem;"
+                                class="pi pi-facebook hover:text-yellow-400 cursor-pointer transition-colors"
                             />
                         </li>
                         <li>
-                            <i
-                                class="pi pi-instagram hover:text-yellow-400 cursor-pointer text-xl sm:text-2xl transition-colors"
+                            <i  style="font-size: 1.3rem;"
+                                class="pi pi-instagram hover:text-yellow-400 cursor-pointer transition-colors"
                             />
                         </li>
                         <li>
-                            <i
-                                class="pi pi-twitter hover:text-yellow-400 cursor-pointer text-xl sm:text-2xl transition-colors"
+                            <i  style="font-size: 1.3rem;"
+                                class="pi pi-twitter hover:text-yellow-400 cursor-pointer transition-colors"
                             />
                         </li>
                         <li>
-                            <i
-                                class="pi pi-tiktok hover:text-yellow-400 cursor-pointer text-xl sm:text-2xl transition-colors"
+                            <i  style="font-size: 1.3rem;"
+                                class="pi pi-tiktok hover:text-yellow-400 cursor-pointer transition-colors"
                             />
                         </li>
                     </ul>
