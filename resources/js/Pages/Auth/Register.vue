@@ -11,10 +11,10 @@ import Toast from "primevue/toast";
 import HomeLayout from "@/Layouts/HomeLayout.vue";
 import Avatar from "primevue/avatar";
 import AvatarGroup from "primevue/avatargroup";
-import Select from "primevue/select";
+import AuthLayout from "@/Layouts/AuthLAyout.vue";
 
 defineOptions({
-    layout: HomeLayout,
+    layout: AuthLayout,
 });
 
 const toast = useToast();

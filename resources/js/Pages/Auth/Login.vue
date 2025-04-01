@@ -8,10 +8,10 @@ import Button from "primevue/button";
 import Checkbox from "primevue/checkbox";
 import { useToast } from "primevue/usetoast";
 import Toast from "primevue/toast";
-import HomeLayout from "@/Layouts/HomeLayout.vue";
+import AuthLayout from "@/Layouts/AuthLAyout.vue";
 
 defineOptions({
-    layout: HomeLayout,
+    layout: AuthLayout,
 });
 
 const toast = useToast();
@@ -42,16 +42,12 @@ function submit() {
 
 <template>
     <div
-        class="flex items-center justify-center font-BeinNormal bg-gray-50 h-[90vh]"
+        class="flex items-center justify-center font-BeinNormal pt-40 "
     >
         <Head title="| تسجيل الدخول" />
         <Toast position="top-center" />
 
         <div class="relative w-full max-w-md">
-            <!-- Background overlay with subtle pattern -->
-            <div
-                class="absolute inset-0 bg-teal-800/10 rounded-2xl transform -rotate-2 scale-105 -z-10"
-            ></div>
 
             <!-- Login Card -->
             <div

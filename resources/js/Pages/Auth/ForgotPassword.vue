@@ -6,10 +6,10 @@ import FloatLabel from "primevue/floatlabel";
 import Button from "primevue/button";
 import { useToast } from "primevue/usetoast";
 import Toast from "primevue/toast";
-import HomeLayout from "@/Layouts/HomeLayout.vue";
+import AuthLayout from "@/Layouts/AuthLAyout.vue";
 
 defineOptions({
-    layout: HomeLayout,
+    layout: AuthLayout,
 });
 
 const toast = useToast();
