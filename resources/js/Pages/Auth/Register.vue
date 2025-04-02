@@ -6,12 +6,12 @@ import FloatLabel from "primevue/floatlabel";
 import Password from "primevue/password";
 import Button from "primevue/button";
 import Checkbox from "primevue/checkbox";
+import Select  from "primevue/select";
 import { useToast } from "primevue/usetoast";
 import Toast from "primevue/toast";
-import HomeLayout from "@/Layouts/HomeLayout.vue";
 import Avatar from "primevue/avatar";
 import AvatarGroup from "primevue/avatargroup";
-import AuthLayout from "@/Layouts/AuthLAyout.vue";
+import AuthLayout from "@/Layouts/AuthLayout.vue";
 
 defineOptions({
     layout: AuthLayout,
