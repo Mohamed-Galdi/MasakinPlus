@@ -1,7 +1,7 @@
 <script setup>
 import { Link } from "@inertiajs/vue3";
-import Footer from "@/Components/Home/Partials/Footer.vue";
-import HomeButton from "@/Components/Home/HomeButton.vue";
+import Footer from "@/Partials/Home/Footer.vue";
+import HomeButton from "@/Components/HomeButton.vue";
 </script>
 
 <template>

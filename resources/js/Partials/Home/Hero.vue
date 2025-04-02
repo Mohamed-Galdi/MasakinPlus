@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from "vue";
 import { gsap } from "gsap";
-import HomeButton from "@/Components/Home/HomeButton.vue";
+import HomeButton from "@/Components/HomeButton.vue";
 
 // Configuration variables
 const ANIMATION_CONFIG = {

@@ -1,11 +1,11 @@
 <script setup>
-import Hero from "@/Components/Home/Partials/Hero.vue";
-import Features from "@/Components/Home/Partials/Features.vue";
-import UsersCards from "@/Components/Home/Partials/UsersCards.vue";
-import OurNumbers from "@/Components/Home/Partials/OurNumbers.vue";
-import Teaser from "@/Components/Home/Partials/Teaser.vue";
-import FAQs from "@/Components/Home/Partials/FAQs.vue";
-import Footer from "@/Components/Home/Partials/Footer.vue";
+import Hero from "@/Partials/Home/Hero.vue";
+import Features from "@/Partials/Home/Features.vue";
+import UsersCards from "@/Partials/Home/UsersCards.vue";
+import OurNumbers from "@/Partials/Home/OurNumbers.vue";
+import Teaser from "@/Partials/Home/Teaser.vue";
+import FAQs from "@/Partials/Home/FAQs.vue";
+import Footer from "@/Partials/Home/Footer.vue";
 </script>
 
 <template>
@@ -30,7 +30,7 @@ import Footer from "@/Components/Home/Partials/Footer.vue";
         <FAQs />
 
         <!-- Footer -->
-         <Footer />
+        <Footer />
     </div>
 </template>
 

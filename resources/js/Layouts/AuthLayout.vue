@@ -1,8 +1,8 @@
 <script setup>
 import { ref, onMounted, onUnmounted, nextTick } from "vue";
 import { Link } from "@inertiajs/vue3";
-import Footer from "@/Components/Home/Partials/Footer.vue";
-import HomeButton from "@/Components/Home/HomeButton.vue";
+import Footer from "@/Partials/Home/Footer.vue";
+import HomeButton from "@/Components/HomeButton.vue";
 import { gsap } from "gsap";
 
 // Reactive paths array
@@ -121,7 +121,10 @@ onUnmounted(() => {
         <!-- Main Content -->
         <div class="relative min-h-screen z-10">
             <!-- Background paths (hidden on mobile) -->
-            <div v-if="!isMobile" class="absolute inset-0 pointer-events-none z-0">
+            <div
+                v-if="!isMobile"
+                class="absolute inset-0 pointer-events-none z-0"
+            >
                 <svg
                     class="w-full h-full text-teal-700/40"
                     viewBox="0 0 696 316"

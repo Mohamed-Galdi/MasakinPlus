@@ -2,7 +2,7 @@
 import { ref, onMounted, onUnmounted } from "vue";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import HomeButton from "@/Components/Home/HomeButton.vue";
+import HomeButton from "@/Components/HomeButton.vue";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import "swiper/css";
 import { Pagination } from "swiper/modules"; // Add pagination module for dots
