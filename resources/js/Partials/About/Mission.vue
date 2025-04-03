@@ -40,18 +40,20 @@ onMounted(() => {
 </script>
 
 <template>
-    <section ref="missionRef" class="py-24 bg-white">
+    <section id="mission" ref="missionRef" class="py-24 bg-white">
         <div class="container mx-auto px-4">
             <div class="text-center max-w-3xl mx-auto mb-6">
                 <h2
                     class="mission-title text-2xl md:text-3xl font-bold mb-8 text-teal-800 leading-tight font-BlueOcean [word-spacing:1rem]"
                 >
-                    رؤيتنا  و  رسالتنا
+                    رؤيتنا و رسالتنا
                 </h2>
-                <p class="mission-text text-xl leading-relaxed text-gray-700 font-BeinNormal">
+                <p
+                    class="mission-text text-xl leading-relaxed text-gray-700 font-BeinNormal"
+                >
                     نسعى في مساكن بلس إلى إحداث ثورة في سوق العقارات السعودي من
                     خلال منصة مبتكرة تجمع بين أصحاب العقارات والمستثمرين
-                    والمستأجرين. هدفنا هو تسهيل الاستثمار العقاري وجعله متاحاً
+                    والمستأجرين. هدفنا هو تسهيل الاستثمار العقاري وجعله متاحا
                     للجميع، مع توفير خيارات سكنية متنوعة تلبي احتياجات
                     المستأجرين.
                 </p>

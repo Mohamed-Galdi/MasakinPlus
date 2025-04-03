@@ -18,7 +18,7 @@ const team = ref([
         name: "عبدالعزيز الدوسري ",
         position: "مديرة العمليات",
         image: "assets/about_us_images/team/4444.jpg",
-        quote: "نبني جسراً بين أصحاب العقارات والمستثمرين",
+        quote: "نبني جسرا بين أصحاب العقارات والمستثمرين",
     },
     {
         name: "محمد القحطاني",
@@ -30,7 +30,7 @@ const team = ref([
         name: "فهد المطيري ",
         position: "مديرة التسويق",
         image: "assets/about_us_images/team/1111.jpg",
-        quote: "نصنع مستقبلاً أفضل للسوق العقاري السعودي",
+        quote: "نصنع مستقبلا أفضل للسوق العقاري السعودي",
     },
 ]);
 
@@ -64,7 +64,9 @@ onMounted(() => {
                 فريقنا
             </h2>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 font-Bein">
+            <div
+                class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 font-Bein"
+            >
                 <div
                     v-for="(member, index) in team"
                     :key="index"
@@ -95,7 +97,7 @@ onMounted(() => {
 
                         <!-- Info card -->
                         <div
-                            class="absolute bottom-0 left-0 w-full bg-slate-200 p-4 transform translate-y-0 group-hover:translate-y-full  transition-transform duration-300"
+                            class="absolute bottom-0 left-0 w-full bg-slate-200 p-4 transform translate-y-0 group-hover:translate-y-full transition-transform duration-300"
                         >
                             <h3 class="text-xl font-bold text-teal-800">
                                 {{ member.name }}

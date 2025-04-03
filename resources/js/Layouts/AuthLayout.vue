@@ -115,7 +115,7 @@ onUnmounted(() => {
                     class="w-16 h-16"
                 />
             </Link>
-            <div class="nav-join-btn"><HomeButton /></div>
+            <!-- <div class="nav-join-btn"><HomeButton /></div> -->
         </nav>
 
         <!-- Main Content -->

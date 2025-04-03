@@ -71,7 +71,9 @@ onBeforeUnmount(() => {
                     loading="eager"
                 />
             </Link>
-            <HomeButton />
+            <Link :href="route('register')">
+                <HomeButton />
+            </Link>
         </nav>
 
         <div class="absolute inset-0 overflow-hidden pointer-events-none">
@@ -107,7 +109,7 @@ onBeforeUnmount(() => {
                     والمستأجرين
                 </p>
                 <div class="hero-cta flex flex-wrap gap-4 font-Bein">
-                    <button
+                    <Link href="#mission"
                         class="group relative overflow-hidden rounded-full bg-gradient-to-r from-teal-600 to-teal-800 px-8 py-4 font-bold transition-all duration-300"
                     >
                         <span
@@ -117,8 +119,8 @@ onBeforeUnmount(() => {
                         <span
                             class="absolute inset-0 bg-white translate-y-full group-hover:translate-y-0 transition-transform duration-300"
                         ></span>
-                    </button>
-                    <button
+                    </Link>
+                    <Link href="#contact"
                         class="group hover:text-teal-800 relative overflow-hidden rounded-full border-2 border-white px-8 py-4 font-bold text-white transition-all duration-300"
                     >
                         <span class="relative z-10 flex items-center gap-2">
@@ -128,7 +130,7 @@ onBeforeUnmount(() => {
                         <span
                             class="absolute inset-0 bg-white translate-y-full group-hover:translate-y-0 transition-transform duration-300"
                         ></span>
-                    </button>
+                    </Link>
                 </div>
             </div>
 

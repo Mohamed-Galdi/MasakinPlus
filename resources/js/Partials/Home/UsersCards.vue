@@ -20,7 +20,7 @@ const cards = [
     {
         title: "للمستثمرين",
         listItems: [
-            "حقق أرباحًا مجزية باستثمارات مدروسة",
+            "حقق أرباحا مجزية باستثمارات مدروسة",
             "استثمر دون الحاجة لإدارة العقارات بنفسك",
             "استفد من فرص مضمونة بعوائد ثابتة",
             "انضم إلى نخبة المستثمرين في السوق العقاري",
@@ -110,8 +110,8 @@ onMounted(() => {
         <div
             class="grid lg:grid-cols-3 grid-cols-1 justify-center w-full max-w-7xl mx-auto md:px-4 px-4"
         >
-            <Link
-                href="#"
+            <a
+                :href="route('about-us')"
                 v-for="(card, index) in cards"
                 :key="card.id"
                 class="group relative cursor-pointer min-h-[30rem]"
@@ -185,7 +185,7 @@ onMounted(() => {
                         </button>
                     </div>
                 </div>
-            </Link>
+            </a>
         </div>
     </div>
 </template>

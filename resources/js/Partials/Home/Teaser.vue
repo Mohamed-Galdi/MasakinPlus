@@ -2,6 +2,7 @@
 import { ref, onMounted, onBeforeUnmount } from "vue";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Link } from "@inertiajs/vue3";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -203,12 +204,13 @@ onBeforeUnmount(() => {
             </div>
 
             <div class="text-center mt-8 relative z-10">
-                <button
-                    class="bg-teal-600 text-white font-BeinNormal text-lg py-3 px-8 rounded-full hover:bg-teal-700 transition-colors duration-300 flex mx-auto items-center gap-2"
+                <Link
+                    :href="route('login')"
+                    class="bg-teal-600 w-fit text-white font-BeinNormal text-lg py-3 px-8 rounded-full hover:bg-teal-700 transition-colors duration-300 flex mx-auto items-center gap-2"
                 >
                     <Icon icon="fa-solid fa-arrow-right" class="w-6 h-6" />
                     <span>شاهد المزيد</span>
-                </button>
+                </Link>
             </div>
         </div>
     </section>

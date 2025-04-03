@@ -1,9 +1,8 @@
 <script setup>
-import { MapPin, Phone, Mail, ArrowLeft } from "lucide-vue-next";
 </script>
 
 <template>
-    <section class="py-24 bg-gray-50 relative overflow-hidden font-Bein">
+    <section id="contact" class="py-24 bg-gray-50 relative overflow-hidden font-Bein">
         <!-- Background elements -->
         <div class="absolute inset-0">
             <div
@@ -47,9 +46,9 @@ import { MapPin, Phone, Mail, ArrowLeft } from "lucide-vue-next";
                             <div class="space-y-6">
                                 <div class="flex items-center gap-4">
                                     <div
-                                        class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center"
+                                        class="w-12 h-12 rounded-full bg-white/10 grid place-items-center"
                                     >
-                                        <MapPin class="w-6 h-6 text-white" />
+                                        <i class="pi pi-map-marker  "  style="font-size: 1.3rem;"/>
                                     </div>
                                     <div>
                                         <p class="font-bold">
@@ -63,9 +62,9 @@ import { MapPin, Phone, Mail, ArrowLeft } from "lucide-vue-next";
 
                                 <div class="flex items-center gap-4">
                                     <div
-                                        class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center"
+                                        class="w-12 h-12 rounded-full bg-white/10 grid place-items-center"
                                     >
-                                        <Phone class="w-6 h-6 text-white" />
+                                        <i class="pi pi-whatsapp  "  style="font-size: 1.3rem;"/>
                                     </div>
                                     <div>
                                         <p class="font-bold text-end" dir="ltr">
@@ -79,9 +78,9 @@ import { MapPin, Phone, Mail, ArrowLeft } from "lucide-vue-next";
 
                                 <div class="flex items-center gap-4">
                                     <div
-                                        class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center"
+                                        class="w-12 h-12 rounded-full bg-white/10 grid place-items-center"
                                     >
-                                        <Mail class="w-6 h-6 text-white" />
+                                        <i class="pi pi-envelope  "  style="font-size: 1.3rem;"/>
                                     </div>
                                     <div>
                                         <p class="font-bold">
@@ -157,7 +156,6 @@ import { MapPin, Phone, Mail, ArrowLeft } from "lucide-vue-next";
                                 class="w-full bg-gradient-to-r from-teal-600 to-teal-800 text-white py-4 rounded-xl font-bold hover:from-teal-700 hover:to-teal-900 transition-colors shadow-lg flex items-center justify-center gap-2"
                             >
                                 <span>إرسال الرسالة</span>
-                                <ArrowLeft class="w-5 h-5" />
                             </button>
                         </form>
                     </div>

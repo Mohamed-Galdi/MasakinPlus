@@ -2,7 +2,7 @@
 import { ref, onMounted, onUnmounted } from "vue";
 import { gsap } from "gsap";
 import HomeButton from "@/Components/HomeButton.vue";
-
+import { Link } from "@inertiajs/vue3";
 // Configuration variables
 const ANIMATION_CONFIG = {
     initialLoadStaggerDuration: 0.6,
@@ -164,14 +164,14 @@ onUnmounted(() => clearInterval(autoSwipeInterval));
             class="relative z-10 container mx-auto px-4 flex flex-col justify-between h-screen pb-8"
         >
             <nav class="flex justify-between items-center py-4 text-white">
-                <div class="nav-logo">
+                <Link href="/" class="nav-logo">
                     <img
                         src="/assets/logos/logo_white.png"
                         alt="MasakinPlus"
                         class="w-16 h-16"
                     />
-                </div>
-                <div class="nav-join-btn"><HomeButton /></div>
+                </Link>
+                <Link :href="route('register')" class="nav-join-btn"><HomeButton /></Link>
             </nav>
             <div class="grid md:grid-cols-2 gap-8 items-center">
                 <div class="text-right text-white">
@@ -191,9 +191,9 @@ onUnmounted(() => clearInterval(autoSwipeInterval));
                         ref="slideButton"
                         class="btn-primary transition-colors duration-300 ease-in-out"
                     >
-                        <p class="font-BlueOcean text-xs pt-1">
+                        <Link :href="route('login')" class="font-BlueOcean text-xs pt-1">
                             {{ slides[currentSlide].buttonText }}
-                        </p>
+                        </Link>
                     </button>
                 </div>
                 <div class="md:block">

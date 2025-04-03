@@ -204,7 +204,7 @@ function submit() {
                             <label for="terms" class="text-sm text-gray-600">
                                 بالموافقة، أنت توافق على
                                 <Link
-                                    href="#"
+                                    :href="route('privacy-policy')"
                                     class="text-teal-600 hover:underline"
                                     >الشروط والأحكام</Link
                                 >

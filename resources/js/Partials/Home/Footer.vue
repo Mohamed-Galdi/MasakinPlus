@@ -13,7 +13,7 @@ const currentYear = new Date().getFullYear();
                 class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-12 items-start"
             >
                 <!-- Logo Section -->
-                <div class="flex flex-col items-center gap-2">
+                <Link :href="route('home')" class="flex flex-col items-center gap-2">
                     <img
                         src="/assets/logos/logo_white.png"
                         alt="MasakinPlus"
@@ -22,7 +22,7 @@ const currentYear = new Date().getFullYear();
                     <p class="font-Bein font-semibold text-lg sm:text-xl">
                         مساكن <span class="text-yellow-500">بلس</span>
                     </p>
-                </div>
+                </Link>
 
                 <!-- Accounts Section -->
                 <div class="flex flex-col items-center">
@@ -33,12 +33,12 @@ const currentYear = new Date().getFullYear();
                     </p>
                     <div class="flex flex-col items-start gap-1">
                         <Link
-                            href="#"
+                            :href="route('register')"
                             class="font-Alarabiya text-base sm:text-lg hover:text-yellow-400 transition-colors"
                             >إنشاء حساب</Link
                         >
                         <Link
-                            href="#"
+                            :href="route('login')"
                             class="font-Alarabiya text-base sm:text-lg hover:text-yellow-400 transition-colors"
                             >تسجيل الدخول</Link
                         >
@@ -54,20 +54,16 @@ const currentYear = new Date().getFullYear();
                     </p>
                     <div class="flex flex-col items-start gap-1">
                         <Link
-                            href="#"
-                            class="font-Alarabiya text-base sm:text-lg hover:text-yellow-400 transition-colors"
-                            >من نحن</Link
+                        :href="route('privacy-policy')"
+                        class="font-Alarabiya text-base sm:text-lg hover:text-yellow-400 transition-colors"
+                        >سياسة الخصوصية</Link
                         >
-                        <Link
-                            href="#"
+                        <a
+                            :href="route('about-us')"
                             class="font-Alarabiya text-base sm:text-lg hover:text-yellow-400 transition-colors"
-                            >سياسة الخصوصية</Link
+                            >من نحن</a
                         >
-                        <Link
-                            href="#"
-                            class="font-Alarabiya text-base sm:text-lg hover:text-yellow-400 transition-colors"
-                            >تواصل معنا</Link
-                        >
+                       
                     </div>
                 </div>
 
@@ -80,24 +76,32 @@ const currentYear = new Date().getFullYear();
                     </p>
                     <ul class="flex items-center gap-3 sm:gap-4 text-white ">
                         <li>
-                            <i style="font-size: 1.3rem;"
-                                class="pi pi-facebook hover:text-yellow-400 cursor-pointer transition-colors"
-                            />
+                           <a href="https://www.facebook.com/masakinplus" target="_blank">
+                                <i style="font-size: 1.3rem;"
+                                    class="pi pi-facebook hover:text-yellow-400 cursor-pointer transition-colors"
+                                />
+                           </a>
                         </li>
                         <li>
-                            <i  style="font-size: 1.3rem;"
-                                class="pi pi-instagram hover:text-yellow-400 cursor-pointer transition-colors"
-                            />
+                           <a href="https://www.instagram.com/masakinplus/" target="_blank">
+                                <i  style="font-size: 1.3rem;"
+                                    class="pi pi-instagram hover:text-yellow-400 cursor-pointer transition-colors"
+                                />
+                           </a>
                         </li>
                         <li>
-                            <i  style="font-size: 1.3rem;"
-                                class="pi pi-twitter hover:text-yellow-400 cursor-pointer transition-colors"
-                            />
+                            <a href="https://twitter.com/masakinplus" target="_blank">
+                                <i  style="font-size: 1.3rem;"
+                                    class="pi pi-twitter hover:text-yellow-400 cursor-pointer transition-colors"
+                                />
+                            </a>
                         </li>
                         <li>
-                            <i  style="font-size: 1.3rem;"
-                                class="pi pi-tiktok hover:text-yellow-400 cursor-pointer transition-colors"
-                            />
+                            <a href="https://www.tiktok.com/@masakinplus" target="_blank">
+                                <i  style="font-size: 1.3rem;"
+                                    class="pi pi-tiktok hover:text-yellow-400 cursor-pointer transition-colors"
+                                />
+                            </a>
                         </li>
                     </ul>
                 </div>

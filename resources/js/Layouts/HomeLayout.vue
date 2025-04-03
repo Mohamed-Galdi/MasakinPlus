@@ -17,7 +17,9 @@ import HomeButton from "@/Components/HomeButton.vue";
                     class="w-16 h-16"
                 />
             </Link>
-            <div class="nav-join-btn"><HomeButton /></div>
+            <Link :href="route('register')" class="nav-join-btn"
+                ><HomeButton
+            /></Link>
         </nav>
 
         <!-- main content -->

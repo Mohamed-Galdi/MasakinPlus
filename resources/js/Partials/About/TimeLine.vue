@@ -11,25 +11,28 @@ const milestones = ref([
     {
         year: "2022",
         title: "انطلاقة الرؤية",
-        description: "بدأت فكرة مساكن بلس بهدف إحداث ثورة في سوق العقارات عبر حلول رقمية مبتكرة.",
+        description:
+            "بدأت فكرة مساكن بلس بهدف إحداث ثورة في سوق العقارات عبر حلول رقمية مبتكرة.",
     },
     {
         year: "2023",
-        title: "إطلاق المنصة رسميًا",
-        description: "تم إطلاق منصتنا الرقمية، موفرةً تجربة سلسة لأصحاب العقارات والمستثمرين والمستأجرين.",
+        title: "إطلاق المنصة رسميا",
+        description:
+            "تم إطلاق منصتنا الرقمية، موفرةً تجربة سلسة لأصحاب العقارات والمستثمرين والمستأجرين.",
     },
     {
         year: "2024",
         title: "التوسع على مستوى المملكة",
-        description: "وسعنا نطاق خدماتنا لتشمل مختلف المدن السعودية، مما عزز من فرص الاستثمار والتأجير.",
+        description:
+            "وسعنا نطاق خدماتنا لتشمل مختلف المدن السعودية، مما عزز من فرص الاستثمار والتأجير.",
     },
     {
         year: "2025",
         title: "شراكات استراتيجية كبرى",
-        description: "عقدنا تحالفات مع كبرى الشركات العقارية والمستثمرين لتعزيز نمو السوق وزيادة العوائد.",
+        description:
+            "عقدنا تحالفات مع كبرى الشركات العقارية والمستثمرين لتعزيز نمو السوق وزيادة العوائد.",
     },
-]);  
-
+]);
 
 // Animation function
 function setupScrollAnimations() {
@@ -67,7 +70,7 @@ onMounted(() => {
                     class="absolute top-8 left-1/2 w-1 h-[90%] bg-teal-800 transform -translate-x-1/2 hidden md:block"
                 ></div>
 
-                <div class="space-y-24 ">
+                <div class="space-y-24">
                     <div
                         v-for="(milestone, index) in milestones"
                         :key="index"
@@ -81,17 +84,18 @@ onMounted(() => {
                                     : 'md:flex-row-reverse'
                             "
                         >
-
                             <!-- Content -->
                             <div
-                                class="md:w-1/2 rounded-3xl shadow-lg overflow-hidden mt-8 md:mt-0 relative  flex justify-between items-center border-2 border-teal-800 font-Bein mx-[2px]"
+                                class="md:w-1/2 rounded-3xl shadow-lg overflow-hidden mt-8 md:mt-0 relative flex justify-between items-center border-2 border-teal-800 font-Bein mx-[2px]"
                                 :class="
-                                index % 2 !== 0
-                                    ? 'md:flex-row'
-                                    : 'md:flex-row-reverse'
-                            "
+                                    index % 2 !== 0
+                                        ? 'md:flex-row'
+                                        : 'md:flex-row-reverse'
+                                "
                             >
-                                <div class="bg-teal-800 text-white w-1/6 h-[6rem] items-center flex justify-center">
+                                <div
+                                    class="bg-teal-800 text-white w-1/6 h-[6rem] items-center flex justify-center"
+                                >
                                     {{ milestone.year }}
                                 </div>
 
@@ -101,7 +105,9 @@ onMounted(() => {
                                     >
                                         {{ milestone.title }}
                                     </h3>
-                                    <p class="text-gray-600 md:text-base text-sm">
+                                    <p
+                                        class="text-gray-600 md:text-base text-sm"
+                                    >
                                         {{ milestone.description }}
                                     </p>
                                 </div>

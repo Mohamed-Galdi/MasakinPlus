@@ -5,7 +5,8 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import HomeButton from "@/Components/HomeButton.vue";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import "swiper/css";
-import { Pagination } from "swiper/modules"; // Add pagination module for dots
+import { Pagination } from "swiper/modules";
+import { Link } from "@inertiajs/vue3";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -168,7 +169,9 @@ onUnmounted(() => {
                         >
                             {{ slide.subtitle }}
                         </p>
-                        <HomeButton :title="slide.cta" />
+                        <Link :href="route('login')"
+                            ><HomeButton :title="slide.cta"
+                        /></Link>
                     </div>
                 </div>
             </div>
