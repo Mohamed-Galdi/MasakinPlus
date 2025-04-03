@@ -97,11 +97,11 @@ onMounted(() => {
 
                                 <div class="px-6 w-5/6">
                                     <h3
-                                        class="text-2xl font-bold mb-2 text-teal-800"
+                                        class="md:text-2xl text-xl font-bold mb-2 text-teal-800"
                                     >
                                         {{ milestone.title }}
                                     </h3>
-                                    <p class="text-gray-600">
+                                    <p class="text-gray-600 md:text-base text-sm">
                                         {{ milestone.description }}
                                     </p>
                                 </div>

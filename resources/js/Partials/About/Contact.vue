@@ -3,7 +3,7 @@ import { MapPin, Phone, Mail, ArrowLeft } from "lucide-vue-next";
 </script>
 
 <template>
-    <section class="py-24 bg-gray-50 relative overflow-hidden">
+    <section class="py-24 bg-gray-50 relative overflow-hidden font-Bein">
         <!-- Background elements -->
         <div class="absolute inset-0">
             <div
@@ -16,7 +16,7 @@ import { MapPin, Phone, Mail, ArrowLeft } from "lucide-vue-next";
 
         <div class="container mx-auto px-4 relative z-10">
             <div
-                class="max-w-5xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden"
+                class="max-w-7xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden"
             >
                 <div class="flex flex-col md:flex-row">
                     <div
@@ -39,7 +39,7 @@ import { MapPin, Phone, Mail, ArrowLeft } from "lucide-vue-next";
 
                         <div class="relative z-10">
                             <h2 class="text-3xl font-bold mb-8">تواصل معنا</h2>
-                            <p class="mb-12 text-teal-100 text-lg">
+                            <p class="mb-12 text-teal-100 text-lg font-BeinNormal">
                                 نحن هنا للإجابة على استفساراتكم ومساعدتكم في كل
                                 ما يتعلق بخدماتنا العقارية
                             </p>
@@ -55,8 +55,8 @@ import { MapPin, Phone, Mail, ArrowLeft } from "lucide-vue-next";
                                         <p class="font-bold">
                                             الرياض، المملكة العربية السعودية
                                         </p>
-                                        <p class="text-teal-200">
-                                            طريق الملك فهد، برج المملكة
+                                        <p class="text-teal-200 font-BeinNormal">
+                                            طريق الملك فهد
                                         </p>
                                     </div>
                                 </div>
@@ -68,10 +68,10 @@ import { MapPin, Phone, Mail, ArrowLeft } from "lucide-vue-next";
                                         <Phone class="w-6 h-6 text-white" />
                                     </div>
                                     <div>
-                                        <p class="font-bold">
+                                        <p class="font-bold text-end" dir="ltr">
                                             +966 12 345 6789
                                         </p>
-                                        <p class="text-teal-200">
+                                        <p class="text-teal-200 font-BeinNormal">
                                             من الأحد إلى الخميس، ٩ ص - ٥ م
                                         </p>
                                     </div>
@@ -87,7 +87,7 @@ import { MapPin, Phone, Mail, ArrowLeft } from "lucide-vue-next";
                                         <p class="font-bold">
                                             info@masakinplus.sa
                                         </p>
-                                        <p class="text-teal-200">
+                                        <p class="text-teal-200 font-BeinNormal">
                                             تواصل معنا في أي وقت
                                         </p>
                                     </div>

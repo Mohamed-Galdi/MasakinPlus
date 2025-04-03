@@ -59,7 +59,7 @@ onMounted(() => {
     <section ref="teamRef" class="py-24 bg-white">
         <div class="container mx-auto px-4">
             <h2
-                class="text-4xl md:text-5xl font-bold mb-20 text-center text-teal-800 font-BlueOcean"
+                class="text-3xl md:text-4xl font-bold mb-20 text-center text-teal-800 font-BlueOcean"
             >
                 فريقنا
             </h2>
