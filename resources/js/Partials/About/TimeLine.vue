@@ -9,26 +9,27 @@ gsap.registerPlugin(ScrollTrigger);
 const timelineRef = ref(null);
 const milestones = ref([
     {
-        year: "2020",
-        title: "تأسيس مساكن بلس",
-        description: "بدأنا رحلتنا بفكرة بسيطة لتغيير سوق العقارات",
-    },
-    {
-        year: "2021",
-        title: "إطلاق المنصة",
-        description: "أطلقنا منصتنا الرقمية الأولى لربط المالكين والمستثمرين",
-    },
-    {
         year: "2022",
-        title: "توسع الخدمات",
-        description: "توسعنا لنشمل المزيد من المدن في المملكة العربية السعودية",
+        title: "انطلاقة الرؤية",
+        description: "بدأت فكرة مساكن بلس بهدف إحداث ثورة في سوق العقارات عبر حلول رقمية مبتكرة.",
     },
     {
         year: "2023",
-        title: "شراكات استراتيجية",
-        description: "عقدنا شراكات مع كبرى الشركات العقارية والمستثمرين",
+        title: "إطلاق المنصة رسميًا",
+        description: "تم إطلاق منصتنا الرقمية، موفرةً تجربة سلسة لأصحاب العقارات والمستثمرين والمستأجرين.",
     },
-]);
+    {
+        year: "2024",
+        title: "التوسع على مستوى المملكة",
+        description: "وسعنا نطاق خدماتنا لتشمل مختلف المدن السعودية، مما عزز من فرص الاستثمار والتأجير.",
+    },
+    {
+        year: "2025",
+        title: "شراكات استراتيجية كبرى",
+        description: "عقدنا تحالفات مع كبرى الشركات العقارية والمستثمرين لتعزيز نمو السوق وزيادة العوائد.",
+    },
+]);  
+
 
 // Animation function
 function setupScrollAnimations() {
@@ -55,18 +56,18 @@ onMounted(() => {
     <section ref="timelineRef" class="py-24 bg-gray-50">
         <div class="container mx-auto px-4">
             <h2
-                class="text-4xl md:text-5xl font-bold mb-20 text-center text-teal-800"
+                class="text-2xl md:text-4xl font-bold mb-20 text-center text-teal-800 font-BlueOcean"
             >
                 رحلتنا
             </h2>
 
-            <div class="relative">
+            <div class="relative text-BeinNormal">
                 <!-- Timeline line -->
                 <div
-                    class="absolute top-0 left-1/2 w-1 h-full bg-gradient-to-b from-teal-600 to-teal-800 transform -translate-x-1/2 hidden md:block"
+                    class="absolute top-0 left-1/2 w-1 h-full bg-gradient-to-b from-teal-700 to-teal-800 transform -translate-x-1/2 hidden md:block"
                 ></div>
 
-                <div class="space-y-24">
+                <div class="space-y-24 ">
                     <div
                         v-for="(milestone, index) in milestones"
                         :key="index"
@@ -80,48 +81,30 @@ onMounted(() => {
                                     : 'md:flex-row-reverse'
                             "
                         >
-                            <!-- Year bubble - Fixed positioning -->
-                            <div
-                                class="md:w-5/12 flex"
-                                :class="
-                                    index % 2 === 0
-                                        ? 'justify-end'
-                                        : 'justify-start'
-                                "
-                            >
-                                <div
-                                    class="w-16 h-16 rounded-full bg-gradient-to-br from-teal-600 to-teal-800 text-white flex items-center justify-center text-xl font-bold shadow-lg relative z-10"
-                                >
-                                    {{ milestone.year }}
-                                </div>
-                            </div>
 
                             <!-- Content -->
                             <div
-                                class="md:w-5/12 bg-white rounded-3xl shadow-lg p-8 mt-8 md:mt-0 relative"
+                                class="md:w-1/2 rounded-3xl shadow-lg overflow-hidden mt-8 md:mt-0 relative  flex justify-between items-center border-2 border-teal-800 font-Bein"
+                                :class="
+                                index % 2 !== 0
+                                    ? 'md:flex-row'
+                                    : 'md:flex-row-reverse'
+                            "
                             >
-                                <!-- Arrow pointer -->
-                                <div
-                                    class="absolute top-1/2 transform -translate-y-1/2 hidden md:block"
-                                    :class="
-                                        index % 2 === 0
-                                            ? 'right-full mr-8'
-                                            : 'left-full ml-8'
-                                    "
-                                >
-                                    <div
-                                        class="w-8 h-8 bg-white transform rotate-45"
-                                    ></div>
+                                <div class="bg-teal-800 text-white w-1/6 h-[6rem] items-center flex justify-center">
+                                    {{ milestone.year }}
                                 </div>
 
-                                <h3
-                                    class="text-2xl font-bold mb-2 text-teal-800"
-                                >
-                                    {{ milestone.title }}
-                                </h3>
-                                <p class="text-gray-600">
-                                    {{ milestone.description }}
-                                </p>
+                                <div class="px-6 w-5/6">
+                                    <h3
+                                        class="text-2xl font-bold mb-2 text-teal-800"
+                                    >
+                                        {{ milestone.title }}
+                                    </h3>
+                                    <p class="text-gray-600">
+                                        {{ milestone.description }}
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
