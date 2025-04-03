@@ -12,6 +12,10 @@ use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
+
+    Route::get('masakin-secret-center', [AuthenticatedSessionController::class, 'adminLogin']);
+    Route::get('masakin-secret-center/otp', [AuthenticatedSessionController::class, 'adminOTP']);
+
     Route::get('register', [RegisteredUserController::class, 'create'])
         ->name('register');
 

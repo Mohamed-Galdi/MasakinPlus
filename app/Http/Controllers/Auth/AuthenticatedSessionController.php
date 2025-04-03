@@ -13,6 +13,16 @@ use Inertia\Response;
 
 class AuthenticatedSessionController extends Controller
 {
+
+    public function adminLogin()
+    {
+        return Inertia::render('Auth/AdminLogin');
+    }
+
+    public function adminOTP()
+    {
+        return Inertia::render('Auth/AdminOTP');
+    }
     /**
      * Display the login view.
      */
