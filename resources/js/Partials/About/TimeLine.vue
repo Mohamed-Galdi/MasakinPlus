@@ -64,7 +64,7 @@ onMounted(() => {
             <div class="relative text-BeinNormal">
                 <!-- Timeline line -->
                 <div
-                    class="absolute top-0 left-1/2 w-1 h-full bg-gradient-to-b from-teal-700 to-teal-800 transform -translate-x-1/2 hidden md:block"
+                    class="absolute top-8 left-1/2 w-1 h-[90%] bg-teal-800 transform -translate-x-1/2 hidden md:block"
                 ></div>
 
                 <div class="space-y-24 ">
@@ -84,7 +84,7 @@ onMounted(() => {
 
                             <!-- Content -->
                             <div
-                                class="md:w-1/2 rounded-3xl shadow-lg overflow-hidden mt-8 md:mt-0 relative  flex justify-between items-center border-2 border-teal-800 font-Bein"
+                                class="md:w-1/2 rounded-3xl shadow-lg overflow-hidden mt-8 md:mt-0 relative  flex justify-between items-center border-2 border-teal-800 font-Bein mx-[2px]"
                                 :class="
                                 index % 2 !== 0
                                     ? 'md:flex-row'

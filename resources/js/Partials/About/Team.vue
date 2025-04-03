@@ -11,25 +11,25 @@ const team = ref([
     {
         name: "أحمد الفيصل",
         position: "المؤسس والرئيس التنفيذي",
-        image: "https://picsum.photos/id/1005/300/300",
+        image: "assets/about_us_images/team/2222.jpg",
         quote: "نسعى لتغيير مفهوم الاستثمار العقاري في المملكة",
     },
     {
-        name: "سارة العتيبي",
+        name: "عبدالعزيز الدوسري ",
         position: "مديرة العمليات",
-        image: "https://picsum.photos/id/1011/300/300",
+        image: "assets/about_us_images/team/4444.jpg",
         quote: "نبني جسراً بين أصحاب العقارات والمستثمرين",
     },
     {
         name: "محمد القحطاني",
-        position: "رئيس قسم التكنولوجيا",
-        image: "https://picsum.photos/id/1012/300/300",
+        position: "رئيس قسم التطوير",
+        image: "assets/about_us_images/team/3333.jpg",
         quote: "التكنولوجيا هي مفتاح تبسيط الاستثمار العقاري",
     },
     {
-        name: "نورة الشمري",
+        name: "فهد المطيري ",
         position: "مديرة التسويق",
-        image: "https://picsum.photos/id/1027/300/300",
+        image: "assets/about_us_images/team/1111.jpg",
         quote: "نصنع مستقبلاً أفضل للسوق العقاري السعودي",
     },
 ]);
@@ -59,12 +59,12 @@ onMounted(() => {
     <section ref="teamRef" class="py-24 bg-white">
         <div class="container mx-auto px-4">
             <h2
-                class="text-4xl md:text-5xl font-bold mb-20 text-center text-teal-800"
+                class="text-4xl md:text-5xl font-bold mb-20 text-center text-teal-800 font-BlueOcean"
             >
                 فريقنا
             </h2>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 font-Bein">
                 <div
                     v-for="(member, index) in team"
                     :key="index"
@@ -76,7 +76,7 @@ onMounted(() => {
                             <img
                                 :src="member.image"
                                 :alt="member.name"
-                                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                class="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-110"
                             />
                             <div
                                 class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
@@ -95,7 +95,7 @@ onMounted(() => {
 
                         <!-- Info card -->
                         <div
-                            class="absolute bottom-0 left-0 w-full bg-white/90 backdrop-blur-md p-4 transform translate-y-0 group-hover:translate-y-full transition-transform duration-300"
+                            class="absolute bottom-0 left-0 w-full bg-slate-200 p-4 transform translate-y-0 group-hover:translate-y-full  transition-transform duration-300"
                         >
                             <h3 class="text-xl font-bold text-teal-800">
                                 {{ member.name }}
