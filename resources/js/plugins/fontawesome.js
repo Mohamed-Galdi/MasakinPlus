@@ -9,6 +9,15 @@ import {
     faArrowRight,
     faLocationDot,
     faStar,
+    faBell,
+    faBars,
+    faXmark,
+    faWallet,
+    faHeadset,
+    faChartPie,
+    faBuilding,
+    faFileContract
+
 } from "@fortawesome/free-solid-svg-icons";
 
 import { faBookmark,  } from "@fortawesome/free-regular-svg-icons";
@@ -24,6 +33,14 @@ library.add(
     faLocationDot,
     faStar,
     faBookmark,
+    faBell,
+    faBars,
+    faXmark,
+    faWallet,
+    faHeadset,
+    faChartPie,
+    faBuilding,
+    faFileContract
 );
 
 export { FontAwesomeIcon };

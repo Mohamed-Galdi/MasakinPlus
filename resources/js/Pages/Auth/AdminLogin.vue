@@ -27,7 +27,7 @@ const submit = () => {
         >
             <img src="/assets/logos/logo_white.png" alt="logo" class="w-44" />
 
-            <form @submit.prevent="submit" class="flex flex-col gap-6 bg-slate-500 w-[25rem] my-12 p-6 rounded-xl">
+            <form @submit.prevent="submit" class="flex flex-col gap-6 bg-gray-300 w-[25rem] my-12 p-6 rounded-xl">
                 <!-- email -->
                 <FloatLabel variant="on" class="w-full">
                     <InputText

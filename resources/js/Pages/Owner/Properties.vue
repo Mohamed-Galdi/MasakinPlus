@@ -9,7 +9,7 @@ defineOptions({
 
 <template>
     <div class=''>
-        owner dashboard
+        properties
     </div>
 </template>
 
