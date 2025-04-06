@@ -8,26 +8,35 @@ const toggleSidebar = () => {
 };
 
 const navigationItems = [
+    //    { title: "المستخدمين",
+    //     icon: "pi-users",
+    //     subItems: [
+    //         {
+    //             title: "الملاك",
+    //             path: route("admin.products.dialog-crud"),
+    //             icon: "pi-home",
+    //         },
+    //         {
+    //             title: "المستثمرين",
+    //             path: route("admin.products.drawer-crud"),
+    //             icon: "pi-briefcase",
+    //         },
+    //         {
+    //             title: "المستأجرين",
+    //             path: route("admin.products.drawer-crud"),
+    //             icon: "pi-user",
+    //         },
+    //     ],}
+
     {
         title: "المستخدمين",
+        path: route("admin.users"),
         icon: "pi-users",
-        subItems: [
-            {
-                title: "الملاك",
-                path: route("admin.products.dialog-crud"),
-                icon: "pi-home",
-            },
-            {
-                title: "المستثمرين",
-                path: route("admin.products.drawer-crud"),
-                icon: "pi-briefcase",
-            },
-            {
-                title: "المستأجرين",
-                path: route("admin.products.drawer-crud"),
-                icon: "pi-user",
-            },
-        ],
+    },
+    {
+        title: "العقارات",
+        path: route("admin.properties"),
+        icon: "pi-home",
     },
 ];
 
@@ -80,7 +89,7 @@ const logout = () => {
 </script>
 
 <template>
-    <div class="flex min-h-screen" dir="rtl">
+    <div class="flex min-h-screen font-BeinNormal" dir="rtl">
         <!-- Sidebar -->
         <aside
             :class="[
@@ -105,7 +114,7 @@ const logout = () => {
                     </div>
                     <span
                         v-if="!isSidebarCollapsed"
-                        class="font-semibold text-lg whitespace-nowrap"
+                        class=" text-lg whitespace-nowrap"
                         >لوحة المشرف</span
                     >
                 </Link>
@@ -125,7 +134,7 @@ const logout = () => {
             </div>
 
             <!-- Scrollable navigation items -->
-            <div class="flex-1 overflow-y-auto py-4 ">
+            <div class="flex-1 overflow-y-auto py-4">
                 <ul class="list-none p-0 m-0">
                     <li
                         v-for="item in navigationItems"
@@ -298,8 +307,10 @@ const logout = () => {
                         @click="logout"
                         class="flex items-center justify-between w-full px-3 py-2 logout-bg border-none rounded-lg sidebar-text cursor-pointer transition-colors logout-hover"
                     >
-                        <span class="font-medium whitespace-nowrap">تسجيل الخروج</span>
-                        <i class="pi pi-sign-out "></i>
+                        <span class="font-medium whitespace-nowrap"
+                            >تسجيل الخروج</span
+                        >
+                        <i class="pi pi-sign-out"></i>
                     </button>
                 </div>
 
@@ -316,7 +327,12 @@ const logout = () => {
                             alt="User avatar"
                             class="w-full h-full object-cover"
                         />
-                        <div v-else class="avatar-bg w-8 h-8 rounded-full flex items-center justify-center overflow-hidden"><i  class="pi pi-user text-white"></i></div>
+                        <div
+                            v-else
+                            class="avatar-bg w-8 h-8 rounded-full flex items-center justify-center overflow-hidden"
+                        >
+                            <i class="pi pi-user text-white"></i>
+                        </div>
                     </Link>
 
                     <!-- Logout Button -->
@@ -349,7 +365,7 @@ const logout = () => {
             :class="[
                 'flex-1 bg-slate-100 p-6 overflow-y-auto', // Kept overflow-y-auto
                 isSidebarCollapsed ? ' md:mr-[70px]' : 'md:mr-[250px]', // Dynamic margin-left based on sidebar state
-                'mt-12 md:mt-0' // Adjusted for mobile navbar
+                'mt-12 md:mt-0', // Adjusted for mobile navbar
             ]"
         >
             <slot></slot>
@@ -417,7 +433,7 @@ const logout = () => {
 }
 
 .mobile-btn {
-  background-color: var(--mobile-btn-bg);
+    background-color: var(--mobile-btn-bg);
 }
 
 aside {
@@ -468,7 +484,9 @@ main {
 
 @media (max-width: 767px) {
     main {
-        height: calc(100vh - 3.5rem); /* Adjust for mobile navbar height (h-14 = 3.5rem) */
+        height: calc(
+            100vh - 3.5rem
+        ); /* Adjust for mobile navbar height (h-14 = 3.5rem) */
     }
 }
 </style>

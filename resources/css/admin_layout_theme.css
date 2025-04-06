@@ -1,30 +1,29 @@
+:root {
+/* Theme Variables */
+    --sidebar-bg: #ffffff;
+    --sidebar-text: #1e293b;
+    --sidebar-border: #cbd5e1;
+    --sidebar-hover-bg: #e2e8f0;
 
- :root { 
-     /* Theme Variables  */
-     --sidebar-bg: #1e293b; 
-     --sidebar-text: #e2e8f0; 
-     --sidebar-border: #334155; 
-     --sidebar-hover-bg: #334155; 
+    /* Active item color */
+    --active-bg: #0d9488;
+    --active-text: #ffffff;
+    --active-bg-opacity: rgba(13, 148, 136, 0.1);
 
-     /* Active item color */
-     --active-bg: #0d9488; 
-     --active-text: #ffffff; 
-     --active-bg-opacity: rgba(59, 130, 246, 0.1); 
+    /* Footer color */
+    --footer-item-bg: #e2e8f0;
+    --footer-hover-bg: #cbd5e1;
+    --logout-bg: rgba(127, 29, 29, 0.05);
+    --logout-hover-bg: #fa8383;
 
-     /* Footer color */
-     --footer-item-bg: #334155; 
-     --footer-hover-bg: #475569; 
-     --logout-bg: rgba(127, 29, 29, 0.5); 
-     --logout-hover-bg: #7f1d1d; 
+    /* Avatar/icon background */
+    --avatar-bg: #0d9488;
 
-     /* Avatar/icon backgroun */
-     --avatar-bg: #0d9488; 
+    /* Mobile button color */
+    --mobile-btn-bg: #0d9488;
 
-     /* Mobile button color */
-     --mobile-btn-bg: #0d9488; 
-
-     /* Scrollbar color */
-     --scrollbar-track: #1e293b; 
-     --scrollbar-thumb: #4b5563; 
-     --scrollbar-hover: #64748b; 
- }
+    /* Scrollbar color */
+    --scrollbar-track: #1e293b;
+    --scrollbar-thumb: #4b5563;
+    --scrollbar-hover: #64748b;
+}

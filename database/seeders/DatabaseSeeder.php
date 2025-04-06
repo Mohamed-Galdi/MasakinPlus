@@ -18,10 +18,11 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         User::factory()->create([
-            'name' => 'Prime Vilt',
-            'email' => 'primevilt@gmail.com',
+            'name' => ' محمد كلدي',
+            'email' => 'admin@masakinplus.com',
+            'password' => '12345678',
             'type' => 'admin',
-            'image' => '/storage/users_images/takamura.jpg'
+            'image' => '/storage/users_images/default-user-image.jpg',
         ]);
 
         $response = Http::get('https://fakestoreapi.com/products');
