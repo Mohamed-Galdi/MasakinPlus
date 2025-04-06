@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 
-Route::prefix('/investor')->middleware(['auth', 'verified'])->group(function () {
+Route::prefix('/investor')->middleware(['auth', 'verified', 'investor'])->group(function () {
 
     Route::redirect('/', '/investor/dashboard')->name('investor.dashboard');
 

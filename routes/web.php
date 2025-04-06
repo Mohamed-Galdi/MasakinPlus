@@ -21,18 +21,11 @@ Route::get('/dashboard', function () {
 })->middleware(['auth'])->name('dashboard');
 
 
-
-// Route::get('/test', fn () => inertia('Home/Test'))->name('test');
-
-
 Route::get('/test', function () {
-    Mail::to('contact.galdi@gmail.com')->send(new EmailVerif());
-    return 'email sent';
+    return inertia('Home/Test');
 })->name('test');
 
-Route::get('/test-email', function () {
-    return new EmailVerif();
-})->name('test-email');
+
 
 
 require __DIR__ . '/auth.php';
