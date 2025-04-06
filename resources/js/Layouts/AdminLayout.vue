@@ -98,7 +98,7 @@ const logout = () => {
                 <Link :href="route('home')" class="flex items-center gap-3">
                     <div class="flex-shrink-0 w-[30px] h-[30px] relative">
                         <img
-                            src="../../../public/assets/images/logo.png"
+                            src="/assets/logos/logo.png"
                             alt="Logo"
                             class="absolute inset-0 w-full h-full object-contain"
                         />
