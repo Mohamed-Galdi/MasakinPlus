@@ -3,7 +3,7 @@
 @section('title', 'تفعيل حسابك في مساكن بلس')
 
 @section('content')
-    <h2 style="font-size: 22px; font-weight: 600; color: #115e59; margin: 0 0 20px;">مرحبًا {{ $name }}</h2>
+    <h2 style="font-size: 22px; font-weight: 600; color: #115e59; margin: 0 0 20px;">مرحبًا  </h2>
     <p style="font-size: 16px; color: #4b5563; line-height: 1.6; margin: 0 0 20px;">
         شكرًا لتسجيلك في <span style="font-weight: 600; color: #115e59;">مساكن بلس</span>. لتفعيل حسابك والبدء في استكشاف العقارات، اضغط على الزر أدناه:
     </p>
@@ -12,6 +12,12 @@
             تفعيل الحساب
         </a>
     </div>
+    <p style="font-size: 16px; color: #4b5563; line-height: 1.6; margin: 0 0 20px;">
+        إذا لم يعمل الزر، يمكنك نسخ الرابط التالي ولصقه في متصفحك:
+    </p>
+    <p style="font-size: 14px; color: #275f59; margin: 0 0 20px; word-break: break-all;">
+        <a href="{{ $actionUrl }}" style="color: #275f59; text-decoration: underline;">{{ $actionUrl }}</a>
+    </p>
     <p style="font-size: 14px; color: #6b7280; margin: 0 0 20px;">
         هذا الرابط صالح لمدة 24 ساعة فقط.
     </p>

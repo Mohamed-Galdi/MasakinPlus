@@ -13,16 +13,12 @@ class EmailVerif extends Mailable
 {
     use Queueable, SerializesModels;
 
-    protected $name;
-    protected $email;
     protected $actionUrl;
 
 
-    public function __construct()
+    public function __construct( $actionUrl )
     {
-        $this->name = 'Mohamed';
-        $this->email = 'contact.galdi@gmail.com';
-        $this->actionUrl = 'https://masakinplus.com/test-email';
+        $this->actionUrl = $actionUrl;
     }
 
     /**
@@ -41,10 +37,9 @@ class EmailVerif extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'mail.otp',
+            view: 'mail.email-verification',
             with: [
-                'name' => $this->name,
-                'otp' => '123456',
+                'actionUrl' => $this->actionUrl,
             ],
         );
     }

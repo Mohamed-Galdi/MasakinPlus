@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\AdminAuthenticatedSessionController;
 use App\Http\Controllers\Admin\AccountController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\TempFileController;
@@ -8,7 +9,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
 
-    Route::redirect('/', '/admin/products/dialog-crud')->name('dashboard');
+    Route::redirect('/', '/admin/products/dialog-crud')->name('admin.dashboard');
 
     // Products
     Route::prefix('products')->group(function () {
@@ -33,3 +34,12 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
 // file upload
 Route::post('/upload', [TempFileController::class, 'upload'])->name('file.upload');
 Route::post('/revert/{id}', [TempFileController::class, 'revert'])->name('file.revert');
+
+// admin auth
+
+Route::middleware('guest')->group(function () {
+
+    Route::get('masakin-secret-center', [AdminAuthenticatedSessionController::class, 'adminLogin']);
+    Route::get('masakin-secret-center/otp', [AdminAuthenticatedSessionController::class, 'adminOTP']);
+
+});

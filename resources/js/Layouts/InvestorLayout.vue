@@ -1,6 +1,6 @@
 <script setup>
 import { ref, watch } from "vue";
-import { Link, usePage } from "@inertiajs/vue3";
+import { Link, usePage, router } from "@inertiajs/vue3";
 
 // Reactive state for mobile menu and profile dropdown
 const isMobileMenuOpen = ref(false);
@@ -13,12 +13,12 @@ const currentPath = ref(usePage().url);
 const navigationItems = ref([
     {
         name: "عقاراتي ",
-        href: route("owner.dashboard"),
+        href: route("investor.dashboard"),
         icon: "fa-solid fa-building",
     },
     {
         name: "الإيجارات ",
-        href: route("owner.properties"),
+        href: route("investor.properties"),
         icon: "fa-solid fa-file-contract",
     },
     {
@@ -64,6 +64,11 @@ watch(
         currentPath.value = newUrl;
     }
 );
+
+// Logout
+function logout() {
+    router.post(route('logout'));
+}
 </script>
 <template>
     <div class="min-h-screen bg-gray-100 font-Bein">
@@ -74,7 +79,10 @@ watch(
                     class="flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8"
                 >
                     <!-- Logo -->
-                    <Link :href="route('home')" class="flex-shrink-0 flex flex-col items-center">
+                    <Link
+                        :href="route('home')"
+                        class="flex-shrink-0 flex flex-col items-center"
+                    >
                         <img
                             class="h-12 w-auto"
                             src="/assets/logos/logo.png"
@@ -110,10 +118,10 @@ watch(
                             <!-- User info -->
                             <div class="px-3 py-2">
                                 <p class="text-sm font-medium text-gray-900">
-                                    أحمد محمد
+                                    سي راسلمال
                                 </p>
                                 <p class="text-xs font-medium text-teal-700">
-                                    حساب مالك
+                                    حساب مستثمر
                                 </p>
                             </div>
 
@@ -149,11 +157,12 @@ watch(
                                     <div
                                         class="border-t border-gray-100 my-1"
                                     ></div>
-                                    <Link
-                                        href="#"
-                                        class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50"
-                                        >تسجيل الخروج</Link
+                                    <button
+                                        @click="logout"
+                                        class="block text-start px-4 py-2 text-sm text-red-600 hover:bg-red-50 w-full"
                                     >
+                                        تسجيل الخروج
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -219,10 +228,10 @@ watch(
                         <div class="mr-3">
                             <div class="px-3 py-2">
                                 <p class="text-sm font-medium text-gray-900">
-                                    أحمد محمد
+                                    سي راسلمال
                                 </p>
                                 <p class="text-xs font-medium text-teal-700">
-                                    حساب مالك
+                                    حساب مستثمر
                                 </p>
                             </div>
                         </div>
@@ -234,12 +243,12 @@ watch(
                         >
                             الملف الشخصي
                         </Link>
-                        <Link
-                            href="#"
-                            class="block px-4 py-2 text-base font-medium text-red-600 hover:bg-red-50"
+                        <button
+                            @click="logout"
+                            class="block text-start px-4 py-2 text-sm text-red-600 hover:bg-red-50 w-full"
                         >
                             تسجيل الخروج
-                        </Link>
+                        </button>
                     </div>
                 </div>
             </div>

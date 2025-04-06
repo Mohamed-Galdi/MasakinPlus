@@ -31,21 +31,25 @@ class RegisteredUserController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
+            'username' => 'required|string|max:255|min:3',
+            'email' => 'required|string|lowercase|email|max:255|min:3|unique:'.User::class,
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'accountType' => 'required|string|max:255|in:tenant,investor,owner',
         ]);
+
 
         $user = User::create([
-            'name' => $request->name,
+            'name' => $request->username,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'type' => 'admin',
+            'type' => $request->accountType,
+            'image' => '/storage/users_images/default-user-image.jpg'
         ]);
 
-        event(new Registered($user));
-
         Auth::login($user);
+        
+        // this will send the email verification email
+        event(new Registered($user));
 
         return redirect(route('dashboard'));
     }

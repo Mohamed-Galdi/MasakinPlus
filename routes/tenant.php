@@ -3,10 +3,10 @@
 use Illuminate\Support\Facades\Route;
 
 
-Route::prefix('/tenant')->middleware([])->group(function () {
+Route::prefix('/tenant')->middleware(['auth', 'verified'])->group(function () {
 
-    Route::redirect('/', '/tenant/dashboard');
+    Route::redirect('/', '/tenant/dashboard')->name('tenant.dashboard');
 
-    Route::get('/dashboard', fn() => inertia('Owner/Dashboard'))->name('tenant.dashboard');
-    Route::get('/properties', fn() => inertia('Owner/Properties'))->name('tenant.properties');
+    Route::get('/dashboard', fn() => inertia('Tenant/Dashboard'))->name('tenant.dashboard');
+    Route::get('/properties', fn() => inertia('Tenant/Properties'))->name('tenant.properties');
 });

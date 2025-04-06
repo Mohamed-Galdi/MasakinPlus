@@ -21,13 +21,14 @@ const toast = useToast();
 
 const registerForm = useForm({
     accountType: "",
+    username: "",
     email: "",
     password: "",
     password_confirmation: "",
     terms: false,
 });
 
-const accountType = ref([
+const accountTypes = ref([
     { label: "حساب مالك ", value: "owner" },
     { label: "حساب مستثمر", value: "investor" },
     { label: "حساب مستأجر", value: "tenant" },
@@ -45,9 +46,6 @@ function submit() {
     }
 
     registerForm.post(route("register"), {
-        onSuccess: () => {
-            registerForm.reset();
-        },
         onError: () => {
             const errorMessage = Object.values(registerForm.errors)[0];
             toast.add({
@@ -142,8 +140,9 @@ function submit() {
                         <!-- account type -->
                         <Select
                             v-model="registerForm.accountType"
-                            :options="accountType"
+                            :options="accountTypes"
                             optionLabel="label"
+                            optionValue="value"
                             placeholder="إختر نوع الحساب"
                             class="w-full"
                         />
