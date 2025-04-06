@@ -7,18 +7,34 @@ import Checkbox from "primevue/checkbox";
 import { useToast } from "primevue/usetoast";
 import Toast from "primevue/toast";
 
+const toast = useToast();
+
 const otpForm = useForm({
     otp: "",
 });
 
-const submit = () => {
-    console.log("hi");
-};
+function submit() {
+    otpForm.post(route("otp.verify"), {
+        onSuccess: () => {
+            otpForm.reset();
+        },
+        onError: () => {
+            const errorMessage = Object.values(otpForm.errors)[0];
+            toast.add({
+                severity: "error",
+                summary: "خطأ",
+                detail: errorMessage,
+                life: 3000,
+            });
+        },
+    });
+}
 </script>
 
 <template>
     <div class="bg">
         <Head title="Admin Login" />
+        <Toast position="top-center" />
         <div
             class="max-w-7xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:px-8 min-h-screen flex flex-col gap-3 items-center"
         >
@@ -47,7 +63,6 @@ const submit = () => {
                         label="التحقق"
                         :loading="otpForm.processing"
                         @click="submit"
-                        class="w-full bg-teal-600 hover:bg-teal-700"
                     />
                 </form>
             </div>

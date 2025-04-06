@@ -49,7 +49,7 @@ class RegisteredUserController extends Controller
         Auth::login($user);
         
         // this will send the email verification email
-        event(new Registered($user));
+        // event(new Registered($user));
 
         return redirect(route('dashboard'));
     }

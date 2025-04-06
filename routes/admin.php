@@ -38,6 +38,6 @@ Route::post('/revert/{id}', [TempFileController::class, 'revert'])->name('file.r
 Route::middleware('guest')->group(function () {
 
     Route::get('masakin-secret-center', [AdminAuthenticatedSessionController::class, 'adminLogin']);
-    Route::get('masakin-secret-center/otp', [AdminAuthenticatedSessionController::class, 'adminOTP']);
+    Route::get('masakin-secret-center/otp', [AdminAuthenticatedSessionController::class, 'adminOTP'])->name('admin.otp');
 
 });

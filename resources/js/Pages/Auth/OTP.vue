@@ -13,13 +13,11 @@ defineOptions({
 
 const toast = useToast();
 
-// Assuming the OTP is sent after login attempt, we’ll use a form for verification
 const otpForm = useForm({
     otp: "",
 });
 
 function submit() {
-    console.log(otpForm.otp);
     otpForm.post(route("otp.verify"), {
         onSuccess: () => {
             otpForm.reset();
@@ -97,7 +95,6 @@ function resendOtp() {
                             label="التحقق"
                             :loading="otpForm.processing"
                             @click="submit"
-                            class="w-full bg-teal-600 hover:bg-teal-700"
                         />
 
                         <p class="text-center text-sm text-gray-600">

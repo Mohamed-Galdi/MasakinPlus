@@ -3,7 +3,7 @@
 @section('title', 'رمز التحقق - مساكن بلس')
 
 @section('content')
-    <h2 style="font-size: 22px; font-weight: 600; color: #115e59; margin: 0 0 20px;">مرحبًا {{ $name }}</h2>
+    <h2 style="font-size: 22px; font-weight: 600; color: #115e59; margin: 0 0 20px;">مرحبًا </h2>
     <p style="font-size: 16px; color: #4b5563; line-height: 1.6; margin: 0 0 20px;">
         لقد طلبنا رمز تحقق لتأكيد هويتك في <span style="font-weight: 600; color: #115e59;">مساكن بلس</span>. استخدم الرمز أدناه لإكمال العملية:
     </p>

@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\ConfirmablePasswordController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
 use App\Http\Controllers\Auth\EmailVerificationPromptController;
 use App\Http\Controllers\Auth\NewPasswordController;
+use App\Http\Controllers\Auth\OTPLoginController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
@@ -13,18 +14,21 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
 
+    // register
     Route::get('register', [RegisteredUserController::class, 'create'])
         ->name('register');
-
     Route::post('register', [RegisteredUserController::class, 'store']);
 
+    // login
     Route::get('login', [AuthenticatedSessionController::class, 'create'])
         ->name('login');
-
     Route::post('login', [AuthenticatedSessionController::class, 'store']);
 
-    Route::get('/otp', fn() => inertia('Auth/OTP'))->name('otp');
-    
+    // otp
+    Route::get('/verify-otp', [OTPLoginController::class, 'showOTPForm'])->name('otp');
+    Route::post('/verify-otp', [OTPLoginController::class, 'verifyOTP'])->name('otp.verify');
+
+    // forgot password
     Route::get('/forgot-password', fn() => inertia('Auth/ForgotPassword'))->name('forgot-password');
 
 
