@@ -188,7 +188,7 @@ onUnmounted(() => {
             </div>
         </div>
         <!-- diveder -->
-        <div style="overflow: hidden" class="bg-white relative">
+        <div class="bg-white relative overflow-hidden will-change-transform" style="transform: translateZ(0)">
             <svg
                 preserveAspectRatio="none"
                 viewBox="0 0 1200 120"

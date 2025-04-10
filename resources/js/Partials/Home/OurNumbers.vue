@@ -75,7 +75,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="bg-white pb-12">
+    <div class="bg-white pb-12 pt-2">
         <div class="max-w-7xl mx-auto px-8">
             <h2
                 class="text-teal-800 font-Bein md:text-6xl text-4xl text-center mb-16 "
