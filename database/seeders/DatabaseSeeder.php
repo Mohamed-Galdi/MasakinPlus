@@ -17,39 +17,41 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // User::factory(10)->create();
+        $pw = Hash::make('12345678');
+        $date = now();
 
         User::insert([
             [
                 'name' => ' محمد كلدي',
                 'email' => 'admin@masakinplus.com',
-                'password' => Hash::make('12345678'),
+                'password' => $pw,
                 'type' => 'admin',
                 'image' => '/storage/users_images/default-user-image.jpg',
-                'email_verified_at' => now(),
+                'email_verified_at' => $date,
             ],
             [
                 'name' => ' محمد مالك',
                 'email' => 'owner@masakinplus.com',
-                'password' => Hash::make('12345678'),
+                'password' => $pw,
                 'type' => 'owner',
                 'image' => '/storage/users_images/default-user-image.jpg',
-                'email_verified_at' => now(),
+                'email_verified_at' => $date,
             ],
             [
                 'name' => ' محمد المستثمر',
                 'email' => 'investor@masakinplus.com',
-                'password' => Hash::make('12345678'),
+                'password' => $pw,
                 'type' => 'investor',
                 'image' => '/storage/users_images/default-user-image.jpg',
-                'email_verified_at' => now(),
+                'email_verified_at' => $date,
             ],
             [
                 'name' => ' محمد المستأجر',
                 'email' => 'tenant@masakinplus.com',
-                'password' => Hash::make('12345678'),
+                'password' => $pw,
                 'type' => 'tenant',
                 'image' => '/storage/users_images/default-user-image.jpg',
-                'email_verified_at' => now(),
+                'email_verified_at' => $date,
             ],
         ]);
 
