@@ -64,23 +64,26 @@ html::selection {
     --p-multiselect-focus-border-color: #262626 !important;
 }
 
+@layer utilities {
+    .btn {
+        @apply flex justify-center items-center gap-2 rounded-lg py-2 px-4 text-center transition-all duration-300 ease-in-out;
+    }
+}
+
 .p-password-input {
     width: 100%;
 }
 
-.p-select-overlay{
+.p-select-overlay {
     direction: ltr;
 }
 
-.p-select-option-label{
+.p-select-option-label {
     text-align: right;
     width: 100%;
     font-family: BeinNormal;
 }
 
-@layer utilities {
-    .btn {
-        @apply flex justify-center items-center gap-2 rounded-lg py-2 px-4 text-center transition-all duration-300 ease-in-out;
-    }
-
-}
+/* .p-button{
+background-color: red !important;
+} */

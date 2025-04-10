@@ -1,6 +1,10 @@
 <script setup>
 import { ref, watch } from "vue";
 import { Link, usePage, router } from "@inertiajs/vue3";
+import { useTextHelpers } from "@/plugins/textHelpers";
+
+const textHelpers = useTextHelpers();
+const user = usePage().props.user;
 
 // Reactive state for mobile menu and profile dropdown
 const isMobileMenuOpen = ref(false);
@@ -117,8 +121,8 @@ function logout() {
                         >
                             <!-- User info -->
                             <div class="px-3 py-2">
-                                <p class="text-sm font-medium text-gray-900">
-                                    سي مولشي
+                                <p class="text-sm text-slate-800">
+                                    {{ textHelpers.limitText(user.name, 20) }}
                                 </p>
                                 <p class="text-xs font-medium text-teal-700">
                                     حساب مالك
@@ -132,7 +136,7 @@ function logout() {
                             <div class="relative px-3">
                                 <img
                                     class="h-8 w-8 rounded-full"
-                                    src="/storage/users_images/default-user-image.jpg"
+                                    :src="user.image"
                                     alt="المستخدم"
                                 />
                                 <button
@@ -150,7 +154,7 @@ function logout() {
                                     class="origin-top-left absolute left-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10"
                                 >
                                     <Link
-                                        href="#"
+                                        :href="route('account.index')"
                                         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                         >الملف الشخصي</Link
                                     >
@@ -221,14 +225,14 @@ function logout() {
                         <div class="flex-shrink-0">
                             <img
                                 class="h-10 w-10 rounded-full"
-                                src="/storage/users_images/default-user-image.jpg"
+                                :src="user.image"
                                 alt="المستخدم"
                             />
                         </div>
                         <div class="mr-3">
                             <div class="px-3 py-2">
                                 <p class="text-sm font-medium text-gray-900">
-                                    سي مولشي
+                                    {{ textHelpers.limitText(user.name, 40) }}
                                 </p>
                                 <p class="text-xs font-medium text-teal-700">
                                     حساب مالك
@@ -238,7 +242,7 @@ function logout() {
                     </div>
                     <div class="mt-3 space-y-1">
                         <Link
-                            href="#"
+                            :href="route('account.index')"
                             class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100"
                         >
                             الملف الشخصي

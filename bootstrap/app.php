@@ -2,6 +2,7 @@
 
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\InvestorMiddleware;
+use App\Http\Middleware\NotAdminMiddleware;
 use App\Http\Middleware\OwnerMiddleware;
 use App\Http\Middleware\TenantMiddleware;
 use Illuminate\Foundation\Application;
@@ -21,6 +22,7 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
         $middleware->alias([
             'admin' => AdminMiddleware::class,
+            'not-admin' => NotAdminMiddleware::class,
             'investor' => InvestorMiddleware::class,
             'owner' => OwnerMiddleware::class,
             'tenant' => TenantMiddleware::class,

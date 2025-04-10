@@ -8,7 +8,6 @@ import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 import "filepond/dist/filepond.min.css";
 import { router, usePage } from "@inertiajs/vue3";
 import { setOptions } from "vue-filepond";
-import fr_FR from "filepond/locale/fr-fr";
 import ar_AR from "filepond/locale/ar-ar";
 
 // Define component props
@@ -19,7 +18,7 @@ const props = defineProps({
     },
     maxFileSize: {
         type: Number,
-        default: 1 * 1024 * 1024, // 1 MB
+        default: 5 * 1024 * 1024, // 5 MB
     },
     allowedFileTypes: {
         type: Array,
