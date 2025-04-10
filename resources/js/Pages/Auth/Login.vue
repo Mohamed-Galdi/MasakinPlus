@@ -8,7 +8,7 @@ import Button from "primevue/button";
 import Checkbox from "primevue/checkbox";
 import { useToast } from "primevue/usetoast";
 import Toast from "primevue/toast";
-import AuthLayout from "@/Layouts/AuthLAyout.vue";
+import AuthLayout from "@/Layouts/AuthLayout.vue";
 
 defineOptions({
     layout: AuthLayout,
@@ -107,7 +107,7 @@ function submit() {
                                 </label>
                             </div>
                             <Link
-                                :href="route('forgot-password')"
+                                :href="route('password.request')"
                                 class="text-teal-600 hover:underline text-sm"
                             >
                                 نسيت كلمة المرور؟

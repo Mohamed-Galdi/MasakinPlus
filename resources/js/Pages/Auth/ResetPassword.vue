@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from "vue";
 import { Head, useForm, Link } from "@inertiajs/vue3";
-import InputText from "primevue/inputtext";
+import Password from "primevue/password";
 import FloatLabel from "primevue/floatlabel";
 import Button from "primevue/button";
 import { useToast } from "primevue/usetoast";
@@ -12,25 +12,33 @@ defineOptions({
     layout: AuthLayout,
 });
 
+const props = defineProps({
+    email: String,
+    token: String,
+});
+
 const toast = useToast();
 
-const forgotPasswordForm = useForm({
-    email: "",
+const resetPasswordForm = useForm({
+    token: props.token,
+    email: props.email,
+    password: "",
+    password_confirmation: "",
 });
 
 function submit() {
-    forgotPasswordForm.post(route("password.email"), {
+    resetPasswordForm.post(route("password.store"), {
         onSuccess: () => {
-            forgotPasswordForm.reset();
+            resetPasswordForm.reset();
             toast.add({
                 severity: "success",
                 summary: "تم",
-                detail: "تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني",
+                detail: "تم إعادة تعيين كلمة المرور بنجاح",
                 life: 3000,
             });
         },
         onError: () => {
-            const errorMessage = Object.values(forgotPasswordForm.errors)[0];
+            const errorMessage = Object.values(resetPasswordForm.errors)[0];
             toast.add({
                 severity: "error",
                 summary: "خطأ",
@@ -46,7 +54,7 @@ function submit() {
     <div
         class="flex items-center justify-center font-BeinNormal bg-gray-50 h-[90vh]"
     >
-        <Head title="| نسيت كلمة المرور" />
+        <Head title="| إعادة تعيين كلمة المرور" />
         <Toast position="top-center" />
 
         <div class="relative w-full max-w-md">
@@ -55,7 +63,7 @@ function submit() {
                 class="absolute inset-0 bg-teal-800/10 rounded-2xl transform -rotate-2 scale-105 -z-10"
             ></div>
 
-            <!-- Forgot Password Card -->
+            <!-- Reset Password Card -->
             <div
                 class="shadow-xl border border-teal-600 bg-white/95 backdrop-blur-sm rounded-2xl p-6"
             >
@@ -64,30 +72,50 @@ function submit() {
                         <h1
                             class="font-bold text-teal-800 font-Bein text-3xl mb-2"
                         >
-                            نسيت كلمة المرور
+                            إعادة تعيين كلمة المرور
                         </h1>
                         <p class="text-gray-600 text-sm">
-                            أدخل بريدك الإلكتروني لتلقي رابط إعادة تعيين كلمة
-                            المرور
+                            أدخل كلمة المرور الجديدة لحسابك
                         </p>
                     </div>
 
                     <form @submit.prevent="submit" class="flex flex-col gap-6">
-                        <!-- Email Input -->
+                        <!-- New Password Input -->
+
                         <FloatLabel variant="on" class="w-full">
-                            <InputText
-                                id="email"
-                                v-model="forgotPasswordForm.email"
-                                class="w-full border-gray-300 focus:border-teal-500 rounded-md"
+                            <Password
+                                id="password"
+                                v-model="resetPasswordForm.password"
+                                :feedback="false"
+                                toggleMask
+                                class="w-full mt-1"
+                                inputClass="border-gray-300 focus:border-teal-500 rounded-md"
                             />
-                            <label for="email">البريد الإلكتروني</label>
+                            <label for="password">كلمة المرور الجديدة</label>
+                        </FloatLabel>
+
+                        <!-- Confirm Password Input -->
+                        <FloatLabel variant="on" class="w-full">
+                            <Password
+                                id="password_confirmation"
+                                v-model="
+                                    resetPasswordForm.password_confirmation
+                                "
+                                :feedback="false"
+                                toggleMask
+                                class="w-full mt-1"
+                                inputClass="border-gray-300 focus:border-teal-500 rounded-md"
+                            />
+                            <label for="password_confirmation"
+                                >تأكيد كلمة المرور</label
+                            >
                         </FloatLabel>
 
                         <Button
                             severity="contrast"
                             type="button"
-                            label="إرسال رابط إعادة التعيين"
-                            :loading="forgotPasswordForm.processing"
+                            label="حفظ كلمة المرور الجديدة"
+                            :loading="resetPasswordForm.processing"
                             @click="submit"
                         />
 

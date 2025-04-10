@@ -5,7 +5,7 @@ import InputOtp from "primevue/inputotp";
 import Button from "primevue/button";
 import { useToast } from "primevue/usetoast";
 import Toast from "primevue/toast";
-import AuthLayout from "@/Layouts/AuthLAyout.vue";
+import AuthLayout from "@/Layouts/AuthLayout.vue";
 
 defineOptions({
     layout: AuthLayout,

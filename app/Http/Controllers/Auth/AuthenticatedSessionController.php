@@ -33,45 +33,45 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    // public function store(LoginRequest $request): RedirectResponse
-    // {
-    //     $request->authenticate();
-
-    //     $request->session()->regenerate();
-
-    //     return redirect()->intended(route('dashboard', absolute: false));
-    // }
-
-    // login with otp
-
     public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
 
-        // Get the authenticated user
-        $user = User::where('email', $request->email)->first();
+        $request->session()->regenerate();
 
-        // Generate and save OTP
-        $otp = rand(100000, 999999);
-        $user->otp_code = $otp;
-        $user->otp_expires_at = now()->addMinutes(5);
-        $user->save();
-
-        // Send the OTP email
-        Mail::to($user->email)->send(new OTP($otp));
-
-        // Store the user ID in session for OTP verification
-        Session::put('otp_user_id', $user->id);
-
-        // Log the user out temporarily — we only finalize login after OTP verification
-        auth()->logout();
-
-        if ($user->type === 'admin') {
-            return redirect()->route('admin.otp');
-        }
-
-        return redirect()->route('otp');
+        return redirect()->intended(route('dashboard', absolute: false));
     }
+
+    // login with otp
+
+    // public function store(LoginRequest $request): RedirectResponse
+    // {
+    //     $request->authenticate();
+
+    //     // Get the authenticated user
+    //     $user = User::where('email', $request->email)->first();
+
+    //     // Generate and save OTP
+    //     $otp = rand(100000, 999999);
+    //     $user->otp_code = $otp;
+    //     $user->otp_expires_at = now()->addMinutes(5);
+    //     $user->save();
+
+    //     // Send the OTP email
+    //     Mail::to($user->email)->send(new OTP($otp));
+
+    //     // Store the user ID in session for OTP verification
+    //     Session::put('otp_user_id', $user->id);
+
+    //     // Log the user out temporarily — we only finalize login after OTP verification
+    //     auth()->logout();
+
+    //     if ($user->type === 'admin') {
+    //         return redirect()->route('admin.otp');
+    //     }
+
+    //     return redirect()->route('otp');
+    // }
 
 
 
