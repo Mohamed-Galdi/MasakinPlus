@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
                 'email_verified_at' => $date,
             ],
             [
-                'name' => ' محمد مالك',
+                'name' => ' محمد املاك',
                 'email' => 'owner@masakinplus.com',
                 'password' => $pw,
                 'type' => 'owner',

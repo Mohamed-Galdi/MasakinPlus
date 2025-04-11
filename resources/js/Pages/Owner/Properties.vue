@@ -9,7 +9,7 @@ defineOptions({
 
 <template>
     <div class=''>
-        properties
+        
     </div>
 </template>
 

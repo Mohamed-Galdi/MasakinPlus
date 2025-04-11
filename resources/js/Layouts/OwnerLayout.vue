@@ -17,28 +17,8 @@ const currentPath = ref(usePage().url);
 const navigationItems = ref([
     {
         name: "عقاراتي ",
-        href: route("owner.dashboard"),
+        href: route("owner.properties.index"),
         icon: "fa-solid fa-building",
-    },
-    {
-        name: "الإيجارات ",
-        href: route("owner.properties"),
-        icon: "fa-solid fa-file-contract",
-    },
-    {
-        name: "التقارير",
-        href: route("test"),
-        icon: "fa-solid fa-chart-pie",
-    },
-    {
-        name: "المحفظة",
-        href: route("test"),
-        icon: "fa-solid fa-wallet",
-    },
-    {
-        name: "الدعم",
-        href: route("test"),
-        icon: "fa-solid fa-headset",
     },
 ]);
 
