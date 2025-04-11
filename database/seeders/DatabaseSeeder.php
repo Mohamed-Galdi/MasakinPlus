@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // User::factory(10)->create();
-        $pw = Hash::make('12345678');
+        $pw = Hash::make('eVdVItth9pxxMTE');
         $date = now();
 
         User::insert([

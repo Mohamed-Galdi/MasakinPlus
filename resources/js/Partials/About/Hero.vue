@@ -71,7 +71,7 @@ onBeforeUnmount(() => {
                     loading="eager"
                 />
             </Link>
-            <Link :href="route('register')">
+            <Link :href="route('login')">
                 <HomeButton />
             </Link>
         </nav>

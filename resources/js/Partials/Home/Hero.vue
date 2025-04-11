@@ -171,7 +171,7 @@ onUnmounted(() => clearInterval(autoSwipeInterval));
                         class="w-16 h-16"
                     />
                 </Link>
-                <Link :href="route('register')" class="nav-join-btn"><HomeButton /></Link>
+                <Link :href="route('login')" class="nav-join-btn"><HomeButton /></Link>
             </nav>
             <div class="grid md:grid-cols-2 gap-8 items-center">
                 <div class="text-right text-white">
@@ -191,7 +191,7 @@ onUnmounted(() => clearInterval(autoSwipeInterval));
                         ref="slideButton"
                         class="btn-primary transition-colors duration-300 ease-in-out"
                     >
-                        <Link :href="route('login')" class="font-BlueOcean text-xs pt-1">
+                        <Link :href="route('register')" class="font-BlueOcean text-xs pt-1">
                             {{ slides[currentSlide].buttonText }}
                         </Link>
                     </button>
