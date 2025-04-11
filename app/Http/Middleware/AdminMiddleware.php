@@ -15,7 +15,7 @@ class AdminMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if (Auth::check() && Auth::user()->type === 'admin') {
+        if (Auth::check() && Auth::user()->type === 'admin' && Auth::user()->is_active) {
             return $next($request);
         }
 

@@ -16,7 +16,7 @@ class TenantMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if (Auth::check() && Auth::user()->type === 'tenant') {
+        if (Auth::check() && Auth::user()->type === 'tenant' && Auth::user()->is_active) {
             return $next($request);
         }
 

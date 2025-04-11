@@ -20,6 +20,7 @@ const loginForm = useForm({
     email: "",
     password: "",
     remember: false,
+    formType: "login",
 });
 
 function submit() {

@@ -14,6 +14,7 @@ const toast = useToast();
 const loginForm = useForm({
     email: "",
     password: "",
+    formType: "adminLogin",
 });
 
 function submit() {

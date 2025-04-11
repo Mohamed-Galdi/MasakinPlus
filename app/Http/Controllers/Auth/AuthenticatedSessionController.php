@@ -35,12 +35,39 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
-        $request->authenticate();
+        $formType = $request->formType; // 'login' or 'adminLogin'
 
+        // Fetch user with type and is_active status
+        $user = User::where('email', $request->email)
+            ->select('email', 'type', 'is_active')
+            ->first();
+
+        if (!$user) {
+            return back()->withErrors(['email' => __('auth.failed')]);
+        }
+
+        // Check if the user account is active
+        if (!$user->is_active) {
+            return back()->withErrors(['email' => __('auth.failed')]);
+        }
+
+        // Prevent normal users from logging in through the admin form
+        if ($formType === 'adminLogin' && $user->type !== 'admin') {
+            return back()->withErrors(['email' => __('auth.failed')]);
+        }
+
+        // Prevent admins from logging in through the normal user form
+        if ($formType === 'login' && $user->type === 'admin') {
+            return back()->withErrors(['email' => __('auth.failed')]);
+        }
+
+        // Proceed with login
+        $request->authenticate();
         $request->session()->regenerate();
 
         return redirect()->intended(route('dashboard', absolute: false));
     }
+
 
     // login with otp
 

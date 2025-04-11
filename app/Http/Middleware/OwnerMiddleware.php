@@ -17,7 +17,7 @@ class OwnerMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if (Auth::check() && Auth::user()->type === 'owner') {
+        if (Auth::check() && Auth::user()->type === 'owner' && Auth::user()->is_active) {
             return $next($request);
         }
 

@@ -17,7 +17,7 @@ class InvestorMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if (Auth::check() && Auth::user()->type === 'investor') {
+        if (Auth::check() && Auth::user()->type === 'investor' && Auth::user()->is_active) {
             return $next($request);
         }
 
