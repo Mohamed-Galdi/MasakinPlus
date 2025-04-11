@@ -10,7 +10,10 @@ import Dialog from "primevue/dialog";
 import Password from "primevue/password";
 import Image from "primevue/image";
 import Button from "primevue/button";
-import TabView from "primevue/tabview";
+import Tabs from "primevue/tabs";
+import TabList from "primevue/tablist";
+import Tab from "primevue/tab";
+import TabPanels from "primevue/tabpanels";
 import TabPanel from "primevue/tabpanel";
 
 defineOptions({
@@ -169,8 +172,9 @@ function updateImage() {
                 type="button"
                 label="تحديث"
                 :loading="updateImageForm.processing"
-                class="w-full bg-teal-800 hover:bg-teal-900 text-white"
+                class="w-full "
                 @click="updateImage"
+                severity="primary"
             />
         </Dialog>
 
@@ -208,7 +212,8 @@ function updateImage() {
                     type="submit"
                     label="تحديث"
                     :loading="updatePasswordForm.processing"
-                    class="w-full bg-teal-800 hover:bg-teal-900 text-white"
+                    class="w-full"
+                    severity="primary"
                 />
             </form>
         </Dialog>
@@ -218,10 +223,9 @@ function updateImage() {
             <!-- Sidebar Profile Card -->
             <div class="lg:w-1/4 w-full">
                 <div
-                    class="bg-white border border-slate-500/50 shadow-sm p-6 h-[22rem] flex flex-col justify-between rounded-lg overflow-hidden"
+                    class="bg-white border border-slate-500/50 shadow-sm px-6 py-4 h-[22rem] flex flex-col justify-between rounded-lg overflow-hidden"
                 >
                     <div class="flex flex-col items-center">
-
                         <Image
                             v-if="profileImage"
                             :src="profileImage"
@@ -229,13 +233,19 @@ function updateImage() {
                             class="w-32 h-32 rounded-md overflow-hidden mb-4 border-2 border-gray-500"
                             preview
                         />
-                        <div v-else class="flex items-center bg-teal-700 justify-center w-32 h-32 rounded-md overflow-hidden mb-4 border-2 border-gray-500">
-                            <i class="pi pi-user text-white" style="font-size: 3.5rem;"></i>
+                        <div
+                            v-else
+                            class="flex items-center bg-teal-700 justify-center w-32 h-32 rounded-md overflow-hidden mb-4 border-2 border-gray-500"
+                        >
+                            <i
+                                class="pi pi-user text-white"
+                                style="font-size: 3.5rem"
+                            ></i>
                         </div>
-                        <h2 class="text-xl font-semibold text-gray-800">
+                        <h2 class="text-xl font-semibold text-teal-800">
                             {{ infosForm.name }}
                         </h2>
-                        <p class="text-sm text-gray-500">
+                        <p class="mt-1 text-gray-500 font-sans">
                             {{ infosForm.email }}
                         </p>
                     </div>
@@ -243,6 +253,7 @@ function updateImage() {
                         label="تحديث الصورة"
                         class="w-full"
                         @click="openUpdateImageModal"
+                        severity="primary"
                     />
                 </div>
             </div>
@@ -252,90 +263,98 @@ function updateImage() {
                 <div
                     class="bg-white border border-slate-500/50 shadow-sm h-[22rem] rounded-lg overflow-hidden"
                 >
-                    <TabView class="h-full">
-                        <!-- Profile Info Tab -->
-                        <TabPanel header="الحساب">
-                            <div
-                                class="h-[17rem] flex flex-col justify-between py-2"
-                            >
-                                <div>
-                                    <h2
-                                        class="text-xl font-semibold text-gray-800 mb-6"
-                                    >
-                                        معلومات الحساب
-                                    </h2>
-                                    <div class="space-y-4">
-                                        <InputText
-                                            v-model="infosForm.name"
-                                            placeholder="الاسم"
-                                            :disabled="editFormDisabled"
-                                            class="w-full"
-                                        />
-                                        <InputText
-                                            v-model="infosForm.email"
-                                            placeholder="البريد الإلكتروني"
-                                            :disabled="editFormDisabled"
-                                            class="w-full"
-                                        />
-                                    </div>
-                                </div>
-                                <div class="flex gap-3 mt-6">
-                                    <Button
-                                        :label="
-                                            editFormDisabled ? 'تحديث' : 'تأكيد'
-                                        "
-                                        :loading="infosForm.processing"
-                                        class="w-full bg-teal-800 hover:bg-teal-900 text-white"
-                                        @click="handleEditInfos"
-                                    />
-                                    <Button
-                                        v-if="!editFormDisabled"
-                                        label="إلغاء"
-                                        class="w-full bg-gray-500 hover:bg-gray-600 text-white"
-                                        @click="handleCancel"
-                                    />
-                                </div>
-                            </div>
-                        </TabPanel>
-
-                        <!-- Security Tab -->
-                        <TabPanel header="إعدادات الأمان">
-                            <div
-                                class="py-2 h-[17rem] flex flex-col justify-between"
-                            >
-                                <div>
-                                    <h2
-                                        class="text-xl font-semibold text-gray-800 mb-6"
-                                    >
-                                        إعدادات الأمان
-                                    </h2>
-                                    <div class="space-y-4">
-                                        <div
-                                            class="bg-slate-100 p-4 rounded-lg"
+                    <Tabs value="0">
+                        <TabList>
+                            <Tab value="0">الحساب</Tab>
+                            <Tab value="1"> إعدادات الأمان</Tab>
+                        </TabList>
+                        <TabPanels>
+                            <TabPanel value="0">
+                                <div
+                                    class="h-[17rem] flex flex-col justify-between py-2"
+                                >
+                                    <div>
+                                        <h2
+                                            class="text-xl font-semibold text-teal-800 mb-6"
                                         >
-                                            <h3
-                                                class="font-medium text-gray-700"
-                                            >
-                                                كلمة المرور
-                                            </h3>
-                                            <p
-                                                class="text-sm text-gray-600 mt-1"
-                                            >
-                                                حدّث كلمة مرورك للحفاظ على أمان
-                                                حسابك. ستحتاج إلى تسجيل الدخول
-                                                مرة أخرى بعد تغييرها.
-                                            </p>
+                                            معلومات الحساب
+                                        </h2>
+                                        <div class="space-y-4">
+                                            <InputText
+                                                v-model="infosForm.name"
+                                                placeholder="الاسم"
+                                                :disabled="editFormDisabled"
+                                                class="w-full"
+                                            />
+                                            <InputText
+                                                v-model="infosForm.email"
+                                                placeholder="البريد الإلكتروني"
+                                                :disabled="editFormDisabled"
+                                                class="w-full"
+                                            />
                                         </div>
                                     </div>
+                                    <div class="flex gap-3 mt-6">
+                                        <Button
+                                            :label="
+                                                editFormDisabled
+                                                    ? 'تحديث'
+                                                    : 'تأكيد'
+                                            "
+                                            :loading="infosForm.processing"
+                                            @click="handleEditInfos"
+                                            severity="primary"
+                                            class="w-full"
+                                        />
+                                        <Button
+                                            v-if="!editFormDisabled"
+                                            label="إلغاء"
+                                            class="w-full bg-gray-500 hover:bg-gray-600 text-white"
+                                            @click="handleCancel"
+                                        />
+                                    </div>
                                 </div>
-                                <Button
-                                    label="تغيير كلمة المرور"
-                                    class="bg-teal-800 hover:bg-teal-900 text-white"
-                                    @click="updatePasswordModal = true"
-                                />
-                            </div>
-                        </TabPanel>
-                    </TabView>
+                            </TabPanel>
+
+                            <TabPanel value="1">
+                                <div
+                                    class="py-2 h-[17rem] flex flex-col justify-between"
+                                >
+                                    <div>
+                                        <h2
+                                            class="text-xl font-semibold text-gray-800 mb-6"
+                                        >
+                                            إعدادات الأمان
+                                        </h2>
+                                        <div class="space-y-4">
+                                            <div
+                                                class="bg-slate-100 p-4 rounded-lg"
+                                            >
+                                                <h3
+                                                    class="font-medium text-gray-700"
+                                                >
+                                                    كلمة المرور
+                                                </h3>
+                                                <p
+                                                    class="text-sm text-gray-600 mt-1"
+                                                >
+                                                    حدث كلمة مرورك للحفاظ على
+                                                    أمان حسابك. ستحتاج إلى تسجيل
+                                                    الدخول مرة أخرى بعد تغييرها.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <Button
+                                        label="تغيير كلمة المرور"
+                                        @click="updatePasswordModal = true"
+                                        class="w-full"
+                                        severity="primary"
+                                    />
+                                </div>
+                            </TabPanel>
+                        </TabPanels>
+                    </Tabs>
                 </div>
             </div>
         </div>

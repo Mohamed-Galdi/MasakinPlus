@@ -43,7 +43,7 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'type' => $request->accountType,
-            'image' => '/storage/users_images/default-user-image.jpg'
+            'image' => '/storage/users_images/default-user-image.webp'
         ]);
 
         Auth::login($user);

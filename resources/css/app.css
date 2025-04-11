@@ -84,6 +84,7 @@ html::selection {
     font-family: BeinNormal;
 }
 
-/* .p-button{
-background-color: red !important;
-} */
+.p-button-primary{
+background-color: #41a396 !important;
+border-color: #0d675b !important;
+}

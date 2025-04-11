@@ -25,7 +25,8 @@ Route::get('/dashboard', function () {
 Route::prefix('/account')->middleware(['auth', 'verified', 'not-admin'])->group(function () {
     Route::get('/', [UserAccountController::class, 'index'])->name('account.index');
     Route::post('/change-image', [UserAccountController::class, 'changeImage'])->name('account.changeImage');
-    Route::post('/edit-account', [UserAccountController::class, 'editAccount'])->name('account.editAccount');
+    Route::post('/edit-username', [UserAccountController::class, 'editUsername'])->name('account.editUsername');
+    Route::post('/edit-email', [UserAccountController::class, 'editEmail'])->name('account.editEmail');
     Route::post('/update-password', [UserAccountController::class, 'updatePassword'])->name('account.updatePassword');
 });
 

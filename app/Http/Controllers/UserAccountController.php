@@ -38,15 +38,26 @@ class UserAccountController extends Controller
         return redirect()->route('account.index');
     }
 
-    public function editAccount(Request $request)
+    public function editUsername(Request $request)
     {
         $request->validate([
             'name' => 'required|string',
-            'email' => 'required|email',
         ]);
 
         $user = auth()->user();
         $user->name = $request->name;
+        $user->save();
+
+        return redirect()->route('account.index');
+    }
+    
+    public function editEmail(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|string|email',
+        ]);
+
+        $user = auth()->user();
         $user->email = $request->email;
         $user->save();
 

@@ -1,7 +1,7 @@
 <script setup>
 import DynamicLayout from "@/Layouts/DynamicLayout.vue";
 import { Head, useForm } from "@inertiajs/vue3";
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import FileUpload from "@/Components/PrimeVilt/FileUpload.vue";
 import InputText from "primevue/inputtext";
 import { useToast } from "primevue/usetoast";
@@ -10,11 +10,7 @@ import Dialog from "primevue/dialog";
 import Password from "primevue/password";
 import Image from "primevue/image";
 import Button from "primevue/button";
-import Tabs from "primevue/tabs";
-import TabList from "primevue/tablist";
-import Tab from "primevue/tab";
-import TabPanels from "primevue/tabpanels";
-import TabPanel from "primevue/tabpanel";
+import Message from "primevue/message";
 
 defineOptions({
     layout: DynamicLayout,
@@ -27,45 +23,90 @@ const props = defineProps({
     },
 });
 
-const toast = useToast();
+let userType;
 
-// Profile Info Form
-const infosForm = useForm({
-    name: props.user.name,
-    email: props.user.email,
-});
-const editFormDisabled = ref(true);
-
-function handleEditInfos() {
-    if (!editFormDisabled.value) {
-        infosForm.post(route("account.editAccount"), {
-            onSuccess: () => {
-                toast.add({
-                    severity: "success",
-                    summary: " نجاح",
-                    detail: "تم تحديث الحساب بنجاح",
-                    life: 3000,
-                });
-                editFormDisabled.value = true;
-            },
-            onError: () => {
-                toast.add({
-                    severity: "error",
-                    summary: "خطأ",
-                    detail: Object.values(infosForm.errors)[0],
-                    life: 3000,
-                });
-            },
-        });
-    } else {
-        editFormDisabled.value = false;
-    }
+switch (props.user.type) {
+    case "owner":
+        userType = "حساب مالك";
+        break;
+    case "investor":
+        userType = "حساب مستثمر";
+        break;
+    case "tenant":
+        userType = "حساب مستأجر";
+        break;
+    default:
+        userType = "حساب غير معروف";
+        break;
 }
 
-function handleCancel() {
-    infosForm.name = props.user.name;
-    infosForm.email = props.user.email;
-    editFormDisabled.value = true;
+const toast = useToast();
+const activeSection = ref("profile");
+
+// Username Form
+const usernameForm = useForm({
+    name: props.user.name,
+});
+const editUsernameMode = ref(false);
+
+function updateUsername() {
+    usernameForm.post(route("account.editUsername"), {
+        onSuccess: () => {
+            toast.add({
+                severity: "success",
+                summary: "نجاح",
+                detail: "تم تحديث اسم المستخدم بنجاح",
+                life: 3000,
+            });
+            editUsernameMode.value = false;
+        },
+        onError: () => {
+            toast.add({
+                severity: "error",
+                summary: "خطأ",
+                detail: Object.values(usernameForm.errors)[0],
+                life: 3000,
+            });
+        },
+    });
+}
+
+function cancelUsernameEdit() {
+    usernameForm.name = props.user.name;
+    editUsernameMode.value = false;
+}
+
+// Email Form
+const emailForm = useForm({
+    email: props.user.email,
+});
+const editEmailMode = ref(false);
+
+function updateEmail() {
+    emailForm.post(route("account.editEmail"), {
+        onSuccess: () => {
+            toast.add({
+                severity: "success",
+                summary: "نجاح",
+                detail: "تم تحديث البريد الإلكتروني بنجاح",
+                life: 3000,
+            });
+            editEmailMode.value = false;
+        },
+        onError: () => {
+            toast.add({
+                severity: "error",
+                summary: "خطأ",
+                detail: Object.values(emailForm.errors)[0],
+                life: 3000,
+            });
+        },
+    });
+}
+
+function cancelEmailEdit() {
+    emailForm.email = props.user.email;
+    editEmailMode.value = false;
 }
 
 // Password Form
@@ -81,7 +122,7 @@ function updatePassword() {
         onSuccess: () => {
             toast.add({
                 severity: "success",
-                summary: " نجاح",
+                summary: "نجاح",
                 detail: "تم تحديث كلمة المرور بنجاح",
                 life: 3000,
             });
@@ -145,12 +186,17 @@ function updateImage() {
         },
     });
 }
+
+// Navigation items
+const menuItems = [
+    { id: "profile", label: "الملف الشخصي", icon: "pi pi-user" },
+    { id: "security", label: "الأمان", icon: "pi pi-shield" },
+];
 </script>
 
 <template>
-    <div class="container mx-auto px-4 py-8 max-w-7xl font-BeinNormal">
-        <Head title="| Account" />
-
+    <div class="min-h-screen">
+        <Head title="| إعدادات الحساب" />
         <Toast position="top-center" />
 
         <!-- Image Update Modal -->
@@ -217,173 +263,270 @@ function updateImage() {
         </Dialog>
 
         <!-- Main Content -->
-        <div class="flex flex-col lg:flex-row gap-6">
-            <!-- Sidebar Profile Card -->
-            <div class="lg:w-1/4 w-full">
-                <div
-                    class="bg-white border border-slate-500/50 shadow-sm p-6 h-[22rem] flex flex-col justify-between rounded-lg overflow-hidden"
-                >
-                    <div class="flex flex-col items-center">
-                        <Image
-                            v-if="profileImage"
-                            :src="profileImage"
-                            alt="Profile Image"
-                            class="w-32 h-32 rounded-md overflow-hidden mb-4 border-2 border-gray-500"
-                            preview
-                        />
+        <div class="container mx-auto px-4 py-8 max-w-7xl font-BeinNormal">
+            <div class="flex flex-col lg:flex-row gap-8">
+                <!-- Sidebar -->
+                <div class="lg:w-1/4">
+                    <div
+                        class="bg-white rounded-2xl shadow-sm overflow-hidden mb-6"
+                    >
                         <div
-                            v-else
-                            class="flex items-center bg-teal-700 justify-center w-32 h-32 rounded-md overflow-hidden mb-4 border-2 border-gray-500"
+                            class="bg-gradient-to-r from-teal-600 to-teal-700 h-32 relative"
                         >
-                            <i
-                                class="pi pi-user text-white"
-                                style="font-size: 3.5rem"
-                            ></i>
-                        </div>
-                        <h2 class="text-xl font-semibold text-gray-800">
-                            {{ infosForm.name }}
-                        </h2>
-                        <p class="text-sm text-gray-500">
-                            {{ infosForm.email }}
-                        </p>
-                    </div>
-                    <Button
-                                                severity="contrast"
-
-                        label="تحديث الصورة"
-                        class="w-full"
-                        @click="openUpdateImageModal"
-                    />
-                </div>
-            </div>
-
-            <!-- Main Content Area -->
-            <div class="lg:w-3/4 w-full">
-                <div
-                    class="bg-white border border-slate-500/50 shadow-sm h-[22rem] rounded-lg overflow-hidden"
-                >
-                    <Tabs value="0">
-                        <TabList>
-                            <Tab value="0">الحساب</Tab>
-                            <Tab value="1"> إعدادات الأمان</Tab>
-                        </TabList>
-                        <TabPanels>
-                            <TabPanel value="0">
-                                <div
-                                    class="h-[17rem] flex flex-col justify-between py-2"
-                                >
-                                    <div>
-                                        <h2
-                                            class="text-xl font-semibold text-gray-800 mb-6"
-                                        >
-                                            معلومات الحساب
-                                        </h2>
-                                        <div class="space-y-4">
-                                            <InputText
-                                                v-model="infosForm.name"
-                                                placeholder="الاسم"
-                                                :disabled="editFormDisabled"
-                                                class="w-full"
-                                            />
-                                            <InputText
-                                                v-model="infosForm.email"
-                                                placeholder="البريد الإلكتروني"
-                                                :disabled="editFormDisabled"
-                                                class="w-full"
-                                            />
-                                        </div>
+                            <div
+                                class="absolute -bottom-16 left-1/2 transform -translate-x-1/2"
+                            >
+                                <div class="relative group">
+                                    <div
+                                        class="rounded-full h-32 w-32 overflow-hidden border-4 border-white bg-white"
+                                    >
+                                        <Image
+                                            :src="profileImage"
+                                            alt="Profile Image"
+                                            imageClass="object-cover h-full w-full"
+                                            preview
+                                        />
                                     </div>
-                                    <div class="flex gap-3 mt-6">
-                                        <Button
-                                            :label="
-                                                editFormDisabled
-                                                    ? 'تحديث'
-                                                    : 'تأكيد'
-                                            "
-                                            :class="
-                                                editFormDisabled
-                                                    ? 'w-full'
-                                                    : 'w-1/2'
-                                            "
-                                            :loading="infosForm.processing"
-                                            @click="handleEditInfos"
-                                        />
-                                        <Button
-                                            v-if="!editFormDisabled"
-                                            label="إلغاء"
-                                            class="w-1/2 bg-gray-500 hover:bg-gray-600 text-white"
-                                            @click="handleCancel"
-                                        />
+
+                                    <div
+                                        class="absolute bottom-2 border border-gray-500 right-0 bg-gray-50 rounded-full p-2 shadow-md cursor-pointer hover:bg-gray-300 transition-colors flex items-center justify-center"
+                                        @click="openUpdateImageModal"
+                                    >
+                                        <i
+                                            class="pi pi-pencil text-gray-800"
+                                        ></i>
                                     </div>
                                 </div>
-                            </TabPanel>
+                            </div>
+                        </div>
 
-                            <!-- Security Tab -->
-                            <TabPanel value="1">
-                                <div
-                                    class="py-2 h-[17rem] flex flex-col justify-between"
+                        <div class="pt-20 pb-6 px-6 text-center">
+                            <h2 class="text-2xl font-bold text-teal-800">
+                                {{ usernameForm.name }}
+                            </h2>
+                            <p class="text-gray-500 mt-1 font-sans">
+                                {{ emailForm.email }}
+                            </p>
+
+                            <div class="mt-2 flex justify-center">
+                                <p
+                                    class="p-1 bg-slate-800 text-teal-50 text-sm rounded-md font-sans font-bold"
                                 >
-                                    <div>
-                                        <h2
-                                            class="text-xl font-semibold text-gray-800 mb-6"
-                                        >
-                                            إعدادات الأمان
-                                        </h2>
-                                        <div class="space-y-4">
-                                            <div
-                                                class="bg-slate-100 p-4 rounded-lg"
-                                            >
-                                                <h3
-                                                    class="font-medium text-gray-700"
-                                                >
-                                                    كلمة المرور
-                                                </h3>
-                                                <p
-                                                    class="text-sm text-gray-600 mt-1"
-                                                >
-                                                    حدث كلمة مرورك للحفاظ على
-                                                    أمان حسابك. ستحتاج إلى تسجيل
-                                                    الدخول مرة أخرى بعد تغييرها.
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    {{ userType }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Navigation Menu -->
+                    <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
+                        <div class="p-4">
+                            <h3
+                                class="text-lg font-semibold text-gray-700 mb-4"
+                            >
+                                إعدادات الحساب
+                            </h3>
+                            <div class="space-y-2">
+                                <div
+                                    v-for="item in menuItems"
+                                    :key="item.id"
+                                    @click="activeSection = item.id"
+                                    :class="[
+                                        'flex items-center p-3 rounded-lg cursor-pointer transition-colors',
+                                        activeSection === item.id
+                                            ? 'bg-teal-50 text-teal-600'
+                                            : 'hover:bg-gray-50 text-gray-700 hover:text-gray-900',
+                                    ]"
+                                >
+                                    <i
+                                        :class="[
+                                            item.icon,
+                                            'ml-3',
+                                            activeSection === item.id
+                                                ? 'text-teal-600'
+                                                : 'text-gray-500',
+                                        ]"
+                                    ></i>
+                                    <span class="font-medium">{{
+                                        item.label
+                                    }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Content Area -->
+                <div class="lg:w-3/4">
+                    <!-- Profile Section -->
+                    <div
+                        v-if="activeSection === 'profile'"
+                        class="bg-white rounded-2xl shadow-sm overflow-hidden"
+                    >
+                        <div class="p-6 border-b border-gray-100">
+                            <h2 class="text-2xl font-bold text-gray-800">
+                                الملف الشخصي
+                            </h2>
+                            <p class="text-gray-500 mt-1">
+                                إدارة معلومات حسابك الشخصي
+                            </p>
+                        </div>
+
+                        <!-- Username Section -->
+                        <div class="p-6 border-b border-gray-100">
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="text-lg font-semibold text-gray-800">
+                                    اسم المستخدم
+                                </h3>
+                                <Button
+                                    v-if="!editUsernameMode"
+                                    icon="pi pi-pencil"
+                                    text
+                                    rounded
+                                    aria-label="تعديل"
+                                    @click="editUsernameMode = true"
+                                />
+                            </div>
+
+                            <div
+                                v-if="!editUsernameMode"
+                                class="flex items-center"
+                            >
+                                <p class="text-gray-700">
+                                    {{ usernameForm.name }}
+                                </p>
+                            </div>
+
+                            <div v-else class="space-y-4">
+                                <div class="p-float-label">
+                                    <InputText
+                                        id="username"
+                                        v-model="usernameForm.name"
+                                        class="w-full"
+                                    />
+                                </div>
+                                <div class="flex gap-2">
+                                    <Button
+                                        label="حفظ"
+                                        icon="pi pi-check"
+                                        @click="updateUsername"
+                                        :loading="usernameForm.processing"
+                                        severity="primary"
+                                    />
+                                    <Button
+                                        label="إلغاء"
+                                        icon="pi pi-times"
+                                        severity="secondary"
+                                        text
+                                        @click="cancelUsernameEdit"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Email Section -->
+                        <div class="p-6">
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="text-lg font-semibold text-gray-800">
+                                    البريد الإلكتروني
+                                </h3>
+                                <Button
+                                    v-if="!editEmailMode"
+                                    icon="pi pi-pencil"
+                                    text
+                                    rounded
+                                    aria-label="تعديل"
+                                    @click="editEmailMode = true"
+                                />
+                            </div>
+
+                            <Message severity="info" class="mb-4">
+                                <span
+                                    >سيتم استخدام البريد الإلكتروني لاستلام رمز
+                                    التحقق (OTP) عند تسجيل الدخول</span
+                                >
+                            </Message>
+
+                            <div
+                                v-if="!editEmailMode"
+                                class="flex items-center"
+                            >
+                                <p
+                                    class="text-gray-800 font-sans font-semibold"
+                                >
+                                    {{ emailForm.email }}
+                                </p>
+                            </div>
+
+                            <div v-else class="space-y-4">
+                                <div class="p-float-label">
+                                    <InputText
+                                        id="email"
+                                        v-model="emailForm.email"
+                                        class="w-full"
+                                    />
+                                </div>
+                                <div class="flex gap-2">
+                                    <Button
+                                        label="حفظ"
+                                        icon="pi pi-check"
+                                        @click="updateEmail"
+                                        :loading="emailForm.processing"
+                                        severity="primary"
+                                    />
+                                    <Button
+                                        label="إلغاء"
+                                        icon="pi pi-times"
+                                        severity="secondary"
+                                        text
+                                        @click="cancelEmailEdit"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Security Section -->
+                    <div
+                        v-if="activeSection === 'security'"
+                        class="bg-white rounded-2xl shadow-sm overflow-hidden"
+                    >
+                        <div class="p-6 border-b border-gray-100">
+                            <h2 class="text-2xl font-bold text-gray-800">
+                                إعدادات الأمان
+                            </h2>
+                            <p class="text-gray-500 mt-1">
+                                إدارة إعدادات أمان حسابك
+                            </p>
+                        </div>
+
+                        <!-- Password Section -->
+                        <div class="p-6 border-b border-gray-100">
+                            <div class="flex items-start gap-4">
+                                <div class="flex-grow">
+                                    <h3
+                                        class="text-lg font-semibold text-gray-800"
+                                    >
+                                        كلمة المرور
+                                    </h3>
+
+                                    <p class="text-gray-600 mb-4">
+                                        لحماية حسابك، ننصح بتغيير كلمة المرور
+                                        بانتظام واستخدام كلمة مرور قوية تجمع بين
+                                        الأحرف والأرقام والرموز.
+                                    </p>
+
                                     <Button
                                         label="تغيير كلمة المرور"
+                                        icon="pi pi-key"
                                         @click="updatePasswordModal = true"
                                     />
                                 </div>
-                            </TabPanel>
-                        </TabPanels>
-                    </Tabs>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </template>
-
-<style scoped>
-.p-inputtext {
-    @apply border-gray-300 focus:border-teal-400 focus:ring-teal-400 rounded-md;
-}
-
-.p-button {
-    @apply transition-colors duration-200 rounded-md;
-}
-
-.p-tabview .p-tabview-nav {
-    @apply border-b border-gray-200 bg-gray-50 rounded-t-xl;
-}
-
-.p-tabview .p-tabview-panels {
-    @apply p-0 h-full;
-}
-
-.p-tabview-nav li .p-tabview-nav-link {
-    @apply text-gray-600 hover:text-teal-800;
-}
-
-.p-tabview-nav li.p-highlight .p-tabview-nav-link {
-    @apply text-teal-800 border-b-2 border-teal-800;
-}
-</style>

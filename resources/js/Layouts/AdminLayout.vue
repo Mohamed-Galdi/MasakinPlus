@@ -81,7 +81,7 @@ const isGroupActive = (item) => {
     return false;
 };
 
-const user = computed(() => usePage().props.auth.user || { name: "John Doe" });
+const user = computed(() => usePage().props.user || { name: " غير متوفر" });
 
 const logout = () => {
     router.post(route("logout"));

@@ -26,7 +26,7 @@ class DatabaseSeeder extends Seeder
                 'email' => 'admin@masakinplus.com',
                 'password' => $pw,
                 'type' => 'admin',
-                'image' => '/storage/users_images/default-user-image.jpg',
+                'image' => '/storage/users_images/default-user-image.webp',
                 'email_verified_at' => $date,
             ],
             [
@@ -34,7 +34,7 @@ class DatabaseSeeder extends Seeder
                 'email' => 'owner@masakinplus.com',
                 'password' => $pw,
                 'type' => 'owner',
-                'image' => '/storage/users_images/default-user-image.jpg',
+                'image' => '/storage/users_images/default-user-image.webp',
                 'email_verified_at' => $date,
             ],
             [
@@ -42,7 +42,7 @@ class DatabaseSeeder extends Seeder
                 'email' => 'investor@masakinplus.com',
                 'password' => $pw,
                 'type' => 'investor',
-                'image' => '/storage/users_images/default-user-image.jpg',
+                'image' => '/storage/users_images/default-user-image.webp',
                 'email_verified_at' => $date,
             ],
             [
@@ -50,7 +50,7 @@ class DatabaseSeeder extends Seeder
                 'email' => 'tenant@masakinplus.com',
                 'password' => $pw,
                 'type' => 'tenant',
-                'image' => '/storage/users_images/default-user-image.jpg',
+                'image' => '/storage/users_images/default-user-image.webp',
                 'email_verified_at' => $date,
             ],
         ]);
