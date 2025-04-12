@@ -49,4 +49,29 @@ class User extends Authenticatable implements MustVerifyEmail
             'password' => 'hashed',
         ];
     }
+
+    public function ownedProperties()
+    {
+        return $this->hasMany(Property::class, 'owner_id');
+    }
+
+    /**
+     * Properties the user has invested in (for investors).
+     */
+    // public function investedProperties()
+    // {
+    //     return $this->belongsToMany(Property::class, 'property_investor', 'investor_id', 'property_id')
+    //         ->withPivot('investment_amount', 'share_percentage')
+    //         ->withTimestamps();
+    // }
+
+    /**
+     * Properties the user is renting (for tenants).
+     */
+    // public function rentedProperties()
+    // {
+    //     return $this->belongsToMany(Property::class, 'property_tenant', 'tenant_id', 'property_id')
+    //         ->withPivot('lease_start', 'lease_end', 'monthly_rent')
+    //         ->withTimestamps();
+    // }
 }
