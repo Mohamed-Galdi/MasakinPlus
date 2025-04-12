@@ -15,8 +15,14 @@ class PropertyController extends Controller
                 'amenities' => fn($query) => $query->select('amenities.id', 'name'),
                 'images' => fn($query) => $query->select('property_images.id', 'property_id', 'path'),
             ])
+            ->limit(3)
             ->get();
 
-        return inertia('Owner/Properties', compact('properties'));
+        return inertia('Owner/Properties/index', compact('properties'));
+    }
+
+    public function create()
+    {
+        return inertia('Owner/Properties/create');
     }
 }

@@ -88,3 +88,29 @@ html::selection {
 background-color: #41a396 !important;
 border-color: #0d675b !important;
 }
+
+.p-galleria-indicator-list {
+    padding: 2px !important;	
+}
+
+.p-galleria-indicator{
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding:  4px 0 !important;
+}
+
+.p-galleria-prev-button{
+    color: rgb(119, 119, 119) !important;
+}
+.p-galleria-next-button{
+    color: rgb(119, 119, 119) !important;
+}
+
+.p-galleria-nav-button{
+    background-color: rgba(255, 255, 255) !important;
+}
+
+.p-steppanel{
+    background-color: rgba(255, 255, 255, 0) !important;
+}

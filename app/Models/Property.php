@@ -18,7 +18,6 @@ class Property extends Model
         'bathrooms',
         'is_furnished',
         'daily_rent_price',
-        'monthly_rent_price',
         'status',
     ];
 

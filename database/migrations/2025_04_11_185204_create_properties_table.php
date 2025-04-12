@@ -24,7 +24,6 @@ return new class extends Migration
             $table->integer('bathrooms')->default(1);
             $table->boolean('is_furnished')->default(false); // مفروشة
             $table->decimal('daily_rent_price', 10, 2);
-            $table->decimal('monthly_rent_price', 10, 2);
             $table->enum('status', ['pending', 'approved', 'rejected', 'funding', 'rented', 'inactive'])->default('pending');
             $table->timestamps();
         });
