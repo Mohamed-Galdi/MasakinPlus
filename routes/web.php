@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\PropertyStatus;
 use App\Http\Controllers\UserAccountController;
 use Illuminate\Support\Facades\Route;
 

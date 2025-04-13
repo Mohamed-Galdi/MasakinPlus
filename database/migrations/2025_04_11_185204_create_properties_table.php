@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Enums\PropertyStatus;
 
 return new class extends Migration
 {
@@ -24,7 +25,8 @@ return new class extends Migration
             $table->integer('bathrooms')->default(1);
             $table->boolean('is_furnished')->default(false); // مفروشة
             $table->decimal('daily_rent_price', 10, 2);
-            $table->enum('status', ['pending', 'approved', 'rejected', 'funding', 'rented', 'inactive'])->default('pending');
+            $table->enum('status', array_column(PropertyStatus::cases(), 'value'))->default(PropertyStatus::Draft->value);
+            $table->enum('status_label', PropertyStatus::labels())->default(PropertyStatus::Draft->label());
             $table->timestamps();
         });
     }

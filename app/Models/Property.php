@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\PropertyStatus;
 use Illuminate\Database\Eloquent\Model;
 
 class Property extends Model
@@ -19,6 +20,10 @@ class Property extends Model
         'is_furnished',
         'daily_rent_price',
         'status',
+    ];
+
+    protected $casts = [
+        'status' => PropertyStatus::class,
     ];
 
     public function owner()

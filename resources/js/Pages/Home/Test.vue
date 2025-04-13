@@ -1,14 +1,10 @@
 <script setup>
-import OwnerLayout from '@/Layouts/OwnerLayout.vue';
 
-defineOptions({
-    layout: OwnerLayout
-})
 </script>
 
 
-<template>
-    <div class=''>
+<template>0
+    <div class='bg-slate-800 text-white max-w-7xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:px-8'>
         owner dashboard
     </div>
 </template>

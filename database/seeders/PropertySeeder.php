@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\PropertyStatus;
 use Illuminate\Database\Seeder;
 use App\Models\Property;
 use App\Models\Amenity;
@@ -11,6 +12,7 @@ class PropertySeeder extends Seeder
 {
     public function run(): void
     {
+        $status = PropertyStatus::Draft->value;
         // Sample property data (12 properties)
         $properties = [
             [
@@ -25,7 +27,7 @@ class PropertySeeder extends Seeder
                 'bathrooms' => 4,
                 'is_furnished' => true,
                 'daily_rent_price' => 1200.00,
-                'status' => 'approved',
+                'status' => $status,
                 'amenities' => ['واي فاي', 'موقف سيارات', 'مسبح'],
             ],
             [
@@ -40,7 +42,7 @@ class PropertySeeder extends Seeder
                 'bathrooms' => 2,
                 'is_furnished' => true,
                 'daily_rent_price' => 300.00,
-                'status' => 'pending',
+                'status' => $status,
                 'amenities' => ['واي فاي', 'مكيفات'],
             ],
             [
@@ -55,7 +57,7 @@ class PropertySeeder extends Seeder
                 'bathrooms' => 1,
                 'is_furnished' => false,
                 'daily_rent_price' => 150.00,
-                'status' => 'approved',
+                'status' => $status,
                 'amenities' => ['واي فاي', 'موقف سيارات'],
             ],
             [
@@ -70,7 +72,7 @@ class PropertySeeder extends Seeder
                 'bathrooms' => 3,
                 'is_furnished' => false,
                 'daily_rent_price' => 600.00,
-                'status' => 'funding',
+                'status' => $status,
                 'amenities' => ['مكيفات', 'حديقة'],
             ],
             [
@@ -85,7 +87,7 @@ class PropertySeeder extends Seeder
                 'bathrooms' => 2,
                 'is_furnished' => true,
                 'daily_rent_price' => 400.00,
-                'status' => 'rented',
+                'status' => $status,
                 'amenities' => ['واي فاي', 'مسبح', 'صالة رياضية'],
             ],
             [
@@ -100,7 +102,7 @@ class PropertySeeder extends Seeder
                 'bathrooms' => 5,
                 'is_furnished' => false,
                 'daily_rent_price' => 1000.00,
-                'status' => 'approved',
+                'status' => $status,
                 'amenities' => ['حديقة', 'مسبح'],
             ],
             [
@@ -115,7 +117,7 @@ class PropertySeeder extends Seeder
                 'bathrooms' => 1,
                 'is_furnished' => true,
                 'daily_rent_price' => 500.00,
-                'status' => 'pending',
+                'status' => $status,
                 'amenities' => ['واي فاي', 'مكيفات'],
             ],
             [
@@ -130,7 +132,7 @@ class PropertySeeder extends Seeder
                 'bathrooms' => 1,
                 'is_furnished' => false,
                 'daily_rent_price' => 200.00,
-                'status' => 'approved',
+                'status' => $status,
                 'amenities' => ['موقف سيارات', 'مكيفات'],
             ],
             [
@@ -145,7 +147,7 @@ class PropertySeeder extends Seeder
                 'bathrooms' => 4,
                 'is_furnished' => true,
                 'daily_rent_price' => 900.00,
-                'status' => 'rented',
+                'status' => $status,
                 'amenities' => ['واي فاي', 'مكيفات', 'حديقة'],
             ],
             [
@@ -160,7 +162,7 @@ class PropertySeeder extends Seeder
                 'bathrooms' => 1,
                 'is_furnished' => true,
                 'daily_rent_price' => 120.00,
-                'status' => 'approved',
+                'status' => $status,
                 'amenities' => ['واي فاي'],
             ],
             [
@@ -175,7 +177,7 @@ class PropertySeeder extends Seeder
                 'bathrooms' => 2,
                 'is_furnished' => false,
                 'daily_rent_price' => 350.00,
-                'status' => 'inactive',
+                'status' => $status,
                 'amenities' => ['حديقة', 'موقف سيارات'],
             ],
             [
@@ -190,7 +192,7 @@ class PropertySeeder extends Seeder
                 'bathrooms' => 2,
                 'is_furnished' => true,
                 'daily_rent_price' => 450.00,
-                'status' => 'approved',
+                'status' => $status,
                 'amenities' => ['واي فاي', 'مسبح', 'صالة رياضية'],
             ],
         ];
