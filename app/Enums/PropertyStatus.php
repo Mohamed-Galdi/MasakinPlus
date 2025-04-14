@@ -29,4 +29,12 @@ enum PropertyStatus: string
     {
         return array_map(fn($status) => $status->label(), self::cases());
     }
+
+    public static function options(): array
+    {
+        return array_map(fn($type) => [
+            'label' => $type->label(),
+            'value' => $type->value,
+        ], self::cases());
+    }
 }

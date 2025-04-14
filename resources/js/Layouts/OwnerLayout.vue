@@ -49,6 +49,8 @@ watch(
     }
 );
 
+// const currentYear = new Date().getFullYear();
+
 // Logout
 function logout() {
     router.post(route("logout"));
@@ -242,5 +244,14 @@ function logout() {
         <main class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
             <slot />
         </main>
+
+        <!-- Footer -->
+        <!-- <div class="bg-white pt-2" >
+            <p
+                class="text-center text-slate-600 font-BeinNormal text-sm sm:text-base"
+            >
+                جميع الحقوق محفوظة لشركة مساكن بلس © {{ currentYear}}
+            </p>
+        </div> -->
     </div>
 </template>

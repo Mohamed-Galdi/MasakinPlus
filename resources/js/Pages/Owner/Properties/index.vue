@@ -1,9 +1,12 @@
 <script setup>
 import OwnerLayout from "@/Layouts/OwnerLayout.vue";
-import { ref } from "vue";
-import { Link } from "@inertiajs/vue3";
-import Galleria from "primevue/galleria";
+import { ref, watch } from "vue";
+import { Link, router } from "@inertiajs/vue3";
+import { debounce } from "lodash";
 import Select from "primevue/select";
+import Galleria from "primevue/galleria";
+import PropertyStatus from "@/Components/PropertyStatus.vue";
+import { useTextHelpers } from "@/plugins/textHelpers";
 
 defineOptions({
     layout: OwnerLayout,
@@ -11,28 +14,67 @@ defineOptions({
 
 const props = defineProps({
     properties: {
+        type: Object,
+        required: true,
+    },
+    typeOptions: {
         type: Array,
         required: true,
     },
+    statusOptions: {
+        type: Array,
+        required: true,
+    },
+    typeFilter: {
+        type: String,
+        required: false,
+        default: "",
+    },
+    statusFilter: {
+        type: String,
+        required: false,
+        default: "",
+    },
 });
 
-const propertyList = ref(props.properties);
+const propertyList = ref(props.properties.data);
 
-const types = [
-    { name: "شقة", id: "1" },
-    { name: "منزل", id: "2" },
-    { name: "فيلا", id: "3" },
-    { name: "استوديو", id: "4" },
-    { name: "مكتب", id: "5" },
-];
+// ############################################## Search and filter
 
-const statusOptions = [
-    { name: "قيد المراجعة", id: "1" },
-    { name: "معتمد", id: "2" },
-    { name: "مرفوض", id: "3" },
-    { name: "قيد المراجعة", id: "4" },
-    { name: "معتمد", id: "5" },
-];
+const typeFilter = ref(props.typeFilter);
+const statusFilter = ref(props.statusFilter);
+
+const typesOptions = ref(props.typeOptions);
+const statusOptions = ref(props.statusOptions);
+
+watch(
+    [typeFilter, statusFilter],
+    debounce(([typeFilter, statusFilter]) => {
+        // Update the table with both filters
+        router.get(
+            route("owner.properties.index"),
+            {
+                typeFilter: typeFilter,
+                statusFilter: statusFilter,
+            },
+            {
+                preserveState: false,
+                preserveScroll: true,
+            }
+        );
+    }, 300)
+);
+
+// Clear filters function
+const clearFilters = () => {
+    typeFilter.value = "";
+    statusFilter.value = "";
+};
+
+// Check if any filter is active
+const isFilterActive = () => {
+    return typeFilter.value !== "" || statusFilter.value !== "";
+};
 
 // Format price with commas
 const formatPrice = (price) => {
@@ -57,19 +99,24 @@ const getGalleriaImages = (propertyImages) => {
         alt: "Property Image",
     }));
 };
+
+const textHelpers = useTextHelpers();
 </script>
 
 <template>
     <div class="container mx-auto px-1 py-1">
         <!-- Header -->
         <div
-            class="flex flex-col md:flex-row justify-between items-end md:items-center mb-6"
+            class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6"
         >
             <div>
                 <h1 class="text-2xl font-bold text-gray-800">العقارات</h1>
                 <p class="text-gray-600 mt-1">إدارة العقارات الخاصة بك</p>
             </div>
-            <Link :href="route('owner.properties.create')" class="btn bg-emerald-600 hover:bg-emerald-700 text-white">
+            <Link
+                :href="route('owner.properties.create')"
+                class="btn bg-emerald-600 hover:bg-emerald-700 text-white md:w-fit w-full mt-2 md:mt-0"
+            >
                 <i class="pi pi-plus"></i>
                 <span>إضافة عقار جديد</span>
             </Link>
@@ -77,29 +124,39 @@ const getGalleriaImages = (propertyImages) => {
 
         <!-- Search and Filter -->
         <div class="bg-white rounded-lg shadow p-4 mb-6">
-            <div class="flex justify-end items-center gap-4">
+            <div class="flex md:flex-row flex-col justify-end items-center gap-4">
+                <!-- Clear Filter Button -->
+                <button
+                    v-if="isFilterActive()"
+                    @click="clearFilters"
+                    class="px-3 py-2  text-red-600 rounded-md hover:text-red-500 transition-colors md:order-first order-last"
+                >
+                    <span>إزالة الفلتر</span>
+                </button>
                 <!-- type -->
                 <Select
-                    v-model="selectedType"
-                    :options="types"
-                    optionLabel="name"
-                    optionValue="id"
+                    v-model="typeFilter"
+                    :options="typesOptions"
+                    optionLabel="label"
+                    optionValue="value"
                     placeholder="اختر نوع العقار"
-                    class="w-44"
+                    class="md:w-56 w-full"
                 />
                 <!-- status -->
                 <Select
-                    v-model="selectedStatus"
+                    v-model="statusFilter"
                     :options="statusOptions"
-                    optionLabel="name"
-                    optionValue="id"
+                    optionLabel="label"
+                    optionValue="value"
                     placeholder="اختر حالة العقار"
-                    class="w-44"
+                    class="md:w-56 w-full"
                 />
-                <i
-                    class="pi pi-filter text-slate-400"
-                    style="font-size: 1.2rem"
-                ></i>
+                <div class="hidden md:block">
+                    <i
+                        class="pi pi-filter text-slate-400"
+                        style="font-size: 1.2rem"
+                    ></i>
+                </div>
             </div>
         </div>
 
@@ -136,36 +193,28 @@ const getGalleriaImages = (propertyImages) => {
                     </Galleria>
 
                     <div class="absolute top-3 right-3 z-10">
-                        <span
-                            :class="`px-2 py-1 rounded-md text-xs font-medium ${
-                                property.status === 'approved'
-                                    ? 'bg-emerald-100 text-emerald-800'
-                                    : property.status === 'pending'
-                                    ? 'bg-amber-100 text-amber-800'
-                                    : 'bg-red-100 text-red-800'
-                            }`"
-                        >
-                            {{
-                                property.status === "approved"
-                                    ? "معتمد"
-                                    : property.status === "pending"
-                                    ? "قيد المراجعة"
-                                    : "مرفوض"
-                            }}
-                        </span>
+                        <PropertyStatus
+                            :status="property.status"
+                            :status-options="statusOptions"
+                        />
                     </div>
                 </div>
 
                 <!-- Property Content -->
                 <div class="p-4">
-                    <h2 class="text-xl font-bold text-teal-800 mb-2">
-                        {{ property.title }}
-                    </h2>
+                    <div class="flex justify-between ">
+                        <h2 class="text-xl font-bold text-teal-800 mb-2">
+                            {{ textHelpers.limitText(property.title, 30) }}
+                        </h2>
+                        <p class="bg-slate-800 text-white text-xs px-2 py-1 rounded-full font-sans h-fit">
+                            {{ property.type_label }}
+                        </p>
+                    </div>
 
                     <div class="flex items-center text-gray-600 mb-2">
                         <i class="pi pi-map-marker ml-1 text-gray-500"></i>
                         <span
-                            >{{ property.city }} - {{ property.address }}</span
+                            >{{ property.city }} - {{ textHelpers.limitText(property.address, 40) }}</span
                         >
                     </div>
 
@@ -236,11 +285,67 @@ const getGalleriaImages = (propertyImages) => {
                 لا توجد عقارات
             </h3>
             <p class="text-gray-600 mb-6">لم يتم العثور على أي عقارات</p>
-            <Link :href="route('owner.properties.create')" 
+            <Link
+                :href="route('owner.properties.create')"
                 class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg transition-colors"
             >
                 إضافة عقار جديد
             </Link>
+        </div>
+
+        <!-- Pagination -->
+        <div
+            dir="ltr"
+            class="my-8 flex md:flex-row flex-col md:gap-0 gap-2 justify-between items-center w-full"
+        >
+            <div class="order-last md:order-first">
+                <p class="text-base text-slate-600 rtl:text-right">
+                    عرض
+                    <span class="text-teal-600 font-bold text-lg">{{
+                        props.properties.from
+                    }}</span>
+                    إلى
+                    <span class="text-teal-600 font-bold text-lg">{{
+                        props.properties.to
+                    }}</span>
+                    من أصل {{ props.properties.total }} عقار
+                </p>
+            </div>
+            <nav class="order-first md:order-last">
+                <div class="flex items-center -space-x-px h-8 text-sm">
+                    <template
+                        v-for="(link, index) in props.properties.links"
+                        :key="link.url"
+                    >
+                        <Link
+                            :preserve-scroll="true"
+                            v-if="link.url"
+                            :href="link.url"
+                            v-html="link.label"
+                            class="flex items-center justify-center px-3 h-8 leading-tight border border-gray-300 transition-colors"
+                            :class="{
+                                'text-teal-800 bg-white hover:bg-gray-100 hover:text-teal-900':
+                                    !link.active,
+                                'bg-teal-600 text-white hover:bg-teal-600':
+                                    link.active,
+                                'rounded-l-lg': index === 0,
+                                'rounded-r-lg':
+                                    index === props.properties.links.length - 1,
+                            }"
+                        />
+                        <p
+                            v-else
+                            v-html="link.label"
+                            class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-slate-200 border border-gray-300"
+                            :class="{
+                                'rounded-l-lg': index === 0,
+                                'rounded-r-lg':
+                                    index === props.properties.links.length - 1,
+                            }"
+                        />
+                    </template>
+                </div>
+            </nav>
         </div>
     </div>
 </template>

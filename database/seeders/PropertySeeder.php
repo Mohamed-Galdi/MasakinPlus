@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Enums\PropertyStatus;
+use App\Enums\PropertyType;
 use Illuminate\Database\Seeder;
 use App\Models\Property;
 use App\Models\Amenity;
@@ -19,7 +20,7 @@ class PropertySeeder extends Seeder
                 'owner_id' => 2,
                 'title' => 'فيلا فاخرة في الرياض',
                 'description' => 'فيلا واسعة بتصميم عصري في حي الملقا، مثالية للعائلات.',
-                'type' => 'فيلا',
+                'type_ar' => 'فيلا',
                 'city' => 'الرياض',
                 'address' => 'حي الملقا، شارع الملك فهد',
                 'area' => 350.5,
@@ -34,7 +35,7 @@ class PropertySeeder extends Seeder
                 'owner_id' => 2,
                 'title' => 'شقة مريحة في جدة',
                 'description' => 'شقة مفروشة بالكامل في حي الحمراء، قريبة من الكورنيش.',
-                'type' => 'شقة',
+                'type_ar' => 'شقة',
                 'city' => 'جدة',
                 'address' => 'حي الحمراء، شارع فلسطين',
                 'area' => 120.0,
@@ -49,7 +50,7 @@ class PropertySeeder extends Seeder
                 'owner_id' => 2,
                 'title' => 'استوديو في الدمام',
                 'description' => 'استوديو حديث للإيجار اليومي، مثالي للزوار.',
-                'type' => 'استوديو',
+                'type_ar' => 'استوديو',
                 'city' => 'الدمام',
                 'address' => 'حي الشاطئ',
                 'area' => 50.0,
@@ -64,7 +65,7 @@ class PropertySeeder extends Seeder
                 'owner_id' => 2,
                 'title' => 'منزل عائلي في مكة',
                 'description' => 'منزل مريح في حي العزيزية، قريب من الحرم.',
-                'type' => 'منزل',
+                'type_ar' => 'منزل',
                 'city' => 'مكة',
                 'address' => 'حي العزيزية',
                 'area' => 200.0,
@@ -79,7 +80,7 @@ class PropertySeeder extends Seeder
                 'owner_id' => 2,
                 'title' => 'شقة فاخرة في الخبر',
                 'description' => 'شقة بإطلالة بحرية في حي العليا.',
-                'type' => 'شقة',
+                'type_ar' => 'شقة',
                 'city' => 'الخبر',
                 'address' => 'حي العليا',
                 'area' => 150.0,
@@ -94,7 +95,7 @@ class PropertySeeder extends Seeder
                 'owner_id' => 2,
                 'title' => 'فيلا في الطائف',
                 'description' => 'فيلا هادئة محاطة بالطبيعة، مثالية للعطلات.',
-                'type' => 'فيلا',
+                'type_ar' => 'فيلا',
                 'city' => 'الطائف',
                 'address' => 'حي الهدا',
                 'area' => 400.0,
@@ -109,7 +110,7 @@ class PropertySeeder extends Seeder
                 'owner_id' => 2,
                 'title' => 'مكتب في الرياض',
                 'description' => 'مكتب مجهز في مركز الأعمال بحي العليا.',
-                'type' => 'مكتب',
+                'type_ar' => 'مكتب',
                 'city' => 'الرياض',
                 'address' => 'حي العليا، طريق الملك فهد',
                 'area' => 80.0,
@@ -124,7 +125,7 @@ class PropertySeeder extends Seeder
                 'owner_id' => 2,
                 'title' => 'شقة في ينبع',
                 'description' => 'شقة قريبة من البحر في ينبع البحر.',
-                'type' => 'شقة',
+                'type_ar' => 'شقة',
                 'city' => 'ينبع',
                 'address' => 'حي الشربتلي',
                 'area' => 100.0,
@@ -139,7 +140,7 @@ class PropertySeeder extends Seeder
                 'owner_id' => 2,
                 'title' => 'فيلا في المدينة',
                 'description' => 'فيلا فسيحة قريبة من المسجد النبوي.',
-                'type' => 'فيلا',
+                'type_ar' => 'فيلا',
                 'city' => 'المدينة المنورة',
                 'address' => 'حي السلام',
                 'area' => 300.0,
@@ -154,7 +155,7 @@ class PropertySeeder extends Seeder
                 'owner_id' => 2,
                 'title' => 'استوديو في جدة',
                 'description' => 'استوديو صغير ومريح في حي الروضة.',
-                'type' => 'استوديو',
+                'type_ar' => 'استوديو',
                 'city' => 'جدة',
                 'address' => 'حي الروضة',
                 'area' => 40.0,
@@ -169,7 +170,7 @@ class PropertySeeder extends Seeder
                 'owner_id' => 2,
                 'title' => 'منزل في تبوك',
                 'description' => 'منزل عائلي في حي المروج.',
-                'type' => 'منزل',
+                'type_ar' => 'منزل',
                 'city' => 'تبوك',
                 'address' => 'حي المروج',
                 'area' => 180.0,
@@ -184,7 +185,7 @@ class PropertySeeder extends Seeder
                 'owner_id' => 2,
                 'title' => 'شقة في الرياض',
                 'description' => 'شقة حديثة في حي النخيل.',
-                'type' => 'شقة',
+                'type_ar' => 'شقة',
                 'city' => 'الرياض',
                 'address' => 'حي النخيل',
                 'area' => 130.0,
@@ -198,6 +199,32 @@ class PropertySeeder extends Seeder
         ];
 
         foreach ($properties as $data) {
+
+            // Match Arabic name to PropertyType enum
+            $typeEnum = match ($data['type_ar']) {
+                'شقة' => PropertyType::Apartment,
+                'فيلا' => PropertyType::Villa,
+                'استوديو' => PropertyType::Studio,
+                'مكتب' => PropertyType::Office,
+                'منزل' => PropertyType::House,
+                'مبنى' => PropertyType::Building,
+                'مستودع' => PropertyType::Warehouse,
+                'عقار تجاري' => PropertyType::Commercial,
+                'أرض' => PropertyType::Land,
+                default => PropertyType::Apartment,
+            };
+
+            $statusEnum = fake()->randomElement(PropertyStatus::cases());
+
+            // Add new enum-based columns
+            $data['type'] = $typeEnum->value;
+            $data['type_label'] = $typeEnum->label();
+            $data['status'] = $statusEnum->value;
+            $data['status_label'] = $statusEnum->label();
+
+            unset($data['type_ar']); // Remove helper key
+
+            
             // Store amenities separately
             $amenities = $data['amenities'];
             unset($data['amenities']);
@@ -213,7 +240,7 @@ class PropertySeeder extends Seeder
             for ($i = 1; $i <= 3; $i++) {
                 PropertyImage::create([
                     'property_id' => $property->id,
-                    'path' => "property_images/property_{$property->id}/image_{$i}.jpg",
+                    'path' => "storage/property_images/property_{$property->id}/p{$property->id}.{$i}.avif",
                     'order' => $i,
                 ]);
             }
