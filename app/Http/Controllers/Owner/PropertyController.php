@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Owner;
 use App\Enums\PropertyStatus;
 use App\Enums\PropertyType;
 use App\Http\Controllers\Controller;
+use App\Models\Amenity;
 use Illuminate\Http\Request;
 
 
@@ -44,6 +45,8 @@ class PropertyController extends Controller
 
     public function create()
     {
-        return inertia('Owner/Properties/create');
+        $typeOptions = PropertyType::options();
+        $amenities = Amenity::select('id', 'name')->get();
+        return inertia('Owner/Properties/create', compact('typeOptions', 'amenities'));
     }
 }
