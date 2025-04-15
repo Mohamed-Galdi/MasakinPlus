@@ -118,3 +118,8 @@ border-color: #0d675b !important;
 .p-steppanel{
     background-color: rgba(255, 255, 255, 0) !important;
 }
+
+.p-steplist{
+    padding: 8px 20px !important ;
+    margin: 0px 8px !important;
+}

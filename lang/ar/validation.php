@@ -217,6 +217,13 @@ return [
         'link'                  => 'رابط',
         // 'slug'                  => ' ',
         'accountType'           => 'نوع الحساب',
+        'type'                  => 'النوع',
+        'area'                  => 'المساحة',
+        'bedrooms'              => 'عدد غرف النوم' ,
+        'bathrooms'             => 'عدد الحمامات',
+        'is_furnished'          => 'العقار مفروش',
+        'daily_rent_price'      => 'سعر الإيجار اليومي',
+        'amenities'             => 'المرافق المتوفرة',
     ],
 
 ];

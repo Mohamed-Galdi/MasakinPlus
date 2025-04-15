@@ -124,12 +124,18 @@ const textHelpers = useTextHelpers();
 
         <!-- Search and Filter -->
         <div class="bg-white rounded-lg shadow p-4 mb-6">
-            <div class="flex md:flex-row flex-col justify-end items-center gap-4">
+            <div class="flex md:flex-row flex-col items-center gap-4">
+                <div class="hidden md:block">
+                    <i
+                        class="pi pi-filter text-slate-400 mt-2"
+                        style="font-size: 1rem"
+                    ></i>
+                </div>
                 <!-- Clear Filter Button -->
                 <button
                     v-if="isFilterActive()"
                     @click="clearFilters"
-                    class="px-3 py-2  text-red-600 rounded-md hover:text-red-500 transition-colors md:order-first order-last"
+                    class="px-3 py-2 text-red-600 rounded-md hover:text-red-500 transition-colors md:order-first order-last"
                 >
                     <span>إزالة الفلتر</span>
                 </button>
@@ -151,12 +157,6 @@ const textHelpers = useTextHelpers();
                     placeholder="اختر حالة العقار"
                     class="md:w-56 w-full"
                 />
-                <div class="hidden md:block">
-                    <i
-                        class="pi pi-filter text-slate-400"
-                        style="font-size: 1.2rem"
-                    ></i>
-                </div>
             </div>
         </div>
 
@@ -202,11 +202,13 @@ const textHelpers = useTextHelpers();
 
                 <!-- Property Content -->
                 <div class="p-4">
-                    <div class="flex justify-between ">
+                    <div class="flex justify-between">
                         <h2 class="text-xl font-bold text-teal-800 mb-2">
                             {{ textHelpers.limitText(property.title, 30) }}
                         </h2>
-                        <p class="bg-slate-800 text-white text-xs px-2 py-1 rounded-full font-sans h-fit">
+                        <p
+                            class="bg-slate-800 text-white text-xs px-2 py-1 rounded-full font-sans h-fit"
+                        >
                             {{ property.type_label }}
                         </p>
                     </div>
@@ -214,7 +216,10 @@ const textHelpers = useTextHelpers();
                     <div class="flex items-center text-gray-600 mb-2">
                         <i class="pi pi-map-marker ml-1 text-gray-500"></i>
                         <span
-                            >{{ property.city }} - {{ textHelpers.limitText(property.address, 40) }}</span
+                            >{{ property.city }} -
+                            {{
+                                textHelpers.limitText(property.address, 40)
+                            }}</span
                         >
                     </div>
 

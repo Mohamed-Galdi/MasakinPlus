@@ -22,7 +22,7 @@ const props = defineProps({
     },
     allowedFileTypes: {
         type: Array,
-        default: () =>  [ "image/jpeg", "image/png", "image/gif", "image/svg+xml"], 
+        default: () =>  [ "image/jpeg", "image/png", "image/gif", "image/svg+xml" , "image/avif", "image/jpg"], 
         // default: () => ["application/pdf"], PDF format
         // default: () => ["application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"], Excel format
     },
