@@ -1,7 +1,7 @@
 <script setup>
 import OwnerLayout from "@/Layouts/OwnerLayout.vue";
 import { ref } from "vue";
-import { Link, useForm } from "@inertiajs/vue3";
+import { Link, useForm, router } from "@inertiajs/vue3";
 import { cities } from "@/plugins/cities";
 import FileUpload from "@/Components/PrimeVilt/FileUpload.vue";
 import { useToast } from "primevue/usetoast";
@@ -79,7 +79,7 @@ function submitCreateProperty() {
                 detail: "تم إنشاء العقار بنجاح",
                 life: 3000,
             });
-            router.push(route("owner.properties.index"));
+            router.get(route("owner.properties.index"));
         },
         onError: () => {
             const errorMessage = Object.values(propertyForm.errors)[0];
@@ -500,6 +500,7 @@ function submitCreateProperty() {
                                     @file-reverted="handleFileReverted"
                                     :allowMultiple="true"
                                     :maxFiles="5"
+                                    :maxFileSize="5 * 1024 * 1024"
                                 />
                             </div>
 
@@ -508,8 +509,19 @@ function submitCreateProperty() {
                                     نصائح لصور أفضل
                                 </h3>
                                 <ul
-                                    class="list-disc list-inside space-y-1 text-sm text-gray-600"
+                                    class="list-disc list-inside space-y-1 text-sm text-gray-600 font-BeinNormal"
                                 >
+                                    <li>
+                                        الحد الأقصى لعدد الصور هو<span
+                                            class="font-bold"
+                                        >
+                                            5 صور</span
+                                        >، ولا يجب أن يتجاوز حجم كل صورة<span
+                                            class="font-bold"
+                                        >
+                                            5 ميغابايت</span
+                                        >
+                                    </li>
                                     <li>
                                         استخدم صوراً بجودة عالية وإضاءة جيدة
                                     </li>

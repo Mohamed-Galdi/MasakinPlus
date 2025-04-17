@@ -131,14 +131,7 @@ const textHelpers = useTextHelpers();
                         style="font-size: 1rem"
                     ></i>
                 </div>
-                <!-- Clear Filter Button -->
-                <button
-                    v-if="isFilterActive()"
-                    @click="clearFilters"
-                    class="px-3 py-2 text-red-600 rounded-md hover:text-red-500 transition-colors md:order-first order-last"
-                >
-                    <span>إزالة الفلتر</span>
-                </button>
+
                 <!-- type -->
                 <Select
                     v-model="typeFilter"
@@ -157,6 +150,14 @@ const textHelpers = useTextHelpers();
                     placeholder="اختر حالة العقار"
                     class="md:w-56 w-full"
                 />
+                <!-- Clear Filter Button -->
+                <button
+                    v-if="isFilterActive()"
+                    @click="clearFilters"
+                    class="px-3 py-2 text-red-600 rounded-md hover:text-red-500 transition-colors"
+                >
+                    <span>إزالة الفلتر</span>
+                </button>
             </div>
         </div>
 

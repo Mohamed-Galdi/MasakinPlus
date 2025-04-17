@@ -224,6 +224,7 @@ return [
         'is_furnished'          => 'العقار مفروش',
         'daily_rent_price'      => 'سعر الإيجار اليومي',
         'amenities'             => 'المرافق المتوفرة',
+        'images'                => 'الصور', 
     ],
 
 ];

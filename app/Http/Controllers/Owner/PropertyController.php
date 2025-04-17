@@ -87,7 +87,7 @@ class PropertyController extends Controller
             $property->amenities()->attach($amenity['id']);
         }
 
-        $propertyImagesFolderName = $property->id . '_' . rand(100000, 999999);
+        $propertyImagesFolderName = 'property_' . $property->id . '_' . rand(100000, 999999);
         
         foreach ($request->images as $image) {
 
@@ -99,6 +99,8 @@ class PropertyController extends Controller
         }
 
         $property->save();
+
+        return '';
 
     }
 }
