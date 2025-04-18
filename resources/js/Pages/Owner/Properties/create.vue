@@ -1,9 +1,10 @@
 <script setup>
 import OwnerLayout from "@/Layouts/OwnerLayout.vue";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { Link, useForm, router } from "@inertiajs/vue3";
 import { cities } from "@/plugins/cities";
 import FileUpload from "@/Components/PrimeVilt/FileUpload.vue";
+import PropertyMap from "@/Components/PropertyMap.vue";
 import { useToast } from "primevue/usetoast";
 import Toast from "primevue/toast";
 import InputText from "primevue/inputtext";
@@ -41,6 +42,14 @@ const availableAmenities = ref(props.amenities);
 
 // For the stepper
 const activeStep = ref(1);
+const mapRef = ref(null);
+
+watch(activeStep, (newStep) => {
+    if (newStep === 3 && mapRef.value) {
+        // Call the resizeMap method when step 2 becomes active
+        mapRef.value.resizeMap();
+    }
+});
 
 const propertyForm = useForm({
     title: "",
@@ -119,7 +128,6 @@ function submitCreateProperty() {
                 <i class="pi pi-arrow-left"></i>
             </Link>
         </div>
-
         <!-- Stepper -->
         <div class="mb-10">
             <Stepper
@@ -473,7 +481,7 @@ function submitCreateProperty() {
                     <!-- Step 3 Content (Map) -->
                     <StepPanel v-slot="{ activateCallback }" :value="3">
                         <div class="bg-slate-200 p-4 rounded-md min-h-[24rem]">
-                            <p>map here later</p>
+                            <PropertyMap ref="mapRef" />
                         </div>
                         <div class="flex justify-between pt-4">
                             <Button
