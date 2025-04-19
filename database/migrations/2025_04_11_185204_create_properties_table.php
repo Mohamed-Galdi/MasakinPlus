@@ -25,6 +25,8 @@ return new class extends Migration
             $table->float('area')->default(0); // Area in square meters
             $table->integer('bedrooms')->default(1); 
             $table->integer('bathrooms')->default(1);
+            $table->decimal('latitude', 10, 6)->nullable();
+            $table->decimal('longitude', 10, 6)->nullable();
             $table->decimal('daily_rent_price', 10, 2);
             $table->enum('status', array_column(PropertyStatus::cases(), 'value'))->default(PropertyStatus::Draft->value);
             $table->enum('status_label', PropertyStatus::labels())->default(PropertyStatus::Draft->label());

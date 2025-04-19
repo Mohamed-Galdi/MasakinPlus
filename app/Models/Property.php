@@ -17,7 +17,8 @@ class Property extends Model
         'area',
         'bedrooms',
         'bathrooms',
-        'is_furnished',
+        'latitude',
+        'longitude',
         'daily_rent_price',
         'status',
     ];

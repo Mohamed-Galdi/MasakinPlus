@@ -42,14 +42,6 @@ const availableAmenities = ref(props.amenities);
 
 // For the stepper
 const activeStep = ref(1);
-const mapRef = ref(null);
-
-watch(activeStep, (newStep) => {
-    if (newStep === 3 && mapRef.value) {
-        // Call the resizeMap method when step 2 becomes active
-        mapRef.value.resizeMap();
-    }
-});
 
 const propertyForm = useForm({
     title: "",
@@ -60,6 +52,8 @@ const propertyForm = useForm({
     area: null,
     bedrooms: null,
     bathrooms: null,
+    latitude: null,
+    longitude: null,
     daily_rent_price: null,
     amenities: [],
     images: [],
@@ -77,6 +71,22 @@ function handleFileReverted(uniqueId) {
         return !filePath.includes(uniqueId);
     });
 }
+
+// ############################################## Map
+const mapRef = ref(null);
+
+watch(activeStep, (newStep) => {
+    if (newStep === 3 && mapRef.value) {
+        mapRef.value.resizeMap();
+    }
+});
+
+const handleCoordinatesUpdate = (coords) => {
+  propertyForm.latitude = coords.lat;
+  propertyForm.longitude = coords.lng;
+};
+
+
 // ############################################# Creation
 function submitCreateProperty() {
     propertyForm.images = tempFile.value;
@@ -481,7 +491,7 @@ function submitCreateProperty() {
                     <!-- Step 3 Content (Map) -->
                     <StepPanel v-slot="{ activateCallback }" :value="3">
                         <div class="bg-slate-200 p-4 rounded-md min-h-[24rem]">
-                            <PropertyMap ref="mapRef" />
+                            <PropertyMap ref="mapRef"  @update:coordinates="handleCoordinatesUpdate"/>
                         </div>
                         <div class="flex justify-between pt-4">
                             <Button

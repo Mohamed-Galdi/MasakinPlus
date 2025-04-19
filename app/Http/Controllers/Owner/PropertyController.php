@@ -53,8 +53,10 @@ class PropertyController extends Controller
         return inertia('Owner/Properties/create', compact('typeOptions', 'amenities'));
     }
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
 
+        dd($request->all());
         $request->validate([
             'title' => 'required|string|max:255|min:3',
             'description' => 'required|string|max:255|min:3',
@@ -64,6 +66,8 @@ class PropertyController extends Controller
             'area' => 'required|numeric|min:0',
             'bedrooms' => 'required|numeric|min:0',
             'bathrooms' => 'required|numeric|min:0',
+            'latitude' => 'required|numeric|min:0',
+            'longitude' => 'required|numeric|min:0',
             'daily_rent_price' => 'required|numeric|min:0',
             'amenities' => 'required|array',
             'images' => 'required|array',
@@ -80,6 +84,8 @@ class PropertyController extends Controller
         $property->area = $request->area;
         $property->bedrooms = $request->bedrooms;
         $property->bathrooms = $request->bathrooms;
+        $property->latitude = $request->latitude;
+        $property->longitude = $request->longitude;
         $property->daily_rent_price = $request->daily_rent_price;
         $property->save();
 
@@ -88,10 +94,10 @@ class PropertyController extends Controller
         }
 
         $propertyImagesFolderName = 'property_' . $property->id . '_' . rand(100000, 999999);
-        
+
         foreach ($request->images as $image) {
 
-            $path = FileService::moveTempFile($image, "property_images/{$propertyImagesFolderName}", $property->id );
+            $path = FileService::moveTempFile($image, "property_images/{$propertyImagesFolderName}", $property->id);
 
             $property->images()->create([
                 'path' => $path,
@@ -101,6 +107,5 @@ class PropertyController extends Controller
         $property->save();
 
         return '';
-
     }
 }
