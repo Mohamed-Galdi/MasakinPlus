@@ -187,7 +187,7 @@ class PropertySeeder extends Seeder
             ],
         ];
 
-        foreach ($properties as $data) {
+        foreach ($properties as $key => $data) {
 
             // Match Arabic name to PropertyType enum
             $typeEnum = match ($data['type_ar']) {
@@ -225,11 +225,15 @@ class PropertySeeder extends Seeder
             $amenityIds = Amenity::whereIn('name', $amenities)->pluck('id');
             $property->amenities()->attach($amenityIds);
 
+
+
             // Create images (3 per property)
+
+            $id = $key + 1;
             for ($i = 1; $i <= 3; $i++) {
                 PropertyImage::create([
                     'property_id' => $property->id,
-                    'path' => "storage/property_images/property_{$property->id}/p{$property->id}.{$i}.avif",
+                    'path' => "storage/property_images/property_{$id}/p{$id}.{$i}.avif",
                     'order' => $i,
                 ]);
             }

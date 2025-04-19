@@ -270,12 +270,13 @@ const textHelpers = useTextHelpers();
                             </p>
                         </div>
                         <!-- Professional Action Buttons -->
-                        <button
+                        <Link
+                            :href="route('owner.properties.edit', property.id)"
                             class="flex items-center justify-center gap-2 py-2 px-3 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 rounded-md transition-all shadow-sm hover:shadow"
                         >
                             <i class="pi pi-pencil text-gray-600"></i>
                             <span class="text-sm font-medium">تعديل</span>
-                        </button>
+                        </Link>
                     </div>
                 </div>
             </div>

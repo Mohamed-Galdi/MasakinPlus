@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('amenity_property', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('property_id')->constrained()->onDelete('cascade');
+            $table->foreignUuid('property_id')->constrained()->onDelete('cascade');
             $table->foreignId('amenity_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });

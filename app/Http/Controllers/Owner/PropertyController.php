@@ -108,4 +108,12 @@ class PropertyController extends Controller
 
         return '';
     }
+
+    public function edit(Request $request, Property $property)
+    {
+        $typeOptions = PropertyType::options();
+        $amenities = Amenity::select('id', 'name')->get();
+
+        return inertia('Owner/Properties/update', compact('property', 'typeOptions', 'amenities'));
+    }
 }
