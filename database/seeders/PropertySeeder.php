@@ -28,6 +28,8 @@ class PropertySeeder extends Seeder
                 'bathrooms' => 4,
                 'daily_rent_price' => 1200.00,
                 'status' => $status,
+                'latitude' => 24.7136,
+                'longitude' => 46.6753,
                 'amenities' => ['واي فاي', 'موقف سيارات', 'مسبح'],
             ],
             [
@@ -42,6 +44,8 @@ class PropertySeeder extends Seeder
                 'bathrooms' => 2,
                 'daily_rent_price' => 300.00,
                 'status' => $status,
+                'latitude' => 24.7136,
+                'longitude' => 46.6753,
                 'amenities' => ['واي فاي', 'مكيفات'],
             ],
             [
@@ -56,6 +60,8 @@ class PropertySeeder extends Seeder
                 'bathrooms' => 1,
                 'daily_rent_price' => 150.00,
                 'status' => $status,
+                'latitude' => 24.7136,
+                'longitude' => 46.6753,
                 'amenities' => ['واي فاي', 'موقف سيارات'],
             ],
             [
@@ -70,6 +76,8 @@ class PropertySeeder extends Seeder
                 'bathrooms' => 3,
                 'daily_rent_price' => 600.00,
                 'status' => $status,
+                'latitude' => 24.7136,
+                'longitude' => 46.6753,
                 'amenities' => ['مكيفات', 'حديقة'],
             ],
 
@@ -85,6 +93,8 @@ class PropertySeeder extends Seeder
                 'bathrooms' => 1,
                 'daily_rent_price' => 500.00,
                 'status' => $status,
+                'latitude' => 24.7136,
+                'longitude' => 46.6753,
                 'amenities' => ['واي فاي', 'مكيفات'],
             ],
             [
@@ -99,6 +109,8 @@ class PropertySeeder extends Seeder
                 'bathrooms' => 5,
                 'daily_rent_price' => 1000.00,
                 'status' => $status,
+                'latitude' => 24.7136,
+                'longitude' => 46.6753,
                 'amenities' => ['حديقة', 'مسبح'],
             ],
             [
@@ -113,6 +125,8 @@ class PropertySeeder extends Seeder
                 'bathrooms' => 2,
                 'daily_rent_price' => 400.00,
                 'status' => $status,
+                'latitude' => 24.7136,
+                'longitude' => 46.6753,
                 'amenities' => ['واي فاي', 'مسبح', 'صالة رياضية'],
             ],
             [
@@ -127,6 +141,8 @@ class PropertySeeder extends Seeder
                 'bathrooms' => 1,
                 'daily_rent_price' => 200.00,
                 'status' => $status,
+                'latitude' => 24.7136,
+                'longitude' => 46.6753,
                 'amenities' => ['موقف سيارات', 'مكيفات'],
             ],
             [
@@ -141,6 +157,8 @@ class PropertySeeder extends Seeder
                 'bathrooms' => 4,
                 'daily_rent_price' => 900.00,
                 'status' => $status,
+                'latitude' => 24.7136,
+                'longitude' => 46.6753,
                 'amenities' => ['واي فاي', 'مكيفات', 'حديقة'],
             ],
             [
@@ -155,6 +173,8 @@ class PropertySeeder extends Seeder
                 'bathrooms' => 1,
                 'daily_rent_price' => 120.00,
                 'status' => $status,
+                'latitude' => 24.7136,
+                'longitude' => 46.6753,
                 'amenities' => ['واي فاي'],
             ],
             [
@@ -169,6 +189,8 @@ class PropertySeeder extends Seeder
                 'bathrooms' => 2,
                 'daily_rent_price' => 350.00,
                 'status' => $status,
+                'latitude' => 24.7136,
+                'longitude' => 46.6753,
                 'amenities' => ['حديقة', 'موقف سيارات'],
             ],
             [
@@ -183,6 +205,8 @@ class PropertySeeder extends Seeder
                 'bathrooms' => 2,
                 'daily_rent_price' => 450.00,
                 'status' => $status,
+                'latitude' => 24.7136,
+                'longitude' => 46.6753,
                 'amenities' => ['واي فاي', 'مسبح', 'صالة رياضية'],
             ],
         ];

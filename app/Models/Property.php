@@ -28,6 +28,8 @@ class Property extends Model
 
     protected $casts = [
         'status' => PropertyStatus::class,
+        'latitude' => 'float',
+        'longitude' => 'float',
     ];
 
     public function owner()

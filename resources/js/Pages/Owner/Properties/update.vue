@@ -48,8 +48,16 @@ const availableAmenities = ref(props.amenities);
 // For the stepper
 const activeStep = ref(1);
 
+const propertyAmenities = property.value.amenities.map((amenity) => {
+    return { id: amenity.id, name: amenity.name };
+});
+
+const propertyImages = property.value.images.map((image) => {
+    return "/" + image.path;
+});
+
 const propertyForm = useForm({
-    title: property.value.title ,
+    title: property.value.title,
     description: property.value.description,
     type: property.value.type,
     city: property.value.city,
@@ -60,21 +68,40 @@ const propertyForm = useForm({
     latitude: property.value.latitude,
     longitude: property.value.longitude,
     daily_rent_price: property.value.daily_rent_price,
-    amenities: [],
-    images: [],
+    amenities: propertyAmenities,
+    images: propertyImages, // Existing images
+    newImages: [], // New images added during update
+    removedImages: [], // Images removed during update
 });
 
 // ############################################## File upload
-const tempFile = ref([]);
+// Track new and removed images
+const tempFile = ref([...propertyImages]); // Initialize with existing images
+const removedImages = ref([]); // Track removed images
 
 function handleFileUploaded(fileFolder) {
     tempFile.value.push(fileFolder);
+    propertyForm.newImages.push(fileFolder); // Add to new images
 }
 
 function handleFileReverted(uniqueId) {
-    tempFile.value = tempFile.value.filter((filePath) => {
-        return !filePath.includes(uniqueId);
-    });
+    // Remove from tempFile
+    tempFile.value = tempFile.value.filter((filePath) => !filePath.includes(uniqueId));
+
+    // Check if the removed file is an existing image
+    const removedExistingImage = propertyImages.find((image) => image === uniqueId || image.includes(uniqueId));
+    if (removedExistingImage) {
+        // Track removed existing image
+        propertyForm.removedImages.push(removedExistingImage);
+    } else {
+        // If it's a new image being reverted, remove it from newImages
+        propertyForm.newImages = propertyForm.newImages.filter(
+            (filePath) => !filePath.includes(uniqueId)
+        );
+    }
+
+    // Update images in the form
+    propertyForm.images = tempFile.value;
 }
 
 // ############################################## Map
@@ -91,29 +118,33 @@ const handleCoordinatesUpdate = (coords) => {
     propertyForm.longitude = coords.lng;
 };
 
-// ############################################# Creation
-function submitCreateProperty() {
-    propertyForm.images = tempFile.value;
-    propertyForm.post(route("owner.properties.store"), {
-        onSuccess: () => {
-            toast.add({
-                severity: "success",
-                summary: "عملية ناجحة",
-                detail: "تم إنشاء العقار بنجاح",
-                life: 3000,
-            });
-            router.get(route("owner.properties.index"));
-        },
-        onError: () => {
-            const errorMessage = Object.values(propertyForm.errors)[0];
-            toast.add({
-                severity: "error",
-                summary: "خطأ",
-                detail: errorMessage,
-                life: 3000,
-            });
-        },
-    });
+// ############################################# Update
+function submitUpdateProperty() {
+    propertyForm.put(
+        route("owner.properties.update", {
+            property: "0196534b-3a76-7154-82ed-808eed8eaeeb",
+        }),
+        {
+            onSuccess: () => {
+                toast.add({
+                    severity: "success",
+                    summary: "عملية ناجحة",
+                    detail: "تم تحديث العقار بنجاح",
+                    life: 3000,
+                });
+                router.get(route("owner.properties.index"));
+            },
+            onError: () => {
+                const errorMessage = Object.values(propertyForm.errors)[0];
+                toast.add({
+                    severity: "error",
+                    summary: "خطأ",
+                    detail: errorMessage,
+                    life: 3000,
+                });
+            },
+        }
+    );
 }
 </script>
 
@@ -126,11 +157,14 @@ function submitCreateProperty() {
         >
             <div>
                 <h1 class="text-2xl font-bold text-gray-800">
-                    إضافة عقار جديد
+                    تعديل معلومات العقار
                 </h1>
-                <p class="text-gray-600 mt-1">
-                    أدخل معلومات العقار الخاص بك بالتفصيل لجذب المزيد من
-                    المستأجرين والمستثمرين
+                <p class="text-gray-600 mt-1 font-BeinNormal">
+                    بعد تعديل معلومات العقار ستتعير حالته الى
+                    <span class="font-Bein text-teal-800">"غير جاهز"</span> و
+                    سيتعيل عليك إعادة تقديم طلب
+                    <span class="font-Bein text-teal-800">الإستتمار</span> او
+                    <span class="font-Bein text-teal-800">العرض</span>
                 </p>
             </div>
             <!-- back button -->
@@ -341,7 +375,7 @@ function submitCreateProperty() {
                 </StepList>
 
                 <StepPanels>
-                    <!-- Step 1 Content (Informations) -->
+                    <!-- Step 1  (Informations) -->
                     <StepPanel
                         v-slot="{ activateCallback }"
                         :value="1"
@@ -419,7 +453,7 @@ function submitCreateProperty() {
                         </div>
                     </StepPanel>
 
-                    <!-- Step 2 Content (Property Details) -->
+                    <!-- Step 2  (Property Details) -->
                     <StepPanel v-slot="{ activateCallback }" :value="2">
                         <div class="bg-slate-200 p-4 rounded-md min-h-[24rem]">
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -492,12 +526,14 @@ function submitCreateProperty() {
                         </div>
                     </StepPanel>
 
-                    <!-- Step 3 Content (Map) -->
+                    <!-- Step 3 (Map) -->
                     <StepPanel v-slot="{ activateCallback }" :value="3">
                         <div class="bg-slate-200 p-4 rounded-md min-h-[24rem]">
                             <PropertyMap
                                 ref="mapRef"
                                 @update:coordinates="handleCoordinatesUpdate"
+                                :initialLat="property.latitude"
+                                :initialLng="property.longitude"
                             />
                         </div>
                         <div class="flex justify-between pt-4">
@@ -515,7 +551,7 @@ function submitCreateProperty() {
                         </div>
                     </StepPanel>
 
-                    <!-- Step 4 Content (Images) -->
+                    <!-- Step 4 (Images) -->
                     <StepPanel v-slot="{ activateCallback }" :value="4">
                         <div class="bg-slate-200 p-4 rounded-md min-h-[24rem]">
                             <div class="space-y-2 mt-6">
@@ -523,6 +559,7 @@ function submitCreateProperty() {
                                 <FileUpload
                                     @file-uploaded="handleFileUploaded"
                                     @file-reverted="handleFileReverted"
+                                    :initialFiles="propertyImages"
                                     :allowMultiple="true"
                                     :maxFiles="5"
                                     :maxFileSize="5 * 1024 * 1024"
@@ -575,7 +612,7 @@ function submitCreateProperty() {
                         </div>
                     </StepPanel>
 
-                    <!-- Step 5 Content (Pricing) -->
+                    <!-- Step 5 (Pricing) -->
                     <StepPanel v-slot="{ activateCallback }" :value="5">
                         <div class="bg-slate-200 p-4 rounded-md min-h-[24rem]">
                             <div class="space-y-2">
@@ -619,10 +656,10 @@ function submitCreateProperty() {
                                 icon-pos="right"
                             />
                             <Button
-                                label="إضافة العقار"
+                                label="تعديل العقار"
                                 icon="pi pi-check"
                                 severity="contrast"
-                                @click="submitCreateProperty"
+                                @click="submitUpdateProperty"
                                 :loading="propertyForm.processing"
                             />
                         </div>

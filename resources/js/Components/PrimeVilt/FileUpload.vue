@@ -12,8 +12,8 @@ import ar_AR from "filepond/locale/ar-ar";
 
 // Define component props
 const props = defineProps({
-    initialFile: {
-        type: [String, Object],
+    initialFiles: {
+        type: [String, Array],
         default: null,
     },
     maxFileSize: {
@@ -22,7 +22,7 @@ const props = defineProps({
     },
     allowedFileTypes: {
         type: Array,
-        default: () =>  [ "image/jpeg", "image/png", "image/gif", "image/svg+xml" , "image/avif", "image/jpg"], 
+        default: () =>  [ "image/jpeg", "image/png", "image/gif", "image/svg+xml" , "image/avif", "image/jpg", "image/webp"], 
         // default: () => ["application/pdf"], PDF format
         // default: () => ["application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"], Excel format
     },
@@ -52,11 +52,20 @@ setOptions(props.locale);
 
 // Handle initial file population (for update operations)
 onMounted(() => {
-    if (props.initialFile) {
-        files.value = [{
-            source: props.initialFile,
-            options: { type: "local" },
-        }];
+    if (props.initialFiles) {
+        if (Array.isArray(props.initialFiles)) {
+            // Handle array of files
+            files.value = props.initialFiles.map(file => ({
+                source: file,
+                options: { type: "local" }
+            }));
+        } else {
+            // Handle single file
+            files.value = [{
+                source: props.initialFiles,
+                options: { type: "local" },
+            }];
+        }
     }
 });
 
