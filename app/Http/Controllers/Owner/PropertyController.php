@@ -11,6 +11,8 @@ use App\Services\FileService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 
 class PropertyController extends Controller
@@ -69,7 +71,7 @@ class PropertyController extends Controller
             'latitude' => 'required|numeric|min:0',
             'longitude' => 'required|numeric|min:0',
             'daily_rent_price' => 'required|numeric|min:0',
-            'amenities' => 'required|array',
+            'amenities' => 'array',
             'images' => 'required|array',
         ]);
 
@@ -121,7 +123,7 @@ class PropertyController extends Controller
 
     public function update(Request $request, Property $property)
     {
-        dd($request->all());
+        // Validate request data
         $request->validate([
             'title' => 'required|string|max:255|min:3',
             'description' => 'required|string|max:255|min:3',
@@ -134,59 +136,105 @@ class PropertyController extends Controller
             'latitude' => 'required|numeric|min:0',
             'longitude' => 'required|numeric|min:0',
             'daily_rent_price' => 'required|numeric|min:0',
-            'amenities' => 'required|array',
-            'images' => 'nullable|array',
-            'removed_images' => 'nullable|array',
+            'amenities' => 'array',
+            'images' => 'required|array|min:1|max:5',
+            'newImages' => 'nullable|array',
+            'removedImages' => 'nullable|array',
         ]);
 
-        // Update basic property information
-        $property->title = $request->title;
-        $property->description = $request->description;
-        $property->type = $request->type;
-        $property->type_label = PropertyType::labelFor($request->type);
-        $property->city = $request->city;
-        $property->address = $request->address;
-        $property->area = $request->area;
-        $property->bedrooms = $request->bedrooms;
-        $property->bathrooms = $request->bathrooms;
-        $property->latitude = $request->latitude;
-        $property->longitude = $request->longitude;
-        $property->daily_rent_price = $request->daily_rent_price;
-        $property->save();
+        // Perform all updates within a transaction
+        return DB::transaction(function () use ($request, $property) {
+            // Update property details
+            $property->update([
+                'title' => $request->title,
+                'description' => $request->description,
+                'type' => $request->type,
+                'type_label' => PropertyType::labelFor($request->type),
+                'city' => $request->city,
+                'address' => $request->address,
+                'area' => $request->area,
+                'bedrooms' => $request->bedrooms,
+                'bathrooms' => $request->bathrooms,
+                'latitude' => $request->latitude,
+                'longitude' => $request->longitude,
+                'daily_rent_price' => $request->daily_rent_price,
+            ]);
 
-        // Update amenities (detach old ones, attach new ones)
-        $property->amenities()->detach();
-        foreach ($request->amenities as $amenity) {
-            $property->amenities()->attach($amenity['id']);
-        }
+            // Sync amenities
+            $property->amenities()->sync(array_column($request->amenities, 'id'));
 
-        // Handle removed images
-        if ($request->removedImages) {
-            foreach ($request->removedImages as $imagePath) {
-                // Remove the leading '/' and convert to storage path
-                $imagePath = ltrim($imagePath, '/');
-                // Delete from database
-                $property->images()->where('path', $imagePath)->delete();
+            // Handle removed images
+            if ($request->removedImages) {
+                // Fix path format to match disk structure
+                $imagePaths = array_map(function ($path) {
+                    return preg_replace('#^/?storage/#', '', $path);
+                }, $request->removedImages);
+
+                // Bulk delete from database
+                $property->images()->whereIn('path', array_map(fn($path) => 'storage/' . $path, $imagePaths))->delete();
+
                 // Delete from storage
-                if (Storage::disk('public')->exists($imagePath)) {
-                    Storage::disk('public')->delete($imagePath);
+                foreach ($imagePaths as $imagePath) {
+                    if (Storage::disk('public')->exists($imagePath)) {
+                        Storage::disk('public')->delete($imagePath);
+
+                        // Clean up empty folders
+                        $folderPath = dirname($imagePath);
+                        if (
+                            Storage::disk('public')->exists($folderPath) &&
+                            count(Storage::disk('public')->files($folderPath)) === 0
+                        ) {
+                            Storage::disk('public')->deleteDirectory($folderPath);
+                        }
+                    } else {
+                        Log::warning("Image not found in storage: {$imagePath}");
+                    }
                 }
+            }
+
+            // Handle new images
+            if ($request->newImages) {
+                $folderName = $this->getImageFolder($request->images, $property->id);
+                foreach ($request->newImages as $image) {
+                    // Corrected parameter order to match FileService
+                    $path = FileService::moveTempFile($image, "property_images/{$folderName}", $property->id);
+                    if ($path) {
+                        $property->images()->create(['path' => $path]);
+                    } else {
+                        Log::warning("Failed to move temporary file: {$image}");
+                    }
+                }
+            }
+
+            return '';
+        });
+    }
+
+    /**
+     * Get the folder name for storing images, reusing the folder of existing images if available.
+     *
+     * @param array $images
+     * @param string $propertyId
+     * @return string
+     */
+    private function getImageFolder(array $images, string $propertyId): string
+    {
+        // Extract only the non-temporary images (those that already have paths)
+        $existingImages = array_filter($images, function ($image) {
+            return is_string($image) && strpos($image, 'storage/property_images/') !== false;
+        });
+
+        // If we have existing images, extract the folder name from the first one
+        if (!empty($existingImages)) {
+            $firstImage = reset($existingImages);
+
+            // Extract folder name using regex - matches the pattern in storage/property_images/FOLDER_NAME/filename
+            if (preg_match('#property_images/([^/]+)/#', $firstImage, $matches)) {
+                return $matches[1];
             }
         }
 
-        // Handle new images
-        if ($request->newImages) {
-            $propertyImagesFolderName = 'property_' . $property->id . '_' . rand(100000, 999999);
-            foreach ($request->newImages as $image) {
-                $path = FileService::moveTempFile($image, "property_images/{$propertyImagesFolderName}", $property->id);
-                if ($path) {
-                    $property->images()->create([
-                        'path' => $path,
-                    ]);
-                }
-            }
-        }
-
-        return '';
+        // If no existing folder found, create a new one with a simpler unique name
+        return 'property_' . $propertyId . '_' . substr(md5(uniqid()), 0, 8);
     }
 }

@@ -2,9 +2,9 @@
 import { ref, onMounted } from "vue";
 import vueFilePond from "vue-filepond";
 import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
-import FilePondPluginFileValidateSize from 'filepond-plugin-file-validate-size';
-import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
-import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
+import FilePondPluginFileValidateSize from "filepond-plugin-file-validate-size";
+import FilePondPluginImagePreview from "filepond-plugin-image-preview";
+import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import "filepond/dist/filepond.min.css";
 import { router, usePage } from "@inertiajs/vue3";
 import { setOptions } from "vue-filepond";
@@ -22,9 +22,14 @@ const props = defineProps({
     },
     allowedFileTypes: {
         type: Array,
-        default: () =>  [ "image/jpeg", "image/png", "image/gif", "image/svg+xml" , "image/avif", "image/jpg", "image/webp"], 
-        // default: () => ["application/pdf"], PDF format
-        // default: () => ["application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"], Excel format
+        default: () => [
+            "image/jpeg",
+            "image/png",
+            "image/gif",
+            "image/svg+xml",
+            "image/webp",
+            "image/avif",
+        ], // Common image formats
     },
     allowMultiple: {
         type: Boolean,
@@ -45,31 +50,27 @@ const $page = usePage();
 const files = ref([]);
 const FilePond = vueFilePond(
     FilePondPluginFileValidateType,
-    FilePondPluginFileValidateSize,
+    FilePondPluginFileValidateSize,
     FilePondPluginImagePreview
 );
+
+// Apply locale settings
 setOptions(props.locale);
 
-// Handle initial file population (for update operations)
+// Load initial files on mount
 onMounted(() => {
     if (props.initialFiles) {
-        if (Array.isArray(props.initialFiles)) {
-            // Handle array of files
-            files.value = props.initialFiles.map(file => ({
-                source: file,
-                options: { type: "local" }
-            }));
-        } else {
-            // Handle single file
-            files.value = [{
-                source: props.initialFiles,
-                options: { type: "local" },
-            }];
-        }
+        const initialFiles = Array.isArray(props.initialFiles)
+            ? props.initialFiles
+            : [props.initialFiles];
+        files.value = initialFiles.map((file) => ({
+            source: file,
+            options: { type: "local" },
+        }));
     }
 });
 
-const emit = defineEmits(["fileUploaded", "fileReverted"]);
+const emit = defineEmits(["fileUploaded", "fileReverted", "fileRemoved"]);
 
 // Handle file upload response
 function handleFileUpload(response) {
@@ -78,11 +79,27 @@ function handleFileUpload(response) {
     return response;
 }
 
-// Handle file revert (removal)
+// Handle revert for newly uploaded files
 function handleFileRevert(uniqueId, load) {
     emit("fileReverted", uniqueId);
-    router.post(route("file.revert", { id: uniqueId }));
-    load();
+    router.post(
+        route("file.revert", { id: uniqueId }),
+        {},
+        {
+            onSuccess: () => load(),
+        }
+    );
+}
+
+// Handle file removal (initial files)
+function handleRemoveFile(error, file) {
+    if (
+        file &&
+        props.initialFiles &&
+        props.initialFiles.includes(file.source)
+    ) {
+        emit("fileRemoved", file.source);
+    }
 }
 
 // FilePond server configuration
@@ -96,8 +113,11 @@ const serverOptions = {
     headers: {
         "X-CSRF-TOKEN": $page.props.csrf_token,
     },
-    load: (source, load, error, progress, abort, headers) => {
-        fetch(source).then(response => response.blob()).then(load);
+    load: (source, load, error) => {
+        fetch(source)
+            .then((response) => response.blob())
+            .then(load)
+            .catch(error);
     },
 };
 </script>
@@ -114,6 +134,7 @@ const serverOptions = {
             credits="false"
             :locale="null"
             :files="files"
+            @removefile="handleRemoveFile"
         />
     </div>
 </template>

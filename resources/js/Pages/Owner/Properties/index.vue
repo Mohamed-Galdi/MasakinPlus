@@ -244,19 +244,32 @@ const textHelpers = useTextHelpers();
                     </div>
 
                     <div class="flex items-center gap-2 mb-4">
-                        <div
-                            v-for="amenity in property.amenities.slice(0, 3)"
-                            :key="amenity.id"
-                            class="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded-full"
-                        >
-                            {{ amenity.name }}
-                        </div>
-                        <div
-                            v-if="property.amenities.length > 3"
-                            class="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded-full"
-                        >
-                            +{{ property.amenities.length - 3 }}
-                        </div>
+                        <template v-if="property.amenities.length < 1">
+                            <div
+                                class="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded-full"
+                            >
+                                <p>لا توجد مرافقات</p>
+                            </div>
+                        </template>
+                        <template v-else>
+                            <div
+                                v-for="amenity in property.amenities.slice(
+                                    0,
+                                    3
+                                )"
+                                :key="amenity.id"
+                                class="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded-full"
+                            >
+                                {{ amenity.name }}
+                            </div>
+                            <div
+                                v-if="property.amenities.length > 3"
+                                class="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded-full cursor-pointer"
+                                @click="showAllAmenities"
+                            >
+                                +{{ property.amenities.length - 3 }}
+                            </div>
+                        </template>
                     </div>
 
                     <div

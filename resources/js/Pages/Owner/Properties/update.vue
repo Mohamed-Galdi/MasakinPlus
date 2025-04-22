@@ -77,30 +77,24 @@ const propertyForm = useForm({
 // ############################################## File upload
 // Track new and removed images
 const tempFile = ref([...propertyImages]); // Initialize with existing images
-const removedImages = ref([]); // Track removed images
 
 function handleFileUploaded(fileFolder) {
     tempFile.value.push(fileFolder);
-    propertyForm.newImages.push(fileFolder); // Add to new images
+    propertyForm.newImages.push(fileFolder);
+    propertyForm.images = tempFile.value;
+}
+
+function handleFileRemoved(imagePath) {
+    tempFile.value = tempFile.value.filter((filePath) => filePath !== imagePath);
+    propertyForm.removedImages.push(imagePath);
+    propertyForm.images = tempFile.value;
 }
 
 function handleFileReverted(uniqueId) {
-    // Remove from tempFile
     tempFile.value = tempFile.value.filter((filePath) => !filePath.includes(uniqueId));
-
-    // Check if the removed file is an existing image
-    const removedExistingImage = propertyImages.find((image) => image === uniqueId || image.includes(uniqueId));
-    if (removedExistingImage) {
-        // Track removed existing image
-        propertyForm.removedImages.push(removedExistingImage);
-    } else {
-        // If it's a new image being reverted, remove it from newImages
-        propertyForm.newImages = propertyForm.newImages.filter(
-            (filePath) => !filePath.includes(uniqueId)
-        );
-    }
-
-    // Update images in the form
+    propertyForm.newImages = propertyForm.newImages.filter(
+        (filePath) => !filePath.includes(uniqueId)
+    );
     propertyForm.images = tempFile.value;
 }
 
@@ -122,7 +116,7 @@ const handleCoordinatesUpdate = (coords) => {
 function submitUpdateProperty() {
     propertyForm.put(
         route("owner.properties.update", {
-            property: "0196534b-3a76-7154-82ed-808eed8eaeeb",
+            property: property.value.id,
         }),
         {
             onSuccess: () => {
@@ -559,6 +553,7 @@ function submitUpdateProperty() {
                                 <FileUpload
                                     @file-uploaded="handleFileUploaded"
                                     @file-reverted="handleFileReverted"
+                                    @file-removed="handleFileRemoved"
                                     :initialFiles="propertyImages"
                                     :allowMultiple="true"
                                     :maxFiles="5"
