@@ -10,7 +10,8 @@ use Illuminate\Http\Request;
 class UserController extends Controller
 {
     public function index(){
-        $users = User::whereNot('type', UserType::Admin->value)->paginate(12);
+        $users = User::whereNot('type', UserType::Admin->value)
+        ->paginate(5);
         return inertia('Admin/Users', compact('users'));
     }
 }

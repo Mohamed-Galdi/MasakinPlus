@@ -13,6 +13,14 @@ class User extends Authenticatable implements MustVerifyEmail
     use HasFactory, Notifiable;
 
     /**
+     * Get the user's image or default image if null.
+     */
+    public function getImageAttribute($value)
+    {
+        return $value ?? '/storage/users_images/default-user-image.webp';
+    }
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var list<string>

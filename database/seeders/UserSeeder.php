@@ -24,7 +24,6 @@ class UserSeeder extends Seeder
                     'email' => 'admin@masakinplus.com',
                     'password' => $pw,
                     'type' => UserType::Admin->value,
-                    'image' => '/storage/users_images/default-user-image.webp',
                     'email_verified_at' => $date,
                 ],
                 [
@@ -32,7 +31,6 @@ class UserSeeder extends Seeder
                     'email' => 'owner@masakinplus.com',
                     'password' => $pw,
                     'type' => UserType::Owner->value,
-                    'image' => '/storage/users_images/default-user-image.webp',
                     'email_verified_at' => $date,
                 ],
                 [
@@ -40,7 +38,6 @@ class UserSeeder extends Seeder
                     'email' => 'investor@masakinplus.com',
                     'password' => $pw,
                     'type' => UserType::Investor->value,
-                    'image' => '/storage/users_images/default-user-image.webp',
                     'email_verified_at' => $date,
                 ],
                 [
@@ -48,7 +45,6 @@ class UserSeeder extends Seeder
                     'email' => 'tenant@masakinplus.com',
                     'password' => $pw,
                     'type' => UserType::Tenant->value,
-                    'image' => '/storage/users_images/default-user-image.webp',
                     'email_verified_at' => $date,
                 ],
             ]
