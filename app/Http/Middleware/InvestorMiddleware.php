@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Enums\UserType;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,7 +18,7 @@ class InvestorMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if (Auth::check() && Auth::user()->type === 'investor' && Auth::user()->is_active) {
+        if (Auth::check() && Auth::user()->type === UserType::Investor->value && Auth::user()->is_active) {
             return $next($request);
         }
 

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\UserType;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -22,7 +23,7 @@ class UserSeeder extends Seeder
                     'name' => ' محمد كلدي',
                     'email' => 'admin@masakinplus.com',
                     'password' => $pw,
-                    'type' => 'admin',
+                    'type' => UserType::Admin->value,
                     'image' => '/storage/users_images/default-user-image.webp',
                     'email_verified_at' => $date,
                 ],
@@ -30,7 +31,7 @@ class UserSeeder extends Seeder
                     'name' => ' محمد املاك',
                     'email' => 'owner@masakinplus.com',
                     'password' => $pw,
-                    'type' => 'owner',
+                    'type' => UserType::Owner->value,
                     'image' => '/storage/users_images/default-user-image.webp',
                     'email_verified_at' => $date,
                 ],
@@ -38,7 +39,7 @@ class UserSeeder extends Seeder
                     'name' => ' محمد المستثمر',
                     'email' => 'investor@masakinplus.com',
                     'password' => $pw,
-                    'type' => 'investor',
+                    'type' => UserType::Investor->value,
                     'image' => '/storage/users_images/default-user-image.webp',
                     'email_verified_at' => $date,
                 ],
@@ -46,7 +47,7 @@ class UserSeeder extends Seeder
                     'name' => ' محمد المستأجر',
                     'email' => 'tenant@masakinplus.com',
                     'password' => $pw,
-                    'type' => 'tenant',
+                    'type' => UserType::Tenant->value,
                     'image' => '/storage/users_images/default-user-image.webp',
                     'email_verified_at' => $date,
                 ],

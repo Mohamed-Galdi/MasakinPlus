@@ -30,7 +30,7 @@ const navigationItems = [
 
     {
         title: "المستخدمين",
-        path: route("admin.users"),
+        path: route("admin.users.index"),
         icon: "pi-users",
     },
     {

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AdminAuthenticatedSessionController;
 use App\Http\Controllers\Admin\AccountController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\TempFileController;
 use Illuminate\Support\Facades\Route;
 
@@ -11,9 +12,7 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
 
     Route::redirect('/', '/admin/users')->name('admin.dashboard');
 
-    Route::get('/users', function () {
-        return inertia('Admin/Users');
-    })->name('admin.users');
+    Route::get('/users', [UserController::class, 'index'])->name('admin.users.index');
 
     Route::get('/properties', function () {
         return inertia('Admin/Properties');

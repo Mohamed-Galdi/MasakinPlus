@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Enums\UserType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Mail\OTP;
@@ -52,12 +53,12 @@ class AuthenticatedSessionController extends Controller
         }
 
         // Prevent normal users from logging in through the admin form
-        if ($formType === 'adminLogin' && $user->type !== 'admin') {
+        if ($formType === 'adminLogin' && $user->type !== UserType::Admin->value) {
             return back()->withErrors(['email' => __('auth.failed')]);
         }
 
         // Prevent admins from logging in through the normal user form
-        if ($formType === 'login' && $user->type === 'admin') {
+        if ($formType === 'login' && $user->type === UserType::Admin->value) {
             return back()->withErrors(['email' => __('auth.failed')]);
         }
 
@@ -93,7 +94,7 @@ class AuthenticatedSessionController extends Controller
     //     // Log the user out temporarily — we only finalize login after OTP verification
     //     auth()->logout();
 
-    //     if ($user->type === 'admin') {
+    //     if ($user->type === UserType::Admin->value) {
     //         return redirect()->route('admin.otp');
     //     }
 
