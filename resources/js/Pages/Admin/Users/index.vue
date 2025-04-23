@@ -11,7 +11,6 @@ import Column from "primevue/column";
 import Avatar from "primevue/avatar";
 import Tag from "primevue/tag";
 import Button from "primevue/button";
-import Divider from "primevue/divider";
 import Tooltip from "primevue/tooltip";
 
 defineOptions({
@@ -113,6 +112,11 @@ const getUserTypeArabic = (type) => {
             return type;
     }
 };
+
+// 
+function editUser(id) {
+    router.get(route('admin.users.view', {user: id}))
+}
 </script>
 
 <template>
@@ -272,9 +276,10 @@ const getUserTypeArabic = (type) => {
                 </Column>
 
                 <Column header="الإجراءات" class="w-[120px]">
-                    <template #body>
+                    <template #body="slotProps">
                         <div class="flex gap-1 justify-center">
                             <Button
+                                @click="editUser(slotProps.data.id)"
                                 v-tooltip="'تعديل المستخدم'"
                                 icon="pi pi-pencil"
                                 text

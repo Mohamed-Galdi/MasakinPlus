@@ -31,4 +31,10 @@ class UserController extends Controller
 
         return inertia('Admin/Users/index', compact('users', 'usersTypes', 'search', 'userType'));
     }
+
+    public function view($id)
+    {
+        $user = User::whereNot('type', UserType::Admin->value)->findOrFail($id);
+        return inertia('Admin/Users/view', compact('user'));
+    }
 }

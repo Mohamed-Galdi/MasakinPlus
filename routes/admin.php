@@ -13,6 +13,7 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::redirect('/', '/admin/users')->name('admin.dashboard');
 
     Route::get('/users', [UserController::class, 'index'])->name('admin.users.index');
+    Route::get('/users/{user}', [UserController::class, 'view'])->name('admin.users.view');
 
     Route::get('/properties', function () {
         return inertia('Admin/Properties');
