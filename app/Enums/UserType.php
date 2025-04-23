@@ -36,4 +36,17 @@ enum UserType: string
             'value' => $type->value,
         ], self::cases());
     }
+
+    public static function casesExcluding(UserType ...$excluded): array
+    {
+        return array_filter(self::cases(), fn($case) => !in_array($case, $excluded));
+    }
+
+    public static function optionsExcluding(UserType ...$excluded): array
+    {
+        return array_map(fn($type) => [
+            'label' => $type->label(),
+            'value' => $type->value,
+        ], self::casesExcluding(...$excluded));
+    }
 }

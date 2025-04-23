@@ -12,6 +12,8 @@ class UserController extends Controller
     public function index(){
         $users = User::whereNot('type', UserType::Admin->value)
         ->paginate(5);
-        return inertia('Admin/Users', compact('users'));
+        $usersTypes = UserType::optionsExcluding(UserType::Admin);
+        dd($usersTypes);
+        return inertia('Admin/Users/index', compact('users'));
     }
 }

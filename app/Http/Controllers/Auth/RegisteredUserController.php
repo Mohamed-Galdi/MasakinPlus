@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Enums\UserType;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Inertia\Inertia;
 use Inertia\Response;
+use Illuminate\Validation\Rule;
 
 class RegisteredUserController extends Controller
 {
@@ -20,7 +22,8 @@ class RegisteredUserController extends Controller
      */
     public function create(): Response
     {
-        return Inertia::render('Auth/Register');
+        $userTypes = array_values(UserType::optionsExcluding(UserType::Admin));
+        return Inertia::render('Auth/Register', compact('userTypes'));
     }
 
     /**
@@ -34,7 +37,7 @@ class RegisteredUserController extends Controller
             'username' => 'required|string|max:255|min:3',
             'email' => 'required|string|lowercase|email|max:255|min:3|unique:'.User::class,
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'accountType' => 'required|string|max:255|in:tenant,investor,owner',
+            Rule::in(array_column(UserType::casesExcluding(UserType::Admin), 'value')),
         ]);
 
 

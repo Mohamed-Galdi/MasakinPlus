@@ -25,6 +25,7 @@ class UserSeeder extends Seeder
                     'password' => $pw,
                     'type' => UserType::Admin->value,
                     'email_verified_at' => $date,
+                    'created_at' => $date,
                 ],
                 [
                     'name' => ' محمد املاك',
@@ -32,6 +33,7 @@ class UserSeeder extends Seeder
                     'password' => $pw,
                     'type' => UserType::Owner->value,
                     'email_verified_at' => $date,
+                    'created_at' => $date,
                 ],
                 [
                     'name' => ' محمد المستثمر',
@@ -39,6 +41,7 @@ class UserSeeder extends Seeder
                     'password' => $pw,
                     'type' => UserType::Investor->value,
                     'email_verified_at' => $date,
+                    'created_at' => $date,
                 ],
                 [
                     'name' => ' محمد المستأجر',
@@ -46,6 +49,7 @@ class UserSeeder extends Seeder
                     'password' => $pw,
                     'type' => UserType::Tenant->value,
                     'email_verified_at' => $date,
+                    'created_at' => $date,
                 ],
             ]
         );

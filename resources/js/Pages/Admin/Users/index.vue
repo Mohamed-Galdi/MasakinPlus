@@ -1,6 +1,7 @@
 <script setup>
 import AdminLayout from "@/Layouts/AdminLayout.vue";
 
+
 defineOptions({
     layout: AdminLayout,
 });
@@ -16,9 +17,8 @@ const props = defineProps({
 <template>
     <p class="text-4xl">المستخدمين</p>
     <div>
-        <div v-for="user in props.users.data" :key="user.id" class="flex gap-8">
-            <p>{{ user.name}}: </p>
-            <p>{{ user.image }}</p>
+        <div v-for="user in props.users.data" :key="user.id" >
+            <p>{{ user.name}} </p>
         </div>
     </div>
 </template>

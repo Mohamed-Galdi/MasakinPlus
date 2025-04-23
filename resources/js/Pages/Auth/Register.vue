@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { Head, useForm, Link } from "@inertiajs/vue3";
 import InputText from "primevue/inputtext";
 import FloatLabel from "primevue/floatlabel";
@@ -17,6 +17,14 @@ defineOptions({
     layout: AuthLayout,
 });
 
+const props = defineProps({
+    userTypes: {
+        type: Array,
+        required: true,
+    },
+});
+
+
 const toast = useToast();
 
 const registerForm = useForm({
@@ -28,11 +36,12 @@ const registerForm = useForm({
     terms: false,
 });
 
-const accountTypes = ref([
-    { label: "حساب مالك ", value: "owner" },
-    { label: "حساب مستثمر", value: "investor" },
-    { label: "حساب مستأجر", value: "tenant" },
-]);
+const accountTypes = computed(() =>
+    props.userTypes.map(type => ({
+        ...type,
+        label: 'حساب ' + type.label,
+    }))
+);
 
 function submit() {
     if (!registerForm.terms) {
