@@ -2,11 +2,14 @@
 
 namespace App\Providers;
 
+use App\Models\Property;
+use App\Policies\PropertyOwnerPolicy;
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Support\Facades\Gate;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -30,5 +33,6 @@ class AppServiceProvider extends ServiceProvider
                 ->subject('Verify Email Address')
                 ->view('mail.email-verification', ['actionUrl' => $url]);
         });
+        Gate::policy(Property::class, PropertyOwnerPolicy::class);
     }
 }

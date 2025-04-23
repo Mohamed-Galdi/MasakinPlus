@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Amenity;
 use App\Models\Property;
 use App\Services\FileService;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
@@ -58,7 +59,6 @@ class PropertyController extends Controller
 
     public function store(Request $request)
     {
-
         $request->validate([
             'title' => 'required|string|max:255|min:3',
             'description' => 'required|string|max:255|min:3',
@@ -113,6 +113,9 @@ class PropertyController extends Controller
 
     public function edit(Request $request, Property $property)
     {
+        // authorization
+        Gate::authorize('update', $property);
+
         $typeOptions = PropertyType::options();
         $amenities = Amenity::select('id', 'name')->get();
 
@@ -123,6 +126,9 @@ class PropertyController extends Controller
 
     public function update(Request $request, Property $property)
     {
+        // authorization
+        Gate::authorize('update', $property);
+
         // Validate request data
         $request->validate([
             'title' => 'required|string|max:255|min:3',
