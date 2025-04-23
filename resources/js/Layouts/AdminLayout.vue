@@ -450,11 +450,6 @@ main {
     flex: 1;
 }
 
-.overflow-y-auto {
-    scrollbar-width: thin; /* Firefox */
-    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
-}
-
 /* Webkit browsers (Chrome, Safari, Edge) */
 .overflow-y-auto::-webkit-scrollbar {
     width: 6px; /* Slim scrollbar */

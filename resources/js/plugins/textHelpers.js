@@ -34,7 +34,7 @@ export const useTextHelpers = () => {
             // - px-1: small horizontal padding
             return text.replace(
                 regex,
-                '<mark class="bg-yellow-200 rounded px-0">$1</mark>'
+                '<mark class="bg-green-100 rounded px-0">$1</mark>'
             );
         } catch (e) {
             // If any errors occur during the highlighting process,
