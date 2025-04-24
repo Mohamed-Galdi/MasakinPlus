@@ -92,7 +92,6 @@ class UsersSeeder extends Seeder
                     'email_verified_at' => Carbon::now(),
                     'password' => $hashedPassword,
                     'type' => $type,
-                    'is_active' => (bool)rand(0, 1),
                     'remember_token' => Str::random(10),
                     'created_at' => $createdAt,
                     'updated_at' => $createdAt,

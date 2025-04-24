@@ -1,7 +1,9 @@
 <script setup>
 import { ref } from "vue";
 import AdminLayout from "@/Layouts/AdminLayout.vue";
-import { Link } from "@inertiajs/vue3";
+import { Link, router } from "@inertiajs/vue3";
+import { useToast } from "primevue/usetoast";
+import Toast from "primevue/toast";
 import Avatar from "primevue/avatar";
 import Tag from "primevue/tag";
 import Button from "primevue/button";
@@ -9,7 +11,6 @@ import Dialog from "primevue/dialog";
 import ConfirmDialog from "primevue/confirmdialog";
 import { useConfirm } from "primevue/useconfirm";
 import Tooltip from "primevue/tooltip";
-import Divider from "primevue/divider";
 
 defineOptions({
     layout: AdminLayout,
@@ -22,6 +23,7 @@ const props = defineProps({
     },
 });
 
+const toast = useToast();
 const confirm = useConfirm();
 const showSuspendDialog = ref(false);
 const suspensionReason = ref("");
@@ -56,11 +58,11 @@ const formatDate = (dateString) => {
 const getUserTypeArabic = (type) => {
     switch (type) {
         case "owner":
-            return "مالك";
+            return "حساب مالك";
         case "investor":
-            return "مستثمر";
+            return "حساب مستثمر";
         case "tenant":
-            return "مستأجر";
+            return "حساب مستأجر";
         default:
             return type;
     }
@@ -69,10 +71,8 @@ const getUserTypeArabic = (type) => {
 // Toggle user status with confirmation
 const toggleUserStatus = () => {
     if (isUserActive.value) {
-        // If currently active, show suspension dialog
         showSuspendDialog.value = true;
     } else {
-        // If currently suspended, confirm reactivation
         confirm.require({
             message: "هل أنت متأكد من رغبتك في إعادة تنشيط هذا المستخدم؟",
             header: "تأكيد إعادة التنشيط",
@@ -80,42 +80,85 @@ const toggleUserStatus = () => {
             acceptLabel: "نعم، إعادة تنشيط",
             rejectLabel: "إلغاء",
             accept: () => {
-                // Here you would call your API to reactivate the user
-                isUserActive.value = true;
-                // Show success message
-                // This would be replaced with your actual implementation
+                router.post(
+                    route("admin.users.reactivate", { id: props.user.id }),
+                    {},
+                    {
+                        preserveState: false,
+                        onSuccess: () => {
+                            toast.add({
+                                severity: "success",
+                                summary: "نجاح",
+                                detail: "تم إعادة تنشيط الحساب بنجاح",
+                                life: 3000,
+                            });
+                        },
+                        onError: () => {
+                            toast.add({
+                                severity: "error",
+                                summary: "خطأ",
+                                detail: "حدث خطأ أثناء إعادة تنشيط الحساب",
+                                life: 3000,
+                            });
+                        },
+                    }
+                );
             },
-            reject: () => {
-                // Reset the switch to match the current state
-                isUserActive.value = true; // Corrected: Reset to true to avoid hook call issue
-            },
+            reject: () => {},
         });
     }
 };
 
 // Confirm user suspension
 const confirmSuspension = () => {
-    // Here you would call your API to suspend the user with the reason
-    isUserActive.value = false;
-    showSuspendDialog.value = false;
-    // Show success message
-    // This would be replaced with your actual implementation
+    router.post(
+        route("admin.users.suspend", { id: props.user.id }),
+        { suspension_reason: suspensionReason.value },
+
+        {
+            preserveState: false,
+            onSuccess: () => {
+                showSuspendDialog.value = false;
+                toast.add({
+                    severity: "success",
+                    summary: "نجاح",
+                    detail: "تم تعليق الحساب بنجاح",
+                    life: 3000,
+                });
+            },
+            onError: () => {
+                toast.add({
+                    severity: "error",
+                    summary: "خطأ",
+                    detail: "حدث خطأ أثناء تعليق الحساب",
+                    life: 3000,
+                });
+            },
+        }
+    );
 };
 </script>
 
 <template>
-    <div class="user-details-page">
-        <!-- Confirm Dialog Component -->
+    <div>
+        <Toast position="top-center" />
         <ConfirmDialog />
 
         <!-- Header with Back Button -->
         <div class="flex items-center justify-between mb-6">
-            <Link
+            <Link v-if="isUserActive"
                 :href="route('admin.users.index')"
                 class="flex items-center gap-2 text-gray-600 hover:text-primary transition-colors"
             >
                 <i class="pi pi-arrow-right"></i>
                 <span>العودة إلى قائمة المستخدمين</span>
+            </Link>
+            <Link v-else
+                :href="route('admin.users.suspended')"
+                class="flex items-center gap-2 text-gray-600 hover:text-primary transition-colors"
+            >
+                <i class="pi pi-arrow-right"></i>
+                <span>العودة إلى قائمة المستخدمين المحضورين</span>
             </Link>
         </div>
 
@@ -128,43 +171,26 @@ const confirmSuspension = () => {
                 >
                     <!-- User Profile -->
                     <div class="p-6 text-center border-b border-gray-100">
-                        <div class="relative inline-block mb-4">
-                            <Avatar
-                                :image="user.image"
-                                size="xlarge"
-                                shape="circle"
-                                class="w-24 h-24"
-                            />
-                            <span
-                                class="absolute bottom-0 left-0 w-5 h-5 rounded-full border-2 border-white"
-                                :class="
-                                    isUserActive ? 'bg-green-500' : 'bg-red-500'
-                                "
-                            ></span>
-                        </div>
+                        <Avatar
+                            :image="user.image"
+                            size="xlarge"
+                            shape="circle"
+                            class="w-24 h-24"
+                        />
 
-                        <h2 class="text-xl font-bold mb-1">{{ user.name }}</h2>
-                        <p class="text-gray-500 text-sm mb-3">
-                            {{ user.email }}
-                        </p>
+                        <h2 class="text-xl font-bold mb-2">{{ user.name }}</h2>
 
-                        <div class="flex justify-center gap-2 mb-4">
+                        <div class="flex justify-center gap-2 mb-2">
                             <Tag
                                 :value="getUserTypeArabic(user.type)"
                                 :severity="getTypeSeverity(user.type)"
-                            />
-                            <Tag
-                                :value="isUserActive ? 'نشط' : 'معلق'"
-                                :severity="isUserActive ? 'success' : 'danger'"
                             />
                         </div>
                     </div>
 
                     <!-- Quick Actions -->
                     <div class="p-4">
-                        <h3
-                            class="text-sm font-semibold text-gray-500 mb-3 px-2"
-                        >
+                        <h3 class="text-sm font-Bein text-gray-500 mb-3 px-2">
                             إجراءات سريعة
                         </h3>
 
@@ -180,70 +206,59 @@ const confirmSuspension = () => {
                                 "
                                 :severity="isUserActive ? 'danger' : 'success'"
                                 :outlined="!isUserActive"
-                                class="p-button-sm justify-start"
+                                class="p-button-sm"
                                 @click="toggleUserStatus"
                             />
 
                             <Button
-                                label="تعديل المعلومات"
-                                icon="pi pi-pencil"
-                                outlined
-                                class="p-button-sm justify-start"
-                            />
-
-                            <Button
-                                label="إرسال بريد إلكتروني"
+                                label="إرسال رسالة  "
                                 icon="pi pi-envelope"
-                                text
-                                class="p-button-sm justify-start"
+                                outlined
+                                class="p-button-sm"
                             />
                         </div>
                     </div>
 
-                    <!-- User Info -->
+                    <!-- Account Info -->
                     <div class="p-4 border-t border-gray-100">
-                        <h3
-                            class="text-sm font-semibold text-gray-500 mb-3 px-2"
-                        >
-                            معلومات الحساب
+                        <h3 class="text-sm font-Bein text-gray-500 mb-3 px-2">
+                            معلومات الإتصال
                         </h3>
 
                         <div class="flex flex-col gap-3 px-2">
                             <div class="flex items-center gap-2">
-                                <i class="pi pi-calendar text-gray-400"></i>
+                                <i class="pi pi-envelope text-gray-500"></i>
                                 <div class="flex flex-col">
                                     <span class="text-xs text-gray-500"
-                                        >تاريخ التسجيل</span
+                                        >البريد الإلكتروني</span
                                     >
-                                    <span class="text-sm">{{
-                                        formatDate(user.created_at)
-                                    }}</span>
+                                    <p class="text-gray-800 text-sm">
+                                        {{ user.email }}
+                                    </p>
                                 </div>
                             </div>
 
                             <div class="flex items-center gap-2">
-                                <i class="pi pi-clock text-gray-400"></i>
+                                <i class="pi pi-phone text-gray-500"></i>
                                 <div class="flex flex-col">
                                     <span class="text-xs text-gray-500"
-                                        >آخر تحديث</span
-                                    >
-                                    <span class="text-sm">{{
-                                        user.updated_at
-                                            ? formatDate(user.updated_at)
-                                            : "لم يتم التحديث"
-                                    }}</span>
+                                        >رقم الهاتف
+                                    </span>
+                                    <p class="text-sm text-gray-800">
+                                        {{ user.phone || "غير متوفر" }}
+                                    </p>
                                 </div>
                             </div>
 
                             <div class="flex items-center gap-2">
-                                <i class="pi pi-id-card text-gray-400"></i>
+                                <i class="pi pi-map-marker text-gray-500"></i>
                                 <div class="flex flex-col">
                                     <span class="text-xs text-gray-500"
-                                        >معرف المستخدم</span
-                                    >
-                                    <span class="text-sm font-mono">{{
-                                        user.id
-                                    }}</span>
+                                        >العنوان
+                                    </span>
+                                    <p class="text-gray-800 text-sm">
+                                        {{ user.address || "غير متوفر" }}
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -253,85 +268,82 @@ const confirmSuspension = () => {
 
             <!-- Main Content Area -->
             <div class="lg:col-span-9">
-                <!-- User Information Card -->
+                <!-- Personal Information Card -->
                 <div
                     class="bg-white rounded-lg shadow-sm border border-gray-100 p-6 mb-6"
                 >
                     <div class="flex items-center justify-between mb-6">
                         <h2 class="text-xl font-bold flex items-center gap-2">
                             <i class="pi pi-user text-primary"></i>
-                            المعلومات الشخصية
+                            معلومات الحساب
                         </h2>
-                        <Button
-                            icon="pi pi-pencil"
-                            text
-                            v-tooltip="'تعديل المعلومات الشخصية'"
-                        />
                     </div>
 
                     <div
                         class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6"
                     >
-                        <div class="flex flex-col">
-                            <span class="text-sm text-gray-500 mb-1"
-                                >الاسم الكامل</span
-                            >
-                            <span class="font-medium">{{ user.name }}</span>
+                        <div class="flex items-center gap-2">
+                            <i class="pi pi-id-card text-gray-400"></i>
+                            <div class="flex flex-col">
+                                <span class="text-xs text-gray-500"
+                                    >معرف المستخدم</span
+                                >
+                                <span class="text-sm font-mono">{{
+                                    user.id
+                                }}</span>
+                            </div>
                         </div>
 
-                        <div class="flex flex-col">
-                            <span class="text-sm text-gray-500 mb-1"
-                                >البريد الإلكتروني</span
-                            >
-                            <span class="font-medium">{{ user.email }}</span>
+                        <div class="flex items-center gap-2">
+                            <i class="pi pi-calendar text-gray-400"></i>
+                            <div class="flex flex-col">
+                                <span class="text-xs text-gray-500"
+                                    >تاريخ التسجيل</span
+                                >
+                                <span class="text-sm">{{
+                                    formatDate(user.created_at)
+                                }}</span>
+                            </div>
                         </div>
 
-                        <div class="flex flex-col">
-                            <span class="text-sm text-gray-500 mb-1"
-                                >رقم الهاتف</span
-                            >
-                            <span class="font-medium">{{
-                                user.phone || "غير متوفر"
-                            }}</span>
+                        <div class="flex items-center gap-2">
+                            <i class="pi pi-clock text-gray-400"></i>
+                            <div class="flex flex-col">
+                                <span class="text-xs text-gray-500"
+                                    >آخر تحديث</span
+                                >
+                                <span class="text-sm">{{
+                                    user.updated_at
+                                        ? formatDate(user.updated_at)
+                                        : "لم يتم التحديث"
+                                }}</span>
+                            </div>
                         </div>
 
-                        <div class="flex flex-col">
-                            <span class="text-sm text-gray-500 mb-1"
-                                >تاريخ الميلاد</span
-                            >
-                            <span class="font-medium">{{
-                                user.birthdate || "غير متوفر"
-                            }}</span>
-                        </div>
-
-                        <div class="flex flex-col">
-                            <span class="text-sm text-gray-500 mb-1"
-                                >الجنس</span
-                            >
-                            <span class="font-medium">{{
-                                user.gender || "غير متوفر"
-                            }}</span>
-                        </div>
-
-                        <div class="flex flex-col">
-                            <span class="text-sm text-gray-500 mb-1"
-                                >الجنسية</span
-                            >
-                            <span class="font-medium">{{
-                                user.nationality || "غير متوفر"
-                            }}</span>
+                        <div class="flex items-center gap-2">
+                            <i class="pi pi-check-circle text-gray-400"></i>
+                            <div class="flex flex-col">
+                                <span class="text-xs text-gray-500"
+                                    >تحقق البريد</span
+                                >
+                                <span class="text-sm">{{
+                                    user.email_verified_at
+                                        ? formatDate(user.email_verified_at)
+                                        : "غير متحقق"
+                                }}</span>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Account Status Card -->
+                <!-- Account Management Card -->
                 <div
-                    class="bg-white rounded-lg shadow-sm border border-gray-100 p-6 mb-6"
+                    class="bg-white rounded-lg shadow-sm border border-gray-100 p-6"
                 >
                     <div class="flex items-center justify-between mb-6">
                         <h2 class="text-xl font-bold flex items-center gap-2">
                             <i class="pi pi-shield text-primary"></i>
-                            حالة الحساب
+                            إدارة الحساب
                         </h2>
                     </div>
 
@@ -372,41 +384,61 @@ const confirmSuspension = () => {
                                         }}
                                     </p>
                                 </div>
+                                
                             </div>
 
                             <div
-                                class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4"
+                                v-if="!isUserActive"
+                                class="bg-red-50 border border-red-100 rounded-lg p-4 mb-4 space-y-3"
                             >
-                                <div class="flex flex-col">
-                                    <span class="text-sm text-gray-500 mb-1"
-                                        >نوع الحساب</span
-                                    >
-                                    <Tag
-                                        :value="getUserTypeArabic(user.type)"
-                                        :severity="getTypeSeverity(user.type)"
-                                    />
+                                <!-- reason -->
+                                <div class="flex items-start gap-3">
+                                    <i
+                                        class="pi pi-info-circle text-red-500 mt-0.5"
+                                    ></i>
+                                    <div>
+                                        <h4
+                                            class="text-sm font-semibold text-red-700 mb-1"
+                                        >
+                                            سبب التعليق
+                                        </h4>
+                                        <p class="text-sm text-red-600 m-0">
+                                            {{
+                                                user.suspension_reason ||
+                                                "لم يتم تحديد سبب للتعليق"
+                                            }}
+                                        </p>
+                                    </div>
                                 </div>
-
-                                <div class="flex flex-col">
-                                    <span class="text-sm text-gray-500 mb-1"
-                                        >تاريخ التحقق من البريد</span
-                                    >
-                                    <span class="font-medium">{{
-                                        user.email_verified_at
-                                            ? formatDate(user.email_verified_at)
-                                            : "غير متحقق"
-                                    }}</span>
+                                <!-- date -->
+                                <div class="flex items-start gap-3">
+                                    <i
+                                        class="pi pi-calendar text-red-500 mt-0.5"
+                                    ></i>
+                                    <div>
+                                        <h4
+                                            class="text-sm font-semibold text-red-700 mb-1"
+                                        >
+                                            تاريخ التعليق
+                                        </h4>
+                                        <p class="text-sm text-red-600 m-0">
+                                            {{
+                                                formatDate(user.suspended_at)
+                                            }}
+                                        </p>
+                                    </div>
                                 </div>
+                                
                             </div>
                         </div>
 
                         <!-- Status Actions -->
-                        <div
-                            class="md:w-64 flex flex-col gap-3 md:border-r md:border-gray-100 md:pr-6"
-                        >
-                            <h3 class="text-lg font-semibold">إدارة الحساب</h3>
+                        <div class="md:w-64 flex flex-col gap-3">
+                            <h3 class="text-lg font-semibold">
+                                تغيير حالة الحساب
+                            </h3>
                             <p class="text-sm text-gray-500">
-                                يمكنك تغيير حالة الحساب من هنا
+                                يمكنك تعليق أو إعادة تنشيط الحساب
                             </p>
 
                             <Button
@@ -423,71 +455,6 @@ const confirmSuspension = () => {
                                 class="w-full mt-2"
                                 @click="toggleUserStatus"
                             />
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Contact Information Card -->
-                <div
-                    class="bg-white rounded-lg shadow-sm border border-gray-100 p-6"
-                >
-                    <div class="flex items-center justify-between mb-6">
-                        <h2 class="text-xl font-bold flex items-center gap-2">
-                            <i class="pi pi-phone text-primary"></i>
-                            معلومات الاتصال
-                        </h2>
-                        <Button
-                            icon="pi pi-pencil"
-                            text
-                            v-tooltip="'تعديل معلومات الاتصال'"
-                        />
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div
-                            class="bg-gray-50 rounded-lg p-4 flex flex-col items-center text-center"
-                        >
-                            <div
-                                class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mb-3"
-                            >
-                                <i class="pi pi-envelope text-primary"></i>
-                            </div>
-                            <h3 class="text-base font-semibold mb-1">
-                                البريد الإلكتروني
-                            </h3>
-                            <p class="text-gray-600 m-0">{{ user.email }}</p>
-                        </div>
-
-                        <div
-                            class="bg-gray-50 rounded-lg p-4 flex flex-col items-center text-center"
-                        >
-                            <div
-                                class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mb-3"
-                            >
-                                <i class="pi pi-phone text-primary"></i>
-                            </div>
-                            <h3 class="text-base font-semibold mb-1">
-                                رقم الهاتف
-                            </h3>
-                            <p class="text-gray-600 m-0">
-                                {{ user.phone || "غير متوفر" }}
-                            </p>
-                        </div>
-
-                        <div
-                            class="bg-gray-50 rounded-lg p-4 flex flex-col items-center text-center"
-                        >
-                            <div
-                                class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mb-3"
-                            >
-                                <i class="pi pi-map-marker text-primary"></i>
-                            </div>
-                            <h3 class="text-base font-semibold mb-1">
-                                العنوان
-                            </h3>
-                            <p class="text-gray-600 m-0">
-                                {{ user.address || "غير متوفر" }}
-                            </p>
                         </div>
                     </div>
                 </div>
@@ -552,44 +519,3 @@ const confirmSuspension = () => {
         </Dialog>
     </div>
 </template>
-
-<style scoped>
-.user-details-page {
-    direction: rtl;
-}
-
-/* Dialog customization */
-:deep(.p-dialog-header) {
-    padding: 1.25rem;
-    border-bottom: 1px solid #e2e8f0;
-}
-
-:deep(.p-dialog-content) {
-    padding: 0;
-}
-
-:deep(.p-dialog-footer) {
-    padding: 1.25rem;
-    border-top: 1px solid #e2e8f0;
-}
-
-.rtl-dialog :deep(.p-dialog-header),
-.rtl-dialog :deep(.p-dialog-content),
-.rtl-dialog :deep(.p-dialog-footer) {
-    direction: rtl;
-    text-align: right;
-}
-
-/* Button customization */
-:deep(.p-button.justify-start) {
-    justify-content: flex-start;
-}
-
-/* Sticky sidebar */
-@media (min-width: 1024px) {
-    .sticky {
-        position: sticky;
-        top: 1rem;
-    }
-}
-</style>

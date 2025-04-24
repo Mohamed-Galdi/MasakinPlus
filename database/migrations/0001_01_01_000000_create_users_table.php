@@ -24,6 +24,8 @@ return new class extends Migration
             $table->string('otp_code')->nullable();
             $table->timestamp('otp_expires_at')->nullable();
             $table->boolean('is_active')->default(true);
+            $table->string('suspension_reason')->nullable();
+            $table->timestamp('suspended_at')->nullable();
             $table->timestamps();
         });
 

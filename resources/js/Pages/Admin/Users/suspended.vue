@@ -51,7 +51,7 @@ watch(
     debounce(([search, userType]) => {
         // Update the table with both filters
         router.get(
-            route("admin.users.index"),
+            route("admin.users.suspended"),
             {
                 search: search,
                 userType: userType,
@@ -113,9 +113,9 @@ const getUserTypeArabic = (type) => {
     }
 };
 
-// 
+//
 function editUser(id) {
-    router.get(route('admin.users.view', {user: id}))
+    router.get(route("admin.users.view", { user: id }));
 }
 </script>
 
@@ -125,12 +125,12 @@ function editUser(id) {
         <div class="flex items-center justify-between mb-6">
             <div class="flex items-center gap-3">
                 <i
-                    class="pi pi-users text-teal-800 h-full"
+                    class="pi pi-users text-rose-800 h-full"
                     style="font-size: 2.5rem"
                 ></i>
                 <div class="">
-                    <h1 class="text-3xl font-semibold m-0 text-teal-800">
-                        المستخدمين
+                    <h1 class="text-3xl font-semibold m-0 text-rose-800">
+                        المستخدمين المحضورين 
                     </h1>
                     <p class="text-gray-500 text-sm m-0">
                         إدارة حسابات المستخدمين في النظام
@@ -138,9 +138,9 @@ function editUser(id) {
                 </div>
             </div>
             <div>
-                <Link :href="route('admin.users.suspended')" class="btn bg-rose-600 hover:bg-rose-700 text-white">
-                    <p>المستخدمين المحضورين </p>
-                    <i class="pi pi-ban"></i>
+                <Link :href="route('admin.users.index')" class="btn bg-teal-600 hover:bg-teal-700 text-white">
+                    <p>قائمة المستخدمين  </p>
+                    <i class="pi pi-users"></i>
                 </Link>
             </div>
         </div>
@@ -197,7 +197,7 @@ function editUser(id) {
                 ></i>
             </div>
             <h2 class="text-2xl font-semibold text-gray-700 mb-2">
-                لا يوجد مستخدمين
+                لا يوجد مستخدمين محضورين
             </h2>
             <p class="text-gray-500 max-w-md mx-auto mb-6">
                 لم يتم العثور على أي مستخدمين مطابقين لمعايير البحث الحالية.
@@ -277,6 +277,14 @@ function editUser(id) {
                         <div class="text-sm text-gray-600">
                             <i class="pi pi-calendar-plus ml-1"></i>
                             {{ formatDate(slotProps.data.created_at) }}
+                        </div>
+                    </template>
+                </Column>
+                <Column field="created_at" header="تاريخ الحضر">
+                    <template #body="slotProps">
+                        <div class="text-sm text-red-600 flex gap-1">
+                            <i class="pi pi-ban"></i>
+                            <p class>{{ formatDate(slotProps.data.suspended_at) || '--' }}</p>
                         </div>
                     </template>
                 </Column>

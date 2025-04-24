@@ -13,7 +13,10 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::redirect('/', '/admin/users')->name('admin.dashboard');
 
     Route::get('/users', [UserController::class, 'index'])->name('admin.users.index');
+    Route::get('/users/suspended', [UserController::class, 'suspended'])->name('admin.users.suspended');
     Route::get('/users/{user}', [UserController::class, 'view'])->name('admin.users.view');
+    Route::post('/users/{user}/suspend', [UserController::class, 'suspend'])->name('admin.users.suspend');
+    Route::post('/users/{user}/reactivate', [UserController::class, 'reactivate'])->name('admin.users.reactivate');
 
     Route::get('/properties', function () {
         return inertia('Admin/Properties');
