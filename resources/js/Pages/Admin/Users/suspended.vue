@@ -130,7 +130,7 @@ function editUser(id) {
                 ></i>
                 <div class="">
                     <h1 class="text-3xl font-semibold m-0 text-rose-800">
-                        المستخدمين المحضورين 
+                        المستخدمين المحضورين
                     </h1>
                     <p class="text-gray-500 text-sm m-0">
                         إدارة حسابات المستخدمين في النظام
@@ -138,8 +138,11 @@ function editUser(id) {
                 </div>
             </div>
             <div>
-                <Link :href="route('admin.users.index')" class="btn bg-teal-600 hover:bg-teal-700 text-white">
-                    <p>قائمة المستخدمين  </p>
+                <Link
+                    :href="route('admin.users.index')"
+                    class="btn bg-teal-600 hover:bg-teal-700 text-white"
+                >
+                    <p>قائمة المستخدمين</p>
                     <i class="pi pi-users"></i>
                 </Link>
             </div>
@@ -216,7 +219,7 @@ function editUser(id) {
         <!-- Users Table -->
         <div
             v-else
-            class="users-table rounded-xl shadow-sm border border-gray-100 overflow-hidden"
+            class="rounded-xl overflow-hidden flex flex-col justify-between min-h-[75vh]"
         >
             <DataTable
                 :value="props.users.data"
@@ -284,7 +287,12 @@ function editUser(id) {
                     <template #body="slotProps">
                         <div class="text-sm text-red-600 flex gap-1">
                             <i class="pi pi-ban"></i>
-                            <p class>{{ formatDate(slotProps.data.suspended_at) || '--' }}</p>
+                            <p class>
+                                {{
+                                    formatDate(slotProps.data.suspended_at) ||
+                                    "--"
+                                }}
+                            </p>
                         </div>
                     </template>
                 </Column>
@@ -305,62 +313,62 @@ function editUser(id) {
                     </template>
                 </Column>
             </DataTable>
-        </div>
 
-        <!-- Pagination -->
-        <div
-            v-if="!isEmptyUsers"
-            dir="ltr"
-            class="my-8 flex md:flex-row flex-col md:gap-0 gap-2 justify-between items-center w-full"
-        >
-            <div class="order-last md:order-first">
-                <p class="text-base text-slate-600 rtl:text-right">
-                    عرض
-                    <span class="text-teal-600 font-bold text-lg">{{
-                        props.users.from
-                    }}</span>
-                    إلى
-                    <span class="text-teal-600 font-bold text-lg">{{
-                        props.users.to
-                    }}</span>
-                    من أصل {{ props.users.total }} مستخدم
-                </p>
-            </div>
-            <nav class="order-first md:order-last">
-                <div class="flex items-center -space-x-px h-8 text-sm">
-                    <template
-                        v-for="(link, index) in props.users.links"
-                        :key="link.url"
-                    >
-                        <Link
-                            :preserve-scroll="true"
-                            v-if="link.url"
-                            :href="link.url"
-                            v-html="link.label"
-                            class="flex items-center justify-center px-3 h-8 leading-tight border border-gray-300 transition-colors"
-                            :class="{
-                                'text-teal-800 bg-white hover:bg-gray-100 hover:text-teal-900':
-                                    !link.active,
-                                'bg-teal-600 text-white hover:bg-teal-600':
-                                    link.active,
-                                'rounded-l-lg': index === 0,
-                                'rounded-r-lg':
-                                    index === props.users.links.length - 1,
-                            }"
-                        />
-                        <p
-                            v-else
-                            v-html="link.label"
-                            class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-slate-200 border border-gray-300"
-                            :class="{
-                                'rounded-l-lg': index === 0,
-                                'rounded-r-lg':
-                                    index === props.users.links.length - 1,
-                            }"
-                        />
-                    </template>
+            <!-- Pagination -->
+            <div
+                v-if="!isEmptyUsers"
+                dir="ltr"
+                class="my-8 flex md:flex-row flex-col md:gap-0 gap-2 justify-between items-center w-full"
+            >
+                <div class="order-last md:order-first">
+                    <p class="text-base text-slate-600 rtl:text-right">
+                        عرض
+                        <span class="text-teal-600 font-bold text-lg">{{
+                            props.users.from
+                        }}</span>
+                        إلى
+                        <span class="text-teal-600 font-bold text-lg">{{
+                            props.users.to
+                        }}</span>
+                        من أصل {{ props.users.total }} مستخدم
+                    </p>
                 </div>
-            </nav>
+                <nav class="order-first md:order-last">
+                    <div class="flex items-center -space-x-px h-8 text-sm">
+                        <template
+                            v-for="(link, index) in props.users.links"
+                            :key="link.url"
+                        >
+                            <Link
+                                :preserve-scroll="true"
+                                v-if="link.url"
+                                :href="link.url"
+                                v-html="link.label"
+                                class="flex items-center justify-center px-3 h-8 leading-tight border border-gray-300 transition-colors"
+                                :class="{
+                                    'text-teal-800 bg-white hover:bg-gray-100 hover:text-teal-900':
+                                        !link.active,
+                                    'bg-teal-600 text-white hover:bg-teal-600':
+                                        link.active,
+                                    'rounded-l-lg': index === 0,
+                                    'rounded-r-lg':
+                                        index === props.users.links.length - 1,
+                                }"
+                            />
+                            <p
+                                v-else
+                                v-html="link.label"
+                                class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-slate-200 border border-gray-300"
+                                :class="{
+                                    'rounded-l-lg': index === 0,
+                                    'rounded-r-lg':
+                                        index === props.users.links.length - 1,
+                                }"
+                            />
+                        </template>
+                    </div>
+                </nav>
+            </div>
         </div>
     </div>
 </template>

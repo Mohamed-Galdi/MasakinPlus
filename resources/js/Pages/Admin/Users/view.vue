@@ -148,14 +148,14 @@ const confirmSuspension = () => {
         <div class="flex items-center justify-between mb-6">
             <Link v-if="isUserActive"
                 :href="route('admin.users.index')"
-                class="flex items-center gap-2 text-gray-600 hover:text-primary transition-colors"
+                class="flex items-center gap-2 text-gray-600 transition-colors"
             >
                 <i class="pi pi-arrow-right"></i>
                 <span>العودة إلى قائمة المستخدمين</span>
             </Link>
             <Link v-else
                 :href="route('admin.users.suspended')"
-                class="flex items-center gap-2 text-gray-600 hover:text-primary transition-colors"
+                class="flex items-center gap-2 text-gray-600 transition-colors"
             >
                 <i class="pi pi-arrow-right"></i>
                 <span>العودة إلى قائمة المستخدمين المحضورين</span>
@@ -274,7 +274,7 @@ const confirmSuspension = () => {
                 >
                     <div class="flex items-center justify-between mb-6">
                         <h2 class="text-xl font-bold flex items-center gap-2">
-                            <i class="pi pi-user text-primary"></i>
+                            <i class="pi pi-user "></i>
                             معلومات الحساب
                         </h2>
                     </div>
@@ -342,7 +342,7 @@ const confirmSuspension = () => {
                 >
                     <div class="flex items-center justify-between mb-6">
                         <h2 class="text-xl font-bold flex items-center gap-2">
-                            <i class="pi pi-shield text-primary"></i>
+                            <i class="pi pi-shield "></i>
                             إدارة الحساب
                         </h2>
                     </div>

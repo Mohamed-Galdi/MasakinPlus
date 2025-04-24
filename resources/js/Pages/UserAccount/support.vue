@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
-import OwnerLayout from "@/Layouts/OwnerLayout.vue";
+import UserLayout from "@/Layouts/UserLayout.vue";
 import { Link, router } from "@inertiajs/vue3";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
@@ -20,7 +20,7 @@ import TabPanel from "primevue/tabpanel";
 import Divider from "primevue/divider";
 
 defineOptions({
-    layout: OwnerLayout,
+    layout: UserLayout,
 });
 
 const props = defineProps({

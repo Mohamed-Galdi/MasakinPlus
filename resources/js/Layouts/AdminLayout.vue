@@ -34,6 +34,11 @@ const navigationItems = [
         icon: "pi-users",
     },
     {
+        title: "الدعم",
+        path: route("admin.support.index"),
+        icon: "pi-comments",
+    },
+    {
         title: "العقارات",
         path: route("admin.properties"),
         icon: "pi-home",

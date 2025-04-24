@@ -123,3 +123,11 @@ border-color: #0d675b !important;
     padding: 8px 20px !important ;
     margin: 0px 8px !important;
 }
+
+.p-drawer-mask {
+    justify-content: end !important;
+}
+
+.p-drawer-content{
+    padding: 0px !important;
+}
