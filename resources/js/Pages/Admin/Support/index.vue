@@ -1,7 +1,8 @@
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, watch, nextTick } from "vue";
 import AdminLayout from "@/Layouts/AdminLayout.vue";
-import { Link } from "@inertiajs/vue3";
+import { Link, router } from "@inertiajs/vue3";
+import { debounce } from "lodash";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import Button from "primevue/button";
@@ -13,7 +14,12 @@ import Drawer from "primevue/drawer";
 import Textarea from "primevue/textarea";
 import Tooltip from "primevue/tooltip";
 import Badge from "primevue/badge";
-import Divider from "primevue/divider";
+import { useTextHelpers } from "@/plugins/textHelpers";
+import FloatLabel from "primevue/floatlabel";
+import { useForm } from "@inertiajs/vue3";
+import { useToast } from "primevue/usetoast";
+import Toast from "primevue/toast";
+import MultiSelect from "primevue/multiselect";
 
 defineOptions({
     layout: AdminLayout,
@@ -24,15 +30,61 @@ const props = defineProps({
         type: Object,
         default: () => [],
     },
+    users: {
+        type: Array,
+        default: () => [],
+    },
+    usersTypes: {
+        type: Array,
+        required: true,
+    },
+    search: {
+        type: String,
+        required: false,
+        default: "",
+    },
+    userType: {
+        type: String,
+        required: false,
+        default: "",
+    },
 });
 
+const toast = useToast();
+
 const tickets = ref(props.tickets);
+const UsersTypes = ref(props.usersTypes);
 
-// Selected ticket and reply
-const selectedTicket = ref(null);
-const showTicketDrawer = ref(false);
-const replyContent = ref("");
+// ########################################################################################## search and filter
+const textHelpers = useTextHelpers();
+const search = ref(props.search);
+const userType = ref(props.userType);
 
+watch(
+    [search, userType],
+    debounce(([search, userType]) => {
+        // Update the table with both filters
+        router.get(
+            route("admin.support.index"),
+            {
+                search: search,
+                userType: userType,
+            },
+            {
+                preserveState: true,
+                preserveScroll: true,
+            }
+        );
+    }, 500)
+);
+
+// Reset filters
+const resetFilters = () => {
+    search.value = "";
+    userType.value = "";
+};
+
+// ########################################################################################## utils
 // Format date
 const formatDate = (dateString) => {
     if (!dateString) return "";
@@ -57,21 +109,7 @@ const formatDateOnly = (dateString) => {
     }).format(date);
 };
 
-// Get status label and severity
-const getStatusInfo = (status) => {
-    switch (status) {
-        case "open":
-            return { label: "مفتوح", severity: "warning" };
-        case "in_progress":
-            return { label: "قيد المعالجة", severity: "info" };
-        case "closed":
-            return { label: "مغلق", severity: "success" };
-        default:
-            return { label: status, severity: "secondary" };
-    }
-};
-
-// Get user type in Arabic
+// User Type
 const getUserTypeArabic = (type) => {
     switch (type) {
         case "owner":
@@ -97,50 +135,304 @@ const getTypeSeverity = (type) => {
     }
 };
 
-// Open ticket drawer
-const openTicket = (ticket) => {
-    selectedTicket.value = ticket;
-    showTicketDrawer.value = true;
-    replyContent.value = "";
-    // ########################################### Here you would mark admin messages as read
-};
-
-// Send reply
-const sendReply = () => {
-    // ############################################ Here you would send the reply to your backend
-};
-
-// Get first message content (for description in table)
-const getFirstMessageContent = (ticket) => {
+// Get last message content (for description in table)
+const getLastMessageContent = (ticket) => {
     return ticket.messages && ticket.messages.length > 0
-        ? ticket.messages[0].content
+        ? ticket.messages[ticket.messages.length - 1].content
         : "";
 };
 
-// Group messages by date
-const groupMessagesByDate = (messages) => {
-    const groups = {};
+// ########################################################################################## Create ticket
+const showNewTicketDrawer = ref(false);
+const ticketForm = useForm({
+    subject: "",
+    content: "",
+    users_id: [],
+});
 
-    messages.forEach((message) => {
-        const date = new Date(message.created_at);
-        const dateKey = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
-
-        if (!groups[dateKey]) {
-            groups[dateKey] = {
-                date: date,
-                messages: [],
-            };
-        }
-
-        groups[dateKey].messages.push(message);
+const sendTicket = () => {
+    ticketForm.post(route("admin.support.create"), {
+        preserveState: false,
+        onSuccess: () => {
+            toast.add({
+                severity: "success",
+                summary: "نجاح",
+                detail: "تم إنشاء تذكرة جديدة بنجاح",
+                life: 3000,
+            });
+            showNewTicketDrawer.value = false;
+            ticketForm.reset();
+        },
+        onError: () => {
+            const errorMessage = Object.values(ticketForm.errors)[0];
+            toast.add({
+                severity: "error",
+                summary: "خطأ",
+                detail: errorMessage,
+                life: 3000,
+            });
+        },
     });
+};
 
-    return Object.values(groups).sort((a, b) => a.date - b.date);
+// ########################################################################################## Reply ticket
+const selectedTicket = ref(null);
+const showReplyDrawer = ref(false);
+const messages = ref([]);
+const messagesContainer = ref(null);
+const scrollAnchor = ref(null);
+
+const replyForm = useForm({
+    content: "",
+});
+
+const openTicket = (ticket) => {
+    selectedTicket.value = ticket;
+    messages.value = ticket.messages;
+    showReplyDrawer.value = true; // Open drawer
+
+    // resetUnreadCount
+    router.post(
+        route("admin.support.resetUnreadCount", { ticketId: ticket.id }),
+        {},
+        {
+            preserveState: true, // Prevent page reload
+            onSuccess: () => {
+                selectedTicket.value.admin_unread_count = 0; // Update UI
+            },
+        }
+    );
+};
+
+watch(
+    () => messages,
+    () => {
+        nextTick(() => {
+            scrollAnchor.value.scrollIntoView({ behavior: "smooth" });
+        });
+    },
+    { deep: true }
+);
+
+// Send reply
+const sendReply = () => {
+    replyForm.post(
+        route("admin.support.reply", { ticketId: selectedTicket.value.id }),
+        {
+            onSuccess: () => {
+                toast.add({
+                    severity: "success",
+                    summary: "نجاح",
+                    detail: "تم إرسال الرد بنجاح",
+                    life: 3000,
+                });
+
+                // Manually add the reply
+                messages.value.push({
+                    id: Date.now(), // Temporary ID until refresh
+                    ticket_id: selectedTicket.value.id,
+                    sender: "admin",
+                    content: replyForm.content,
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString(),
+                });
+                replyForm.reset(); // Clear reply form
+            },
+            onError: () => {
+                const errorMessage = Object.values(replyForm.errors)[0];
+                toast.add({
+                    severity: "error",
+                    summary: "خطأ",
+                    detail: errorMessage,
+                    life: 3000,
+                });
+            },
+        }
+    );
 };
 </script>
 
 <template>
-    <div class="support-page">
+    <div>
+        <Toast position="top-center" />
+        <!-- New Ticket Drawer -->
+        <Drawer
+            v-model:visible="showNewTicketDrawer"
+            :style="{ width: '50vw', direction: 'rtl' }"
+            position="left"
+            :dismissable="true"
+            :showCloseIcon="true"
+            class="new-ticket-drawer"
+        >
+            <template #header>
+                <div class="flex justify-center items-center gap-2">
+                    <i
+                        class="pi pi-ticket text-teal-800"
+                        style="font-size: 1.5rem"
+                    ></i>
+                    <h1 class="text-2xl font-bold m-0 text-teal-800 font-Bein">
+                        إنشاء تذكرة جديدة
+                    </h1>
+                </div>
+            </template>
+            <div class="p-8 h-full">
+                <form
+                    action=""
+                    class="flex flex-col gap-6 h-full"
+                    @submit.prevent="sendTicket"
+                >
+                    <!-- Users Selection -->
+                    <div class="form-group">
+                        <MultiSelect
+                            filter
+                            emptyFilterMessage="لم يتم العثور على أي مستخدم"
+                            v-model="ticketForm.users_id"
+                            :options="users"
+                            optionLabel="name"
+                            optionValue="id"
+                            placeholder="اختر المستخدمين"
+                            class="w-full shadow-sm border-gray-200 rounded-lg transition-all duration-200 hover:border-primary/50"
+                        />
+                    </div>
+
+                    <!-- Subject Field -->
+                    <div class="form-group">
+                        <FloatLabel variant="on" class="w-full">
+                            <InputText
+                                id="subject"
+                                v-model="ticketForm.subject"
+                                class="w-full shadow-sm border-gray-200 rounded-lg p-3 transition-all duration-200 hover:border-primary/50"
+                            />
+                            <label for="subject" class="text-gray-600"
+                                >الموضوع</label
+                            >
+                        </FloatLabel>
+                    </div>
+
+                    <!-- Message Content -->
+                    <div class="form-group flex-1">
+                        <FloatLabel variant="on" class="w-full h-full">
+                            <Textarea
+                                class="w-full h-full shadow-sm border-gray-200 rounded-lg p-3 transition-all duration-200 hover:border-primary/50"
+                                id="message"
+                                v-model="ticketForm.content"
+                                rows="8"
+                                style="resize: none"
+                            />
+                            <label for="message" class="text-gray-600"
+                                >محتوى التذكرة</label
+                            >
+                        </FloatLabel>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <Button
+                        label="إرسال التذكرة"
+                        icon="pi pi-send"
+                        class="w-full mt-4 p-button-lg bg-primary hover:bg-primary-dark transition-colors duration-200"
+                        :loading="ticketForm.processing"
+                        type="submit"
+                    />
+                </form>
+            </div>
+        </Drawer>
+
+        <!-- Reply Drawer -->
+        <Drawer
+            v-model:visible="showReplyDrawer"
+            :style="{ width: '50vw', direction: 'rtl' }"
+            position="left"
+            :dismissable="true"
+            :showCloseIcon="true"
+            class="reply-ticket-drawer"
+        >
+            <template #header>
+                <div class="flex justify-center items-center gap-2">
+                    <i
+                        class="pi pi-comments text-teal-800"
+                        style="font-size: 1.5rem"
+                    ></i>
+                    <h1 class="text-2xl font-bold m-0 text-teal-800 font-Bein">
+                        الرد على التذكرة
+                    </h1>
+                </div>
+            </template>
+            <div class="p-8 h-full flex flex-col">
+                <!-- Messages Area -->
+                <div
+                    class="flex-1 bg-white rounded-xl shadow-sm p-6 border border-gray-100 overflow-y-auto"
+                    ref="messagesContainer"
+                >
+                    <div class="flex flex-col gap-4">
+                        <div
+                            v-for="message in messages"
+                            :key="message.id"
+                            :class="[
+                                'p-4 rounded-lg max-w-[75%] animate-fade-in',
+                                message.sender === 'admin'
+                                    ? 'bg-sky-100 text-teal-900 self-start'
+                                    : 'bg-gray-100 text-gray-900 self-end',
+                            ]"
+                        >
+                            <p class="text-sm font-medium mb-1">
+                                {{
+                                    message.sender === "admin"
+                                        ? "الإدارة"
+                                        : selectedTicket.user.name
+                                }}
+                            </p>
+                            <p class="text-sm mb-2">
+                                {{ message.content }}
+                            </p>
+                            <span class="text-xs text-gray-500">
+                                {{
+                                    new Date(message.created_at).toLocaleString(
+                                        "ar-SA",
+                                        {
+                                            dateStyle: "short",
+                                            timeStyle: "short",
+                                        }
+                                    )
+                                }}
+                            </span>
+                        </div>
+                        <!-- Dummy div to scroll to -->
+                        <div ref="scrollAnchor"></div>
+                    </div>
+                </div>
+
+                <!-- Reply Form -->
+                <form
+                    action=""
+                    class="mt-6 flex flex-col gap-4"
+                    @submit.prevent="sendReply"
+                >
+                    <div class="form-group">
+                        <FloatLabel variant="on" class="w-full">
+                            <Textarea
+                                class="w-full shadow-sm border-gray-200 rounded-lg p-3 transition-all duration-200 hover:border-teal-500/50"
+                                id="reply"
+                                v-model="replyForm.content"
+                                rows="4"
+                                style="resize: none"
+                            />
+                            <label for="reply" class="text-gray-600"
+                                >اكتب ردك</label
+                            >
+                        </FloatLabel>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <Button
+                        label="إرسال الرد"
+                        icon="pi pi-send"
+                        :loading="replyForm.processing"
+                        type="submit"
+                    />
+                </form>
+            </div>
+        </Drawer>
+
         <!-- Header Section -->
         <div class="flex items-center justify-between mb-6">
             <div class="flex items-center gap-3">
@@ -158,13 +450,13 @@ const groupMessagesByDate = (messages) => {
                 </div>
             </div>
             <div>
-                <Link
-                    :href="route('admin.support.index')"
+                <button
+                    @click="showNewTicketDrawer = !showNewTicketDrawer"
                     class="btn bg-teal-600 hover:bg-teal-700 text-white"
                 >
                     <p>إنشاء تذكرة</p>
                     <i class="pi pi-plus"></i>
-                </Link>
+                </button>
             </div>
         </div>
 
@@ -178,7 +470,7 @@ const groupMessagesByDate = (messages) => {
                     <InputText
                         v-model="search"
                         class="w-full rounded-lg border-gray-200"
-                        placeholder="البحث عن رسالة ..."
+                        placeholder="البحث عن تذكرة أو مستخدم ..."
                     />
                 </div>
                 <!-- Filters -->
@@ -205,7 +497,10 @@ const groupMessagesByDate = (messages) => {
         </div>
 
         <!-- Empty State -->
-        <div v-if="tickets.length === 0" class="p-8 text-center bg-white rounded-xl">
+        <div
+            v-if="props.tickets.data.length === 0"
+            class="p-8 text-center bg-white rounded-xl"
+        >
             <div
                 class="empty-state-icon bg-gray-50 inline-flex items-center justify-center w-20 h-20 rounded-full mb-4"
             >
@@ -231,10 +526,10 @@ const groupMessagesByDate = (messages) => {
         <!-- Tickets Table -->
         <div
             v-else
-            class=" rounded-xl overflow-hidden flex flex-col justify-between min-h-[75vh]"
+            class="rounded-xl overflow-hidden flex flex-col justify-between min-h-[75vh]"
         >
             <DataTable
-                :value="tickets.data"
+                :value="props.tickets.data"
                 stripedRows
                 showGridlines
                 tableStyle="min-width: 50rem"
@@ -253,13 +548,19 @@ const groupMessagesByDate = (messages) => {
                     <template #body="slotProps">
                         <div class="flex items-center gap-2">
                             <div class="flex-1">
-                                <div class="font-medium">
-                                    {{ slotProps.data.subject }}
-                                </div>
+                                <div
+                                    class="font-medium"
+                                    v-html="
+                                        textHelpers.highlightText(
+                                            slotProps.data.subject,
+                                            search
+                                        )
+                                    "
+                                ></div>
                                 <div
                                     class="text-sm text-gray-500 truncate max-w-md"
                                 >
-                                    {{ getFirstMessageContent(slotProps.data) }}
+                                    {{ getLastMessageContent(slotProps.data) }}
                                 </div>
                             </div>
                             <div
@@ -284,9 +585,15 @@ const groupMessagesByDate = (messages) => {
                                 shape="circle"
                             />
                             <div>
-                                <div class="font-medium">
-                                    {{ slotProps.data.user.name }}
-                                </div>
+                                <div
+                                    class="font-medium"
+                                    v-html="
+                                        textHelpers.highlightText(
+                                            slotProps.data.user.name,
+                                            search
+                                        )
+                                    "
+                                ></div>
                                 <div class="text-sm text-gray-500">
                                     {{ slotProps.data.user.email }}
                                 </div>
@@ -303,7 +610,9 @@ const groupMessagesByDate = (messages) => {
                     <template #body="slotProps">
                         <Tag
                             :value="getUserTypeArabic(slotProps.data.user.type)"
-                            :severity="getTypeSeverity(slotProps.data.user.type)"
+                            :severity="
+                                getTypeSeverity(slotProps.data.user.type)
+                            "
                         />
                     </template>
                 </Column>
@@ -333,11 +642,10 @@ const groupMessagesByDate = (messages) => {
                         </div>
                     </template>
                 </Column>
-
             </DataTable>
             <!-- Pagination -->
             <div
-                v-if="1"
+                v-if="props.tickets.data.length > 0"
                 dir="ltr"
                 class="my-8 flex md:flex-row flex-col md:gap-0 gap-2 justify-between items-center w-full"
             >
@@ -345,19 +653,19 @@ const groupMessagesByDate = (messages) => {
                     <p class="text-base text-slate-600 rtl:text-right">
                         عرض
                         <span class="text-teal-600 font-bold text-lg">{{
-                            tickets.from
+                            props.tickets.from
                         }}</span>
                         إلى
                         <span class="text-teal-600 font-bold text-lg">{{
-                            tickets.to
+                            props.tickets.to
                         }}</span>
-                        من أصل {{ tickets.total }} مستخدم
+                        من أصل {{ props.tickets.total }} مستخدم
                     </p>
                 </div>
                 <nav class="order-first md:order-last">
                     <div class="flex items-center -space-x-px h-8 text-sm">
                         <template
-                            v-for="(link, index) in tickets.links"
+                            v-for="(link, index) in props.tickets.links"
                             :key="link.url"
                         >
                             <Link
@@ -373,7 +681,7 @@ const groupMessagesByDate = (messages) => {
                                         link.active,
                                     'rounded-l-lg': index === 0,
                                     'rounded-r-lg':
-                                        index === tickets.links.length - 1,
+                                        index === props.tickets.links.length - 1,
                                 }"
                             />
                             <p
@@ -383,7 +691,7 @@ const groupMessagesByDate = (messages) => {
                                 :class="{
                                     'rounded-l-lg': index === 0,
                                     'rounded-r-lg':
-                                        index === tickets.links.length - 1,
+                                        index === props.tickets.links.length - 1,
                                 }"
                             />
                         </template>
@@ -391,224 +699,5 @@ const groupMessagesByDate = (messages) => {
                 </nav>
             </div>
         </div>
-
-        <!-- Ticket Drawer -->
-        <Drawer
-            v-model:visible="showTicketDrawer"
-            :style="{ width: '50vw' }"
-            position="left"
-            :dismissable="true"
-            :showCloseIcon="true"
-        >
-            <template v-if="selectedTicket">
-                <!-- Ticket Header -->
-                <div
-                    class="ticket-header p-4 border-b border-gray-200 sticky top-0 bg-white z-10"
-                >
-                    <div class="flex items-center justify-between mb-2">
-                        <h2
-                            class="text-xl font-bold m-0 flex items-center gap-2"
-                        >
-                            <span class="">#{{ selectedTicket.id }}</span>
-                            {{ selectedTicket.subject }}
-                        </h2>
-                        <Tag
-                            :value="getStatusInfo(selectedTicket.status).label"
-                            :severity="
-                                getStatusInfo(selectedTicket.status).severity
-                            "
-                        />
-                    </div>
-
-                    <div class="flex items-center gap-3 mt-4">
-                        <Avatar
-                            :image="selectedTicket.user.image"
-                            size="large"
-                            shape="circle"
-                        />
-                        <div>
-                            <div class="flex items-center gap-2">
-                                <h3 class="text-lg font-semibold m-0">
-                                    {{ selectedTicket.user.name }}
-                                </h3>
-                                <Tag
-                                    :value="
-                                        getUserTypeArabic(
-                                            selectedTicket.user.type
-                                        )
-                                    "
-                                    severity="secondary"
-                                    class="text-xs"
-                                />
-                            </div>
-                            <p class="text-sm text-gray-500 m-0">
-                                {{ selectedTicket.user.email }}
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Ticket Content -->
-                <div class="ticket-content p-4">
-                    <!-- Messages -->
-                    <div class="messages-container mb-4">
-                        <div
-                            v-for="(group, index) in groupMessagesByDate(
-                                selectedTicket.messages
-                            )"
-                            :key="index"
-                            class="message-group mb-6"
-                        >
-                            <!-- Date Header -->
-                            <div class="date-header flex justify-center mb-4">
-                                <div
-                                    class="bg-gray-100 text-gray-600 text-sm py-1 px-3 rounded-full"
-                                >
-                                    {{ formatDateOnly(group.date) }}
-                                </div>
-                            </div>
-
-                            <!-- Messages for this date -->
-                            <div
-                                v-for="message in group.messages"
-                                :key="message.id"
-                                class="message mb-4 last:mb-0"
-                            >
-                                <!-- System Message -->
-                                <div
-                                    v-if="message.sender === 'system'"
-                                    class="flex justify-center my-4"
-                                >
-                                    <div
-                                        class="bg-gray-100 text-gray-600 text-sm py-1 px-4 rounded-full flex items-center gap-2"
-                                    >
-                                        <i class="pi pi-info-circle"></i>
-                                        {{ message.content }}
-                                    </div>
-                                </div>
-
-                                <!-- User Message -->
-                                <div
-                                    v-else-if="message.sender === 'user'"
-                                    class="flex gap-3 max-w-[80%]"
-                                >
-                                    <Avatar
-                                        :image="selectedTicket.user.image"
-                                        size="normal"
-                                        shape="circle"
-                                    />
-                                    <div class="flex-1">
-                                        <div class="flex items-center gap-2">
-                                            <span class="font-medium">{{
-                                                selectedTicket.user.name
-                                            }}</span>
-                                            <span
-                                                class="text-xs text-gray-500"
-                                                >{{
-                                                    formatDate(
-                                                        message.created_at
-                                                    )
-                                                }}</span
-                                            >
-                                        </div>
-                                        <div
-                                            class="mt-1 p-3 bg-gray-100 rounded-lg rounded-tr-none"
-                                        >
-                                            {{ message.content }}
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Admin Message -->
-                                <div
-                                    v-else
-                                    class="flex flex-row-reverse gap-3 max-w-[80%] mr-auto"
-                                >
-                                    <Avatar
-                                        image="/storage/users_images/default-user-image.webp"
-                                        size="normal"
-                                        shape="circle"
-                                    />
-                                    <div class="flex-1">
-                                        <div
-                                            class="flex items-center justify-end gap-2"
-                                        >
-                                            <span
-                                                class="text-xs text-gray-500"
-                                                >{{
-                                                    formatDate(
-                                                        message.created_at
-                                                    )
-                                                }}</span
-                                            >
-                                            <span class="font-medium"
-                                                >المشرف</span
-                                            >
-                                        </div>
-                                        <div
-                                            class="mt-1 p-3 rounded-lg rounded-tl-none"
-                                        >
-                                            {{ message.content }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Reply Form -->
-                <div
-                    class="reply-form p-4 border-t border-gray-200 sticky bottom-0 bg-slate-100 -mt-8"
-                >
-                    <div v-if="selectedTicket.status !== 'closed'">
-                        <Textarea
-                            v-model="replyContent"
-                            rows="3"
-                            class="w-full mb-3"
-                            placeholder="اكتب ردك هنا..."
-                            autoResize
-                        />
-                        <div class="flex justify-between">
-                            <Button
-                                label="إغلاق التذكرة"
-                                icon="pi pi-check-circle"
-                                severity="success"
-                                outlined
-                                @click="closeTicket"
-                            />
-                            <Button
-                                label="إرسال الرد"
-                                icon="pi pi-send"
-                                @click="sendReply"
-                                :disabled="!replyContent.trim()"
-                            />
-                        </div>
-                    </div>
-
-                    <!-- Closed Ticket Actions -->
-                    <div v-else class="closed-ticket-actions">
-                        <div
-                            class="bg-gray-50 border border-gray-200 rounded-lg p-4 flex items-center justify-between"
-                        >
-                            <div class="flex items-center gap-2">
-                                <i
-                                    class="pi pi-check-circle text-green-500"
-                                ></i>
-                                <span class="font-medium"
-                                    >تم إغلاق هذه التذكرة</span
-                                >
-                            </div>
-                            <Button
-                                label="إعادة فتح التذكرة"
-                                icon="pi pi-refresh"
-                                outlined
-                                @click="reopenTicket"
-                            />
-                        </div>
-                    </div>
-                </div>
-            </template>
-        </Drawer>
     </div>
 </template>

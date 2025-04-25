@@ -174,11 +174,9 @@ function editUser(id) {
                         class="md:w-60 w-full rounded-lg"
                     />
                     <Button
-                        v-tooltip.top="'إعادة ضبط الفلتر'"
                         icon="pi pi-filter-slash"
                         outlined
                         severity="secondary"
-                        aria-label="إعادة ضبط الفلتر"
                         class="p-button-rounded w-44"
                         @click="resetFilters"
                     />

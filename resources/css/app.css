@@ -131,3 +131,9 @@ border-color: #0d675b !important;
 .p-drawer-content{
     padding: 0px !important;
 }
+
+.p-multiselect-label{
+    text-align: right;
+        width: 100%;
+        font-family: BeinNormal;
+}

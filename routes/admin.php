@@ -25,6 +25,9 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     // Support
     Route::prefix('support')->name('admin.support.')->controller(SupportController::class)->group(function () {
         Route::get('/', 'index')->name('index');
+        Route::post('/create', 'create')->name('create');
+        Route::post('/reply/{ticketId}', 'reply')->name('reply');
+        Route::post('/resetUnreadCount/{ticketId}', 'resetUnreadCount')->name('resetUnreadCount');
        
     });
 
