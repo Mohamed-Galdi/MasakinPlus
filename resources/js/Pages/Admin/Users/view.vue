@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from "vue";
 import AdminLayout from "@/Layouts/AdminLayout.vue";
-import { Link, router } from "@inertiajs/vue3";
+import { Link, router, useForm } from "@inertiajs/vue3";
 import { useToast } from "primevue/usetoast";
 import Toast from "primevue/toast";
 import Avatar from "primevue/avatar";
@@ -11,6 +11,10 @@ import Dialog from "primevue/dialog";
 import ConfirmDialog from "primevue/confirmdialog";
 import { useConfirm } from "primevue/useconfirm";
 import Tooltip from "primevue/tooltip";
+import Drawer from "primevue/drawer";
+import InputText from "primevue/inputtext";
+import Textarea from "primevue/textarea";
+import FloatLabel from "primevue/floatlabel";
 
 defineOptions({
     layout: AdminLayout,
@@ -137,23 +141,178 @@ const confirmSuspension = () => {
         }
     );
 };
+
+// ########################################################################################## Create ticket
+const showNewTicketDrawer = ref(false);
+const ticketForm = useForm({
+    subject: "",
+    content: "",
+    users_id: [props.user.id],
+});
+
+const sendTicket = () => {
+    ticketForm.post(route("admin.support.create"), {
+        preserveState: false,
+        onSuccess: () => {
+            toast.add({
+                severity: "success",
+                summary: "نجاح",
+                detail: "تم إنشاء تذكرة جديدة بنجاح",
+                life: 3000,
+            });
+            showNewTicketDrawer.value = false;
+            ticketForm.reset();
+        },
+        onError: () => {
+            const errorMessage = Object.values(ticketForm.errors)[0];
+            toast.add({
+                severity: "error",
+                summary: "خطأ",
+                detail: errorMessage,
+                life: 3000,
+            });
+        },
+    });
+};
 </script>
 
 <template>
     <div>
         <Toast position="top-center" />
+
+        <!-- New Ticket Drawer -->
+        <Drawer
+            v-model:visible="showNewTicketDrawer"
+            :style="{ width: isMobile ? '100%' : '50vw' }"
+        >
+            <template #header>
+                <div class="flex justify-center items-center gap-2">
+                    <i
+                        class="pi pi-ticket text-teal-800"
+                        style="font-size: 1.5rem"
+                    ></i>
+                    <h1 class="text-2xl font-bold m-0 text-teal-800 font-Bein">
+                        إنشاء تذكرة جديدة
+                    </h1>
+                </div>
+            </template>
+            <div class="p-8 h-full">
+                <form
+                    class="flex flex-col gap-6 h-full"
+                    @submit.prevent="sendTicket"
+                >
+                    <!-- Subject Field -->
+                    <div>
+                        <FloatLabel variant="on" class="w-full">
+                            <InputText
+                                id="subject"
+                                v-model="ticketForm.subject"
+                                class="w-full"
+                            />
+                            <label for="subject" class="text-gray-600"
+                                >الموضوع</label
+                            >
+                        </FloatLabel>
+                    </div>
+
+                    <!-- Message Content -->
+                    <div class="form-group flex-1">
+                        <FloatLabel variant="on" class="w-full h-full">
+                            <Textarea
+                                class="w-full h-full"
+                                id="message"
+                                v-model="ticketForm.content"
+                                rows="8"
+                                style="resize: none"
+                            />
+                            <label for="message" class="text-gray-600"
+                                >محتوى التذكرة</label
+                            >
+                        </FloatLabel>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <Button
+                        label="إرسال التذكرة"
+                        icon="pi pi-send"
+                        :loading="ticketForm.processing"
+                        type="submit"
+                    />
+                </form>
+            </div>
+        </Drawer>
+
         <ConfirmDialog />
+
+        <!-- Suspension Dialog -->
+        <Dialog
+            v-model:visible="showSuspendDialog"
+            modal
+            :header="'تعليق حساب ' + user.name"
+            :style="{ width: '450px' }"
+            :closable="true"
+            class="rtl-dialog"
+        >
+            <div class="flex flex-col gap-4 p-3">
+                <div
+                    class="flex items-center gap-3 bg-yellow-50 text-yellow-800 p-4 rounded-lg"
+                >
+                    <i
+                        class="pi pi-exclamation-triangle text-yellow-500 text-xl"
+                    ></i>
+                    <p class="m-0">
+                        سيتم منع المستخدم من الوصول إلى حسابه حتى يتم إعادة
+                        تنشيطه.
+                    </p>
+                </div>
+
+                <div class="flex flex-col gap-2">
+                    <label for="suspensionReason" class="font-medium"
+                        >سبب التعليق</label
+                    >
+                    <textarea
+                        id="suspensionReason"
+                        v-model="suspensionReason"
+                        rows="3"
+                        class="w-full p-3 border border-gray-300 rounded-lg"
+                        placeholder="أدخل سبب تعليق الحساب..."
+                    ></textarea>
+                </div>
+            </div>
+
+            <template #footer>
+                <div class="flex justify-end gap-2">
+                    <Button
+                        label="إلغاء"
+                        icon="pi pi-times"
+                        outlined
+                        @click="
+                            showSuspendDialog = false;
+                            isUserActive = true;
+                        "
+                    />
+                    <Button
+                        label="تأكيد التعليق"
+                        icon="pi pi-check"
+                        severity="danger"
+                        @click="confirmSuspension"
+                    />
+                </div>
+            </template>
+        </Dialog>
 
         <!-- Header with Back Button -->
         <div class="flex items-center justify-between mb-6">
-            <Link v-if="isUserActive"
+            <Link
+                v-if="isUserActive"
                 :href="route('admin.users.index')"
                 class="flex items-center gap-2 text-gray-600 transition-colors"
             >
                 <i class="pi pi-arrow-right"></i>
                 <span>العودة إلى قائمة المستخدمين</span>
             </Link>
-            <Link v-else
+            <Link
+                v-else
                 :href="route('admin.users.suspended')"
                 class="flex items-center gap-2 text-gray-600 transition-colors"
             >
@@ -211,6 +370,10 @@ const confirmSuspension = () => {
                             />
 
                             <Button
+                                v-if="isUserActive"
+                                @click="
+                                    showNewTicketDrawer = !showNewTicketDrawer
+                                "
                                 label="إرسال رسالة  "
                                 icon="pi pi-envelope"
                                 outlined
@@ -274,7 +437,7 @@ const confirmSuspension = () => {
                 >
                     <div class="flex items-center justify-between mb-6">
                         <h2 class="text-xl font-bold flex items-center gap-2">
-                            <i class="pi pi-user "></i>
+                            <i class="pi pi-user"></i>
                             معلومات الحساب
                         </h2>
                     </div>
@@ -342,7 +505,7 @@ const confirmSuspension = () => {
                 >
                     <div class="flex items-center justify-between mb-6">
                         <h2 class="text-xl font-bold flex items-center gap-2">
-                            <i class="pi pi-shield "></i>
+                            <i class="pi pi-shield"></i>
                             إدارة الحساب
                         </h2>
                     </div>
@@ -384,7 +547,6 @@ const confirmSuspension = () => {
                                         }}
                                     </p>
                                 </div>
-                                
                             </div>
 
                             <div
@@ -422,13 +584,10 @@ const confirmSuspension = () => {
                                             تاريخ التعليق
                                         </h4>
                                         <p class="text-sm text-red-600 m-0">
-                                            {{
-                                                formatDate(user.suspended_at)
-                                            }}
+                                            {{ formatDate(user.suspended_at) }}
                                         </p>
                                     </div>
                                 </div>
-                                
                             </div>
                         </div>
 
@@ -460,62 +619,5 @@ const confirmSuspension = () => {
                 </div>
             </div>
         </div>
-
-        <!-- Suspension Dialog -->
-        <Dialog
-            v-model:visible="showSuspendDialog"
-            modal
-            :header="'تعليق حساب ' + user.name"
-            :style="{ width: '450px' }"
-            :closable="true"
-            class="rtl-dialog"
-        >
-            <div class="flex flex-col gap-4 p-3">
-                <div
-                    class="flex items-center gap-3 bg-yellow-50 text-yellow-800 p-4 rounded-lg"
-                >
-                    <i
-                        class="pi pi-exclamation-triangle text-yellow-500 text-xl"
-                    ></i>
-                    <p class="m-0">
-                        سيتم منع المستخدم من الوصول إلى حسابه حتى يتم إعادة
-                        تنشيطه.
-                    </p>
-                </div>
-
-                <div class="flex flex-col gap-2">
-                    <label for="suspensionReason" class="font-medium"
-                        >سبب التعليق</label
-                    >
-                    <textarea
-                        id="suspensionReason"
-                        v-model="suspensionReason"
-                        rows="3"
-                        class="w-full p-3 border border-gray-300 rounded-lg"
-                        placeholder="أدخل سبب تعليق الحساب..."
-                    ></textarea>
-                </div>
-            </div>
-
-            <template #footer>
-                <div class="flex justify-end gap-2">
-                    <Button
-                        label="إلغاء"
-                        icon="pi pi-times"
-                        outlined
-                        @click="
-                            showSuspendDialog = false;
-                            isUserActive = true;
-                        "
-                    />
-                    <Button
-                        label="تأكيد التعليق"
-                        icon="pi pi-check"
-                        severity="danger"
-                        @click="confirmSuspension"
-                    />
-                </div>
-            </template>
-        </Dialog>
     </div>
 </template>
