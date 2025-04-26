@@ -16,7 +16,7 @@ import {
     faHeadset,
     faChartPie,
     faBuilding,
-    faFileContract
+    faFileContract,
 
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -40,7 +40,7 @@ library.add(
     faHeadset,
     faChartPie,
     faBuilding,
-    faFileContract
+    faFileContract,
 );
 
 export { FontAwesomeIcon };

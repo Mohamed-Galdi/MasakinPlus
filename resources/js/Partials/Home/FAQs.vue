@@ -56,7 +56,7 @@ const getContentHeight = (index) => {
 </script>
 
 <template>
-    <section class="bg-gray-50 py-16" dir="rtl">
+    <section id="faq" class="bg-gray-50 py-16" dir="rtl">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Section Title -->
             <h2

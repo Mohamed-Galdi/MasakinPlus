@@ -13,7 +13,7 @@ class UserAccountController extends Controller
     public function index()
     {
         $user = auth()->user();
-        return inertia('UserAccount/Index', compact('user'));
+        return inertia('Common/account', compact('user'));
     }
     public function changeImage(Request $request)
     {

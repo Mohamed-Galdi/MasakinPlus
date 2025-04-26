@@ -20,6 +20,11 @@ const navigationItems = ref([
         href: route("owner.properties.index"),
         icon: "fa-solid fa-building",
     },
+    {
+        name: "الدعم",
+        href: route("support.index"),
+        icon: "fa-solid fa-headset",
+    }
 ]);
 
 // Function to determine if a navigation item is active (from second component)
