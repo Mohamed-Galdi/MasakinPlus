@@ -2,9 +2,10 @@
 import { Link, router, usePage } from "@inertiajs/vue3";
 import { ref, computed } from "vue";
 
-const isSidebarCollapsed = ref(false);
+const isSidebarCollapsed = ref(localStorage.getItem('sidebarCollapsed') === 'true');
 const toggleSidebar = () => {
     isSidebarCollapsed.value = !isSidebarCollapsed.value;
+    localStorage.setItem('sidebarCollapsed', isSidebarCollapsed.value);
 };
 
 const navigationItems = [
@@ -98,7 +99,7 @@ const logout = () => {
         <!-- Sidebar -->
         <aside
             :class="[
-                'flex flex-col sidebar-bg sidebar-text transition-all duration-300 overflow-x-hidden fixed h-screen z-[9999]', // Changed h-full to h-screen, removed md:static and md:h-auto
+                'flex flex-col sidebar-bg sidebar-text transition-all duration-300 overflow-x-hidden fixed h-screen z-[999]', // Changed h-full to h-screen, removed md:static and md:h-auto
                 {
                     'w-0 md:w-[70px]': isSidebarCollapsed,
                     'w-[250px]': !isSidebarCollapsed,
@@ -119,7 +120,7 @@ const logout = () => {
                     </div>
                     <span
                         v-if="!isSidebarCollapsed"
-                        class=" text-lg whitespace-nowrap"
+                        class="text-lg whitespace-nowrap"
                         >لوحة المشرف</span
                     >
                 </Link>
@@ -353,7 +354,7 @@ const logout = () => {
 
         <!-- Mobile Navbar -->
         <nav
-            class="bg-slate-50 w-full h-14 py-2 px-4 fixed md:hidden shadow-md z-[9998]"
+            class="bg-slate-50 w-full h-14 py-2 px-4 fixed md:hidden shadow-md z-[998]"
         >
             <button
                 v-if="isSidebarCollapsed"

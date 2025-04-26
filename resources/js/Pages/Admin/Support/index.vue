@@ -12,7 +12,6 @@ import Tag from "primevue/tag";
 import Avatar from "primevue/avatar";
 import Drawer from "primevue/drawer";
 import Textarea from "primevue/textarea";
-import Tooltip from "primevue/tooltip";
 import Badge from "primevue/badge";
 import { useTextHelpers } from "@/plugins/textHelpers";
 import FloatLabel from "primevue/floatlabel";
@@ -55,6 +54,7 @@ const toast = useToast();
 const tickets = ref(props.tickets);
 const UsersTypes = ref(props.usersTypes);
 
+const isMobile = computed(() => window.innerWidth <= 768);
 // ########################################################################################## search and filter
 const textHelpers = useTextHelpers();
 const search = ref(props.search);
@@ -95,17 +95,6 @@ const formatDate = (dateString) => {
         day: "numeric",
         hour: "numeric",
         minute: "numeric",
-    }).format(date);
-};
-
-// Format date without time
-const formatDateOnly = (dateString) => {
-    if (!dateString) return "";
-    const date = new Date(dateString);
-    return new Intl.DateTimeFormat("ar-SA", {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
     }).format(date);
 };
 
@@ -258,11 +247,7 @@ const sendReply = () => {
         <!-- New Ticket Drawer -->
         <Drawer
             v-model:visible="showNewTicketDrawer"
-            :style="{ width: '50vw', direction: 'rtl' }"
-            position="left"
-            :dismissable="true"
-            :showCloseIcon="true"
-            class="new-ticket-drawer"
+            :style="{ width: isMobile ? '100%' : '50vw' }"
         >
             <template #header>
                 <div class="flex justify-center items-center gap-2">
@@ -277,12 +262,11 @@ const sendReply = () => {
             </template>
             <div class="p-8 h-full">
                 <form
-                    action=""
                     class="flex flex-col gap-6 h-full"
                     @submit.prevent="sendTicket"
                 >
                     <!-- Users Selection -->
-                    <div class="form-group">
+                    <div>
                         <MultiSelect
                             filter
                             emptyFilterMessage="لم يتم العثور على أي مستخدم"
@@ -291,17 +275,17 @@ const sendReply = () => {
                             optionLabel="name"
                             optionValue="id"
                             placeholder="اختر المستخدمين"
-                            class="w-full shadow-sm border-gray-200 rounded-lg transition-all duration-200 hover:border-primary/50"
+                            class="w-full"
                         />
                     </div>
 
                     <!-- Subject Field -->
-                    <div class="form-group">
+                    <div>
                         <FloatLabel variant="on" class="w-full">
                             <InputText
                                 id="subject"
                                 v-model="ticketForm.subject"
-                                class="w-full shadow-sm border-gray-200 rounded-lg p-3 transition-all duration-200 hover:border-primary/50"
+                                class="w-full"
                             />
                             <label for="subject" class="text-gray-600"
                                 >الموضوع</label
@@ -313,7 +297,7 @@ const sendReply = () => {
                     <div class="form-group flex-1">
                         <FloatLabel variant="on" class="w-full h-full">
                             <Textarea
-                                class="w-full h-full shadow-sm border-gray-200 rounded-lg p-3 transition-all duration-200 hover:border-primary/50"
+                                class="w-full h-full"
                                 id="message"
                                 v-model="ticketForm.content"
                                 rows="8"
@@ -329,7 +313,6 @@ const sendReply = () => {
                     <Button
                         label="إرسال التذكرة"
                         icon="pi pi-send"
-                        class="w-full mt-4 p-button-lg bg-primary hover:bg-primary-dark transition-colors duration-200"
                         :loading="ticketForm.processing"
                         type="submit"
                     />
@@ -340,11 +323,7 @@ const sendReply = () => {
         <!-- Reply Drawer -->
         <Drawer
             v-model:visible="showReplyDrawer"
-            :style="{ width: '50vw', direction: 'rtl' }"
-            position="left"
-            :dismissable="true"
-            :showCloseIcon="true"
-            class="reply-ticket-drawer"
+            :style="{ width: isMobile ? '100%' : '50vw' }"
         >
             <template #header>
                 <div class="flex justify-center items-center gap-2">
@@ -407,10 +386,10 @@ const sendReply = () => {
                     class="mt-6 flex flex-col gap-4"
                     @submit.prevent="sendReply"
                 >
-                    <div class="form-group">
+                    <div>
                         <FloatLabel variant="on" class="w-full">
                             <Textarea
-                                class="w-full shadow-sm border-gray-200 rounded-lg p-3 transition-all duration-200 hover:border-teal-500/50"
+                                class="w-full"
                                 id="reply"
                                 v-model="replyForm.content"
                                 rows="4"
@@ -528,6 +507,7 @@ const sendReply = () => {
             v-else
             class="rounded-xl overflow-hidden flex flex-col justify-between min-h-[75vh]"
         >
+            <!-- Tickets Table -->
             <DataTable
                 :value="props.tickets.data"
                 stripedRows
@@ -659,7 +639,7 @@ const sendReply = () => {
                         <span class="text-teal-600 font-bold text-lg">{{
                             props.tickets.to
                         }}</span>
-                        من أصل {{ props.tickets.total }} مستخدم
+                        من أصل {{ props.tickets.total }} تذكرة
                     </p>
                 </div>
                 <nav class="order-first md:order-last">
@@ -681,7 +661,8 @@ const sendReply = () => {
                                         link.active,
                                     'rounded-l-lg': index === 0,
                                     'rounded-r-lg':
-                                        index === props.tickets.links.length - 1,
+                                        index ===
+                                        props.tickets.links.length - 1,
                                 }"
                             />
                             <p
@@ -691,7 +672,8 @@ const sendReply = () => {
                                 :class="{
                                     'rounded-l-lg': index === 0,
                                     'rounded-r-lg':
-                                        index === props.tickets.links.length - 1,
+                                        index ===
+                                        props.tickets.links.length - 1,
                                 }"
                             />
                         </template>
