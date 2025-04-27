@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
             UsersSeeder::class,
             PropertySeeder::class,
             TicketSeeder::class,
+            InvestmentRequestSeeder::class,
         ]);
     }
 }

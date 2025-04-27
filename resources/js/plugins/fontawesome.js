@@ -17,6 +17,7 @@ import {
     faChartPie,
     faBuilding,
     faFileContract,
+    faCircleDollarToSlot,
 
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -41,6 +42,7 @@ library.add(
     faChartPie,
     faBuilding,
     faFileContract,
+    faCircleDollarToSlot,
 );
 
 export { FontAwesomeIcon };

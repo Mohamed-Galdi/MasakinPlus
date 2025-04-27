@@ -63,6 +63,19 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Property::class, 'owner_id');
     }
 
+    public function investmentRequests()
+    {
+        return $this->hasManyThrough(
+            InvestmentRequest::class,
+            Property::class,
+            'owner_id',        // Foreign key on Property
+            'property_id',     // Foreign key on InvestmentRequest
+            'id',              // Local key on User
+            'id'               // Local key on Property
+        );
+    }
+
+
     /**
      * Properties the user has invested in (for investors).
      */
