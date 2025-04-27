@@ -32,7 +32,7 @@ const navigationItems = ref([
     },
     {
         name: "المحفظة",
-        href: route("test"),
+        href: route("wallet.index"),
         icon: "fa-solid fa-wallet",
     },
     {
