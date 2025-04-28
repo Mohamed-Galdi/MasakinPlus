@@ -54,7 +54,6 @@ const propertyForm = useForm({
     bathrooms: null,
     latitude: null,
     longitude: null,
-    daily_rent_price: null,
     amenities: [],
     images: [],
 });
@@ -82,10 +81,9 @@ watch(activeStep, (newStep) => {
 });
 
 const handleCoordinatesUpdate = (coords) => {
-  propertyForm.latitude = coords.lat;
-  propertyForm.longitude = coords.lng;
+    propertyForm.latitude = coords.lat;
+    propertyForm.longitude = coords.lng;
 };
-
 
 // ############################################# Creation
 function submitCreateProperty() {
@@ -114,20 +112,26 @@ function submitCreateProperty() {
 </script>
 
 <template>
-    <div class="container mx-auto px-4 py-6" dir="rtl">
+    <div class="container mx-auto" dir="rtl">
         <Toast position="top-center" />
         <!-- Header-->
         <div
-            class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6"
+            class="flex flex-col md:flex-row justify-between items-start md:items-center mb-12"
         >
-            <div>
-                <h1 class="text-2xl font-bold text-gray-800">
-                    إضافة عقار جديد
-                </h1>
-                <p class="text-gray-600 mt-1">
-                    أدخل معلومات العقار الخاص بك بالتفصيل لجذب المزيد من
-                    المستأجرين والمستثمرين
-                </p>
+            <div class="flex items-center gap-3">
+                <Icon
+                    icon="fa-solid fa-building"
+                    class="block h-8 text-teal-800"
+                />
+                <div class="">
+                    <h1 class="text-3xl font-semibold m-0 text-teal-800">
+                        إضافة عقار جديد
+                    </h1>
+                    <p class="text-gray-500 text-sm m-0">
+                        أدخل معلومات العقار الخاص بك بالتفصيل لجذب المزيد من
+                        المستأجرين والمستثمرين
+                    </p>
+                </div>
             </div>
             <!-- back button -->
             <Link
@@ -140,10 +144,7 @@ function submitCreateProperty() {
         </div>
         <!-- Stepper -->
         <div class="mb-10">
-            <Stepper
-                v-model:value="activeStep"
-                class="w-full sophisticated-stepper"
-            >
+            <Stepper v-model:value="activeStep" class="w-full">
                 <StepList
                     class="bg-slate-200 p-4 rounded-md min-h-[6rem] overflow-hidden"
                 >
@@ -154,7 +155,7 @@ function submitCreateProperty() {
                         :value="1"
                     >
                         <div
-                            class="flex flex-row flex-auto gap-2"
+                            class="flex flex-row flex-auto gap-2 justify-center"
                             v-bind="a11yAttrs.root"
                         >
                             <button
@@ -192,7 +193,7 @@ function submitCreateProperty() {
                         :value="2"
                     >
                         <div
-                            class="flex flex-row flex-auto gap-2 px-2"
+                            class="flex flex-row flex-auto gap-2 px-2 justify-center"
                             v-bind="a11yAttrs.root"
                         >
                             <button
@@ -230,7 +231,7 @@ function submitCreateProperty() {
                         :value="3"
                     >
                         <div
-                            class="flex flex-row flex-auto gap-2 px-2"
+                            class="flex flex-row flex-auto gap-2 px-2 justify-center"
                             v-bind="a11yAttrs.root"
                         >
                             <button
@@ -268,7 +269,7 @@ function submitCreateProperty() {
                         :value="4"
                     >
                         <div
-                            class="flex flex-row flex-auto gap-2 px-2"
+                            class="flex flex-row flex-auto gap-2 px-2 justify-center"
                             v-bind="a11yAttrs.root"
                         >
                             <button
@@ -295,41 +296,6 @@ function submitCreateProperty() {
                                     }"
                                 >
                                     الصور</span
-                                >
-                            </button>
-                        </div>
-                    </Step>
-
-                    <!-- Step 5 -->
-                    <Step
-                        v-slot="{ activateCallback, value, a11yAttrs }"
-                        asChild
-                        :value="5"
-                    >
-                        <div class="flex flex-row px-2" v-bind="a11yAttrs.root">
-                            <button
-                                class="bg-transparent border-0 inline-flex flex-col gap-2 step-button"
-                                @click="activateCallback"
-                                v-bind="a11yAttrs.header"
-                            >
-                                <span
-                                    :class="[
-                                        'step-icon',
-                                        {
-                                            'step-active': value <= activeStep,
-                                            'step-inactive': value > activeStep,
-                                        },
-                                    ]"
-                                >
-                                    <i class="pi pi-money-bill"></i>
-                                </span>
-                                <span
-                                    class="step-label"
-                                    :class="{
-                                        'text-emerald-700 font-medium':
-                                            value <= activeStep,
-                                    }"
-                                    >التسعير</span
                                 >
                             </button>
                         </div>
@@ -491,7 +457,10 @@ function submitCreateProperty() {
                     <!-- Step 3 Content (Map) -->
                     <StepPanel v-slot="{ activateCallback }" :value="3">
                         <div class="bg-slate-200 p-4 rounded-md min-h-[24rem]">
-                            <PropertyMap ref="mapRef"  @update:coordinates="handleCoordinatesUpdate"/>
+                            <PropertyMap
+                                ref="mapRef"
+                                @update:coordinates="handleCoordinatesUpdate"
+                            />
                         </div>
                         <div class="flex justify-between pt-4">
                             <Button
@@ -559,57 +528,6 @@ function submitCreateProperty() {
                                 icon="pi pi-arrow-right"
                                 @click="activateCallback(3)"
                                 iconPos="right"
-                            />
-                            <Button
-                                label="التالي"
-                                icon="pi pi-arrow-left"
-                                @click="activateCallback(5)"
-                            />
-                        </div>
-                    </StepPanel>
-
-                    <!-- Step 5 Content (Pricing) -->
-                    <StepPanel v-slot="{ activateCallback }" :value="5">
-                        <div class="bg-slate-200 p-4 rounded-md min-h-[24rem]">
-                            <div class="space-y-2">
-                                <label class="form-label"
-                                    >سعر الإيجار اليومي (ريال)</label
-                                >
-                                <InputNumber
-                                    v-model="propertyForm.daily_rent_price"
-                                    class="w-full"
-                                    placeholder="مثال: 300"
-                                    :min="0"
-                                    :step="50"
-                                    suffix=" ريال"
-                                />
-                            </div>
-
-                            <div class="info-panel mt-6">
-                                <h3 class="info-panel-title">
-                                    معلومات التسعير
-                                </h3>
-                                <ul
-                                    class="list-disc list-inside space-y-1 text-sm text-gray-600"
-                                >
-                                    <li>
-                                        قم بمقارنة أسعار العقارات المشابهة في
-                                        المنطقة للحصول على سعر تنافسي يجذب
-                                        المستأجرين والمستثمرين.
-                                    </li>
-                                    <li>
-                                        سيتم استخدام هذه الأسعار لحساب العائد
-                                        المتوقع للمستثمرين.
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="flex justify-between pt-4">
-                            <Button
-                                label="السابق"
-                                icon="pi pi-arrow-right"
-                                @click="activateCallback(4)"
-                                icon-pos="right"
                             />
                             <Button
                                 label="إضافة العقار"

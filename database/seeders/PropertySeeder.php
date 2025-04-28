@@ -26,7 +26,6 @@ class PropertySeeder extends Seeder
                 'area' => 350.5,
                 'bedrooms' => 5,
                 'bathrooms' => 4,
-                'daily_rent_price' => 1200.00,
                 'status' => $status,
                 'latitude' => 24.7136,
                 'longitude' => 46.6753,
@@ -42,7 +41,6 @@ class PropertySeeder extends Seeder
                 'area' => 120.0,
                 'bedrooms' => 2,
                 'bathrooms' => 2,
-                'daily_rent_price' => 300.00,
                 'status' => $status,
                 'latitude' => 24.7136,
                 'longitude' => 46.6753,
@@ -58,7 +56,6 @@ class PropertySeeder extends Seeder
                 'area' => 50.0,
                 'bedrooms' => 1,
                 'bathrooms' => 1,
-                'daily_rent_price' => 150.00,
                 'status' => $status,
                 'latitude' => 24.7136,
                 'longitude' => 46.6753,
@@ -74,7 +71,6 @@ class PropertySeeder extends Seeder
                 'area' => 200.0,
                 'bedrooms' => 4,
                 'bathrooms' => 3,
-                'daily_rent_price' => 600.00,
                 'status' => $status,
                 'latitude' => 24.7136,
                 'longitude' => 46.6753,
@@ -91,7 +87,6 @@ class PropertySeeder extends Seeder
                 'area' => 80.0,
                 'bedrooms' => 0,
                 'bathrooms' => 1,
-                'daily_rent_price' => 500.00,
                 'status' => $status,
                 'latitude' => 24.7136,
                 'longitude' => 46.6753,
@@ -107,7 +102,6 @@ class PropertySeeder extends Seeder
                 'area' => 400.0,
                 'bedrooms' => 6,
                 'bathrooms' => 5,
-                'daily_rent_price' => 1000.00,
                 'status' => $status,
                 'latitude' => 24.7136,
                 'longitude' => 46.6753,
@@ -123,7 +117,6 @@ class PropertySeeder extends Seeder
                 'area' => 150.0,
                 'bedrooms' => 3,
                 'bathrooms' => 2,
-                'daily_rent_price' => 400.00,
                 'status' => $status,
                 'latitude' => 24.7136,
                 'longitude' => 46.6753,
@@ -139,7 +132,6 @@ class PropertySeeder extends Seeder
                 'area' => 100.0,
                 'bedrooms' => 2,
                 'bathrooms' => 1,
-                'daily_rent_price' => 200.00,
                 'status' => $status,
                 'latitude' => 24.7136,
                 'longitude' => 46.6753,
@@ -155,7 +147,6 @@ class PropertySeeder extends Seeder
                 'area' => 300.0,
                 'bedrooms' => 5,
                 'bathrooms' => 4,
-                'daily_rent_price' => 900.00,
                 'status' => $status,
                 'latitude' => 24.7136,
                 'longitude' => 46.6753,
@@ -171,7 +162,6 @@ class PropertySeeder extends Seeder
                 'area' => 40.0,
                 'bedrooms' => 1,
                 'bathrooms' => 1,
-                'daily_rent_price' => 120.00,
                 'status' => $status,
                 'latitude' => 24.7136,
                 'longitude' => 46.6753,
@@ -187,7 +177,6 @@ class PropertySeeder extends Seeder
                 'area' => 180.0,
                 'bedrooms' => 3,
                 'bathrooms' => 2,
-                'daily_rent_price' => 350.00,
                 'status' => $status,
                 'latitude' => 24.7136,
                 'longitude' => 46.6753,
@@ -203,7 +192,6 @@ class PropertySeeder extends Seeder
                 'area' => 130.0,
                 'bedrooms' => 3,
                 'bathrooms' => 2,
-                'daily_rent_price' => 450.00,
                 'status' => $status,
                 'latitude' => 24.7136,
                 'longitude' => 46.6753,
@@ -234,7 +222,15 @@ class PropertySeeder extends Seeder
             $data['type_label'] = $typeEnum->label();
             $data['status'] = $statusEnum->value;
             $data['status_label'] = $statusEnum->label();
+            $data['daily_rent_price'] = in_array($statusEnum->value, [
+                PropertyStatus::Draft->value,
+                PropertyStatus::InvestmentPending->value,
+                PropertyStatus::InvestmentRejected->value
+            ])
+                ? null
+                : round(fake()->numberBetween(100, 1000) / 50) * 50; // SAR 100 to 1,000 daily
 
+            
             unset($data['type_ar']); // Remove helper key
 
 

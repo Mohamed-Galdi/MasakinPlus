@@ -406,10 +406,10 @@ const totalWithdraws = computed(() => {
         <!-- Header Section -->
         <div class="flex items-center justify-between mb-6">
             <div class="flex items-center gap-3">
-                <i
-                    class="pi pi-wallet text-teal-800 h-full"
-                    style="font-size: 2rem"
-                ></i>
+                <Icon
+                    icon="fa-solid fa-wallet"
+                    class="block h-8 text-teal-800"
+                />
                 <div class="">
                     <h1 class="text-3xl font-semibold m-0 text-teal-800">
                         المحفظة

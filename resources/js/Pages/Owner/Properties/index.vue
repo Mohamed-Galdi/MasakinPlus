@@ -104,14 +104,24 @@ const textHelpers = useTextHelpers();
 </script>
 
 <template>
-    <div class="container mx-auto px-1 py-1">
+    <div class="container mx-auto">
         <!-- Header -->
         <div
             class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6"
         >
-            <div>
-                <h1 class="text-2xl font-bold text-gray-800">العقارات</h1>
-                <p class="text-gray-600 mt-1">إدارة العقارات الخاصة بك</p>
+            <div class="flex items-center gap-3">
+                <Icon
+                    icon="fa-solid fa-building"
+                    class="block h-8 text-teal-800"
+                />
+                <div class="">
+                    <h1 class="text-3xl font-semibold m-0 text-teal-800">
+                        العقارات
+                    </h1>
+                    <p class="text-gray-500 text-sm m-0">
+                        إدارة العقارات الخاصة بك
+                    </p>
+                </div>
             </div>
             <Link
                 :href="route('owner.properties.create')"
@@ -278,8 +288,15 @@ const textHelpers = useTextHelpers();
                         <div>
                             <p class="text-sm text-gray-500">الإيجار اليومي</p>
                             <p class="text-lg font-bold text-emerald-600">
-                                {{ formatPrice(property.daily_rent_price) }}
-                                ريال
+                                <template
+                                    v-if="property.daily_rent_price === null"
+                                >
+                                    لم يحدد بعد
+                                </template>
+                                <template v-else>
+                                    {{ formatPrice(property.daily_rent_price) }}
+                                    ريال
+                                </template>
                             </p>
                         </div>
                         <!-- Professional Action Buttons -->

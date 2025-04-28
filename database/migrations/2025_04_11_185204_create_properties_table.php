@@ -27,7 +27,7 @@ return new class extends Migration
             $table->integer('bathrooms')->default(1);
             $table->decimal('latitude', 10, 6)->nullable();
             $table->decimal('longitude', 10, 6)->nullable();
-            $table->decimal('daily_rent_price', 10, 2);
+            $table->decimal('daily_rent_price', 10, 2)->nullable();
             $table->enum('status', array_column(PropertyStatus::cases(), 'value'))->default(PropertyStatus::Draft->value);
             $table->enum('status_label', PropertyStatus::labels())->default(PropertyStatus::Draft->label());
             $table->timestamps();

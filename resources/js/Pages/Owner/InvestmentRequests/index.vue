@@ -86,27 +86,32 @@ const viewRequestDetails = (request) => {
 </script>
 
 <template>
-    <div class="container mx-auto px-1 py-1">
+    <div class="container mx-auto ">
         <!-- Header -->
         <div
             class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6"
         >
-            <div>
-                <h1 class="text-2xl font-bold text-gray-800">
-                    طلبات فتح الاستثمار
-                </h1>
-                <p class="text-gray-600 mt-1">
-                    إدارة طلبات فتح الاستثمار على عقاراتك
-                </p>
+            <div class="flex items-center gap-3">
+                <Icon
+                    icon="fa-solid fa-circle-dollar-to-slot"
+                    class="block h-8 text-teal-800"
+                />
+                <div class="">
+                    <h1 class="text-3xl font-semibold m-0 text-teal-800">
+                        طلبات فتح الاستثمار
+                    </h1>
+                    <p class="text-gray-500 text-sm m-0">
+                        إدارة طلبات فتح الاستثمار على عقاراتك
+                    </p>
+                </div>
             </div>
-            <Button
+            <button
                 @click="showNewRequestModal = true"
                 class="btn bg-emerald-600 hover:bg-emerald-700 text-white md:w-fit w-full mt-2 md:mt-0"
-               
             >
                 <i class="pi pi-plus"></i>
                 <span>طلب فتح استثمار جديد</span>
-            </Button>
+            </button>
         </div>
 
         <!-- Investment Requests Table/Empty State -->
@@ -308,9 +313,7 @@ const viewRequestDetails = (request) => {
                                     الإيجار اليومي
                                 </p>
                                 <p class="text-lg font-bold text-emerald-600">
-                                    {{
-                                        formatPrice(property.daily_rent_price)
-                                    }}
+                                    {{ formatPrice(property.daily_rent_price) }}
                                     ريال
                                 </p>
                             </div>

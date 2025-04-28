@@ -70,7 +70,6 @@ class PropertyController extends Controller
             'bathrooms' => 'required|numeric|min:0',
             'latitude' => 'required|numeric|min:0',
             'longitude' => 'required|numeric|min:0',
-            'daily_rent_price' => 'required|numeric|min:0',
             'amenities' => 'array',
             'images' => 'required|array',
         ]);
@@ -88,7 +87,6 @@ class PropertyController extends Controller
         $property->bathrooms = $request->bathrooms;
         $property->latitude = $request->latitude;
         $property->longitude = $request->longitude;
-        $property->daily_rent_price = $request->daily_rent_price;
         $property->save();
 
         foreach ($request->amenities as $amenity) {
@@ -141,7 +139,6 @@ class PropertyController extends Controller
             'bathrooms' => 'required|numeric|min:0',
             'latitude' => 'required|numeric|min:0',
             'longitude' => 'required|numeric|min:0',
-            'daily_rent_price' => 'required|numeric|min:0',
             'amenities' => 'array',
             'images' => 'required|array|min:1|max:5',
             'newImages' => 'nullable|array',
@@ -163,7 +160,7 @@ class PropertyController extends Controller
                 'bathrooms' => $request->bathrooms,
                 'latitude' => $request->latitude,
                 'longitude' => $request->longitude,
-                'daily_rent_price' => $request->daily_rent_price,
+                'status' => PropertyStatus::Draft->value,
             ]);
 
             // Sync amenities
