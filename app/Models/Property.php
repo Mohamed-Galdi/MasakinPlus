@@ -48,4 +48,9 @@ class Property extends Model
         return $this->belongsToMany(Amenity::class, 'amenity_property', 'property_id', 'amenity_id')
             ->withTimestamps();
     }
+
+    public function InvestmentRequests()
+    {
+        return $this->hasMany(InvestmentRequest::class);
+    }
 }

@@ -312,7 +312,7 @@ function submitCreateProperty() {
                         <div class="bg-slate-200 p-4 rounded-md min-h-[24rem]">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div class="space-y-2">
-                                    <label class="form-label"
+                                    <label 
                                         >عنوان العقار</label
                                     >
                                     <InputText
@@ -323,7 +323,7 @@ function submitCreateProperty() {
                                 </div>
 
                                 <div class="space-y-2">
-                                    <label class="form-label">نوع العقار</label>
+                                    <label >نوع العقار</label>
                                     <Select
                                         v-model="propertyForm.type"
                                         :options="propertyTypes"
@@ -336,7 +336,7 @@ function submitCreateProperty() {
                             </div>
 
                             <div class="space-y-2 mt-6">
-                                <label class="form-label">وصف العقار</label>
+                                <label >وصف العقار</label>
                                 <Textarea
                                     v-model="propertyForm.description"
                                     rows="4"
@@ -349,7 +349,7 @@ function submitCreateProperty() {
                                 class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6"
                             >
                                 <div class="space-y-2">
-                                    <label class="form-label">المدينة</label>
+                                    <label >المدينة</label>
                                     <Select
                                         filter
                                         empty-filter-message=" لا توجد مدينة مطابقة "
@@ -361,7 +361,7 @@ function submitCreateProperty() {
                                 </div>
 
                                 <div class="space-y-2">
-                                    <label class="form-label"
+                                    <label 
                                         >العنوان التفصيلي</label
                                     >
                                     <InputText
@@ -386,7 +386,7 @@ function submitCreateProperty() {
                         <div class="bg-slate-200 p-4 rounded-md min-h-[24rem]">
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                                 <div class="space-y-2">
-                                    <label class="form-label"
+                                    <label 
                                         >المساحة (م²)</label
                                     >
                                     <InputNumber
@@ -400,7 +400,7 @@ function submitCreateProperty() {
                                 </div>
 
                                 <div class="space-y-2">
-                                    <label class="form-label"
+                                    <label 
                                         >عدد غرف النوم</label
                                     >
                                     <InputNumber
@@ -413,7 +413,7 @@ function submitCreateProperty() {
                                 </div>
 
                                 <div class="space-y-2">
-                                    <label class="form-label"
+                                    <label 
                                         >عدد الحمامات</label
                                     >
                                     <InputNumber
@@ -427,7 +427,7 @@ function submitCreateProperty() {
                             </div>
 
                             <div class="space-y-2 mt-6">
-                                <label class="form-label"
+                                <label 
                                     >المرافق المتوفرة</label
                                 >
                                 <MultiSelect
@@ -481,7 +481,7 @@ function submitCreateProperty() {
                     <StepPanel v-slot="{ activateCallback }" :value="4">
                         <div class="bg-slate-200 p-4 rounded-md min-h-[24rem]">
                             <div class="space-y-2 mt-6">
-                                <label class="form-label">صور العقار</label>
+                                <label >صور العقار</label>
                                 <FileUpload
                                     @file-uploaded="handleFileUploaded"
                                     @file-reverted="handleFileReverted"
