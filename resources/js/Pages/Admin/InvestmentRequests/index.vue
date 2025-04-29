@@ -1,60 +1,66 @@
 <script setup>
 import AdminLayout from "@/Layouts/AdminLayout.vue";
-import { ref, computed, watch } from "vue";
-import { Link, router } from "@inertiajs/vue3";
+import { ref, watch, computed } from "vue";
+import { router, Link } from "@inertiajs/vue3";
 import { useTextHelpers } from "@/plugins/textHelpers";
 import { debounce } from "lodash";
 import Select from "primevue/select";
 import InputText from "primevue/inputtext";
+import Button from "primevue/button";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
-import Avatar from "primevue/avatar";
-import Tag from "primevue/tag";
-import Button from "primevue/button";
-import Tooltip from "primevue/tooltip";
+import Toast from "primevue/toast";
+import { useToast } from "primevue/usetoast";
+import Dialog from "primevue/dialog";
+import investmentRequestsStatus from "@/Components/InvestmentRequestStatus.vue";
 
 defineOptions({
     layout: AdminLayout,
 });
 
 const props = defineProps({
-    users: {
+    investmentRequests: {
         type: Object,
         required: true,
     },
-    usersTypes: {
+    investmentRequestsStatusOptions: {
         type: Array,
         required: true,
+    },
+    statusFilter: {
+        type: String,
+        required: false,
+        default: "",
     },
     search: {
         type: String,
         required: false,
         default: "",
     },
-    userType: {
-        type: String,
-        required: false,
-        default: "",
-    },
 });
 
-const UsersTypes = ref(props.usersTypes);
+const investmentRequestsStatusOptions = ref(
+    props.investmentRequestsStatusOptions
+);
+
+const toast = useToast();
+
+const isMobile = computed(() => window.innerWidth <= 768);
 
 // ############################################## Search and filter
-
 const textHelpers = useTextHelpers();
 const search = ref(props.search);
-const userType = ref(props.userType);
+const statusFilter = ref(props.statusFilter);
 
 watch(
-    [search, userType],
-    debounce(([search, userType]) => {
+    [search, statusFilter],
+    debounce(([search, statusFilter]) => {
         // Update the table with both filters
         router.get(
-            route("admin.users.index"),
+            route("admin.investment-requests.index"),
             {
                 search: search,
-                userType: userType,
+                statusFilter: statusFilter,
             },
             {
                 preserveState: true,
@@ -63,32 +69,13 @@ watch(
         );
     }, 500)
 );
+
 // Reset filters
 const resetFilters = () => {
     search.value = "";
-    userType.value = "";
+    statusFilter.value = "";
 };
-
-// Computed property to check if users list is empty
-const isEmptyUsers = computed(() => {
-    return !props.users.data || props.users.data.length === 0;
-});
-
-// Function to get tag severity based on user type
-const getTypeSeverity = (type) => {
-    switch (type) {
-        case "owner":
-            return "success";
-        case "investor":
-            return "warning";
-        case "tenant":
-            return "info";
-        default:
-            return "secondary";
-    }
-};
-
-// Function to format date
+// ############################################## utils
 const formatDate = (dateString) => {
     if (!dateString) return "";
     const date = new Date(dateString);
@@ -99,52 +86,46 @@ const formatDate = (dateString) => {
     }).format(date);
 };
 
-// Function to get user type in Arabic
-const getUserTypeArabic = (type) => {
-    switch (type) {
-        case "owner":
-            return "مالك";
-        case "investor":
-            return "مستثمر";
-        case "tenant":
-            return "مستأجر";
-        default:
-            return type;
-    }
+// ############################################## View request details
+const showRequestDetailsModal = ref(false);
+const requestDetails = ref({});
+const viewRequestDetails = (request) => {
+    showRequestDetailsModal.value = true;
+    requestDetails.value = request;
 };
-
-//
-function editUser(id) {
-    router.get(route("admin.users.view", { user: id }));
-}
 </script>
 
 <template>
     <div>
+        <!-- Toast -->
+        <Toast position="top-center" />
+
+        <!-- New Investment Request Modal -->
+        <Dialog
+            v-model:visible="showRequestDetailsModal"
+            modal
+            header="طلب فتح استثمار جديد"
+            :style="{ width: isMobile ? '90%' : '50vw' }"
+            :closable="true"
+            :closeOnEscape="true"
+        >
+        </Dialog>
+
         <!-- Header Section -->
         <div class="flex items-center justify-between mb-6">
             <div class="flex items-center gap-3">
-                <i
-                    class="pi pi-users text-teal-800 h-full"
-                    style="font-size: 2.5rem"
-                ></i>
+                <Icon
+                    icon="fa-regular fa-file-zipper"
+                    class="block h-10 text-teal-800"
+                />
                 <div class="">
                     <h1 class="text-3xl font-semibold m-0 text-teal-800">
-                        المستخدمين
+                        طلبات فتح الاستثمار
                     </h1>
                     <p class="text-gray-500 text-sm m-0">
-                        إدارة حسابات المستخدمين في النظام
+                        إدارة طلبات فتح الاستثمار على العقارات
                     </p>
                 </div>
-            </div>
-            <div>
-                <Link
-                    :href="route('admin.users.suspended')"
-                    class="btn bg-rose-600 hover:bg-rose-700 text-white"
-                >
-                    <p>المستخدمين المحضورين</p>
-                    <i class="pi pi-ban"></i>
-                </Link>
             </div>
         </div>
 
@@ -158,7 +139,7 @@ function editUser(id) {
                     <InputText
                         v-model="search"
                         class="w-full rounded-lg border-gray-200"
-                        placeholder="البحث عن مستخدم بالاسم أو البريد الإلكتروني..."
+                        placeholder="البحث عن مستخدم بالاسم   ..."
                     />
                 </div>
                 <!-- Filters -->
@@ -166,8 +147,8 @@ function editUser(id) {
                     class="filter-controls flex items-center gap-3 md:w-72 w-full"
                 >
                     <Select
-                        v-model="userType"
-                        :options="UsersTypes"
+                        v-model="statusFilter"
+                        :options="investmentRequestsStatusOptions"
                         optionLabel="label"
                         optionValue="value"
                         placeholder="نوع الحساب"
@@ -184,96 +165,74 @@ function editUser(id) {
             </div>
         </div>
 
-        <!-- Empty State -->
+        <!--  Empty State -->
         <div
-            v-if="isEmptyUsers"
+            v-if="props.investmentRequests.data.length === 0"
             class="empty-state bg-white rounded-xl shadow-sm border border-gray-100 p-8 text-center"
         >
             <div
-                class="empty-state-icon bg-gray-50 inline-flex items-center justify-center w-24 h-24 rounded-full mb-4"
+                class="empty-state-icon bg-gray-50 inline-flex items-center justify-center w-20 h-20 rounded-full mb-4"
             >
                 <i
-                    class="pi pi-users text-gray-300"
-                    style="font-size: 3rem"
+                    class="pi pi-file-edit text-gray-300"
+                    style="font-size: 2.5rem"
                 ></i>
             </div>
-            <h2 class="text-2xl font-semibold text-gray-700 mb-2">
-                لا يوجد مستخدمين
+            <h2 class="text-xl font-semibold text-gray-700 mb-2">
+                لا توجد طلبات فتح الاستثمار
             </h2>
             <p class="text-gray-500 max-w-md mx-auto mb-6">
-                لم يتم العثور على أي مستخدمين مطابقين لمعايير البحث الحالية.
-                يمكنك تعديل الفلتر أو إضافة مستخدمين جدد.
+                لم يتم تقديم أي طلبات فتح الاستثمار بعد.
             </p>
-            <div class="flex justify-center gap-3">
-                <Button
-                    icon="pi pi-filter-slash"
-                    label="إعادة ضبط الفلتر"
-                    outlined
-                    @click="resetFilters"
-                />
-            </div>
         </div>
 
-        <!-- Users Table -->
         <div
             v-else
-            class="rounded-xl overflow-hidden flex flex-col justify-between  min-h-[75vh]"
+            class="rounded-xl overflow-hidden flex flex-col justify-between min-h-[75vh]"
         >
             <DataTable
-                :value="props.users.data"
+                :value="props.investmentRequests.data"
                 stripedRows
                 showGridlines
                 tableStyle="min-width: 50rem"
                 class="border-none"
+                @row-click="(event) => viewRequestDetails(event.data)"
+                :rowHover="true"
+                :rowClass="() => 'cursor-pointer'"
             >
-                <Column field="image" header="الصورة" class="w-[80px]">
-                    <template #body="slotProps">
-                        <Avatar
-                            :image="slotProps.data.image"
-                            size="normal"
-                            shape="circle"
-                        />
-                    </template>
-                </Column>
-
-                <Column field="name" header="الاسم">
-                    <template #body="slotProps">
-                        <div
-                            v-html="
-                                textHelpers.highlightText(
-                                    slotProps.data.name,
-                                    search
-                                )
-                            "
-                        ></div>
-                    </template>
-                </Column>
-
-                <Column field="email" header="البريد الإلكتروني">
+                <Column field="created_at" header=" المالك">
                     <template #body="slotProps">
                         <div
                             class="text-sm text-gray-600"
                             v-html="
                                 textHelpers.highlightText(
-                                    slotProps.data.email,
+                                    slotProps.data.property.owner.name,
                                     search
                                 )
                             "
                         ></div>
                     </template>
                 </Column>
-
-                <Column field="type" header="نوع الحساب">
+                <Column field="created_at" header=" العقار">
                     <template #body="slotProps">
-                        <Tag
-                            :value="getUserTypeArabic(slotProps.data.type)"
-                            :severity="getTypeSeverity(slotProps.data.type)"
-                            class="text-xs"
-                        />
+                        <div class="text-sm text-gray-600">
+                            <p>{{ slotProps.data.property.title }}</p>
+                            <p>{{ slotProps.data.property.address }}</p>
+                        </div>
+                    </template>
+                </Column>
+                <Column field="created_at" header=" حالة الطلب">
+                    <template #body="slotProps">
+                        <div class="text-sm text-gray-600">
+                            <investmentRequestsStatus
+                                :status="slotProps.data.status"
+                                :statusOptions="investmentRequestsStatusOptions"
+                            />
+                        </div>
                     </template>
                 </Column>
 
-                <Column field="created_at" header="تاريخ التسجيل">
+                <Column field="created_at" header="تاريخ  الطلب">
                     <template #body="slotProps">
                         <div class="text-sm text-gray-600">
                             <i class="pi pi-calendar-plus ml-1"></i>
@@ -281,26 +240,9 @@ function editUser(id) {
                         </div>
                     </template>
                 </Column>
-
-                <Column header="الإجراءات" class="w-[120px]">
-                    <template #body="slotProps">
-                        <div class="flex gap-1 justify-center">
-                            <Button
-                                @click="editUser(slotProps.data.id)"
-                                v-tooltip="'تعديل المستخدم'"
-                                icon="pi pi-pencil"
-                                text
-                                rounded
-                                aria-label="تعديل"
-                                class="p-button-sm"
-                            />
-                        </div>
-                    </template>
-                </Column>
             </DataTable>
             <!-- Pagination -->
             <div
-                v-if="!isEmptyUsers"
                 dir="ltr"
                 class="my-8 flex md:flex-row flex-col md:gap-0 gap-2 justify-between items-center w-full"
             >
@@ -308,19 +250,20 @@ function editUser(id) {
                     <p class="text-base text-slate-600 rtl:text-right">
                         عرض
                         <span class="text-teal-600 font-bold text-lg">{{
-                            props.users.from
+                            props.investmentRequests.from
                         }}</span>
                         إلى
                         <span class="text-teal-600 font-bold text-lg">{{
-                            props.users.to
+                            props.investmentRequests.to
                         }}</span>
-                        من أصل {{ props.users.total }} مستخدم
+                        من أصل {{ props.investmentRequests.total }} مستخدم
                     </p>
                 </div>
                 <nav class="order-first md:order-last">
                     <div class="flex items-center -space-x-px h-8 text-sm">
                         <template
-                            v-for="(link, index) in props.users.links"
+                            v-for="(link, index) in props.investmentRequests
+                                .links"
                             :key="link.url"
                         >
                             <Link
@@ -336,7 +279,9 @@ function editUser(id) {
                                         link.active,
                                     'rounded-l-lg': index === 0,
                                     'rounded-r-lg':
-                                        index === props.users.links.length - 1,
+                                        index ===
+                                        props.investmentRequests.links.length -
+                                            1,
                                 }"
                             />
                             <p
@@ -346,7 +291,9 @@ function editUser(id) {
                                 :class="{
                                     'rounded-l-lg': index === 0,
                                     'rounded-r-lg':
-                                        index === props.users.links.length - 1,
+                                        index ===
+                                        props.investmentRequests.links.length -
+                                            1,
                                 }"
                             />
                         </template>
@@ -356,50 +303,3 @@ function editUser(id) {
         </div>
     </div>
 </template>
-
-<style scoped>
-/* Table styling */
-:deep(.p-datatable .p-datatable-thead > tr > th) {
-    background-color: #f8fafc;
-    color: #475569;
-    font-weight: 600;
-    padding: 1rem;
-    border-bottom: 1px solid #e2e8f0;
-}
-
-:deep(.p-datatable .p-datatable-tbody > tr > td) {
-    padding: 0.75rem 1rem;
-    border-bottom: 1px solid #f1f5f9;
-}
-
-:deep(.p-datatable .p-datatable-tbody > tr:hover) {
-    background-color: #f8fafc;
-}
-
-:deep(.p-datatable-wrapper) {
-    border-radius: 0.75rem;
-}
-
-/* Ensure RTL support for PrimeVue components */
-:deep(.p-inputtext),
-:deep(.p-dropdown) {
-    text-align: right;
-}
-
-/* Empty state animation */
-.empty-state-icon {
-    animation: pulse 2s infinite ease-in-out;
-}
-
-@keyframes pulse {
-    0% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.05);
-    }
-    100% {
-        transform: scale(1);
-    }
-}
-</style>

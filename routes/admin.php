@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AdminAuthenticatedSessionController;
 use App\Http\Controllers\Admin\AccountController;
+use App\Http\Controllers\Admin\InvestmentRequestController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SupportController;
 use App\Http\Controllers\Admin\UserController;
@@ -28,7 +29,11 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
         Route::post('/create', 'create')->name('create');
         Route::post('/reply/{ticketId}', 'reply')->name('reply');
         Route::post('/resetUnreadCount/{ticketId}', 'resetUnreadCount')->name('resetUnreadCount');
-       
+    });
+
+    // Investment Requests
+    Route::prefix('investment-requests')->name('admin.investment-requests.')->controller(InvestmentRequestController::class)->group(function () {
+        Route::get('/', 'index')->name('index');
     });
 
 
@@ -43,7 +48,6 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
         Route::post('/edit-account', [AccountController::class, 'editAccount'])->name('admin.account.editAccount');
         Route::post('/update-password', [AccountController::class, 'updatePassword'])->name('admin.account.updatePassword');
     });
-
 });
 
 // file upload
@@ -56,5 +60,4 @@ Route::middleware('guest')->group(function () {
 
     Route::get('masakin-secret-center', [AdminAuthenticatedSessionController::class, 'adminLogin']);
     Route::get('masakin-secret-center/otp', [AdminAuthenticatedSessionController::class, 'adminOTP'])->name('admin.otp');
-
 });

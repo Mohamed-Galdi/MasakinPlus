@@ -2,47 +2,63 @@
 import { Link, router, usePage } from "@inertiajs/vue3";
 import { ref, computed } from "vue";
 
-const isSidebarCollapsed = ref(localStorage.getItem('sidebarCollapsed') === 'true');
+const isSidebarCollapsed = ref(
+    localStorage.getItem("sidebarCollapsed") === "true"
+);
 const toggleSidebar = () => {
     isSidebarCollapsed.value = !isSidebarCollapsed.value;
-    localStorage.setItem('sidebarCollapsed', isSidebarCollapsed.value);
+    localStorage.setItem("sidebarCollapsed", isSidebarCollapsed.value);
 };
 
 const navigationItems = [
-    //    { title: "المستخدمين",
+    // {
+    //     title: "المستخدمين",
     //     icon: "pi-users",
     //     subItems: [
     //         {
     //             title: "الملاك",
-    //             path: route("admin.products.dialog-crud"),
-    //             icon: "pi-home",
+    //             path: route("home"),
+    //             iconType: "primevue",
+    //             icon: "pi-users",
     //         },
     //         {
     //             title: "المستثمرين",
-    //             path: route("admin.products.drawer-crud"),
+    //             path: route("home"),
+    //             iconType: "primevue",
     //             icon: "pi-briefcase",
     //         },
     //         {
     //             title: "المستأجرين",
-    //             path: route("admin.products.drawer-crud"),
-    //             icon: "pi-user",
+    //             path: route("home"),
+    //             iconType: "fontawesome",
+    //             icon: "fa-solid fa-user-group",
     //         },
-    //     ],}
+    //     ],
+    // },
 
     {
         title: "المستخدمين",
         path: route("admin.users.index"),
+        iconType: "primevue",
         icon: "pi-users",
-    },
-    {
-        title: "الدعم",
-        path: route("admin.support.index"),
-        icon: "pi-comments",
     },
     {
         title: "العقارات",
         path: route("admin.properties"),
+        iconType: "primevue",
         icon: "pi-home",
+    },
+    {
+        title: "طلبات فتح الاستثمار",
+        path: route("admin.investment-requests.index"),
+        iconType: "fontawesome",
+        icon: "fa-regular fa-file-zipper",
+    },
+    {
+        title: "الدعم",
+        path: route("admin.support.index"),
+        iconType: "primevue",
+        icon: "pi-comments",
     },
 ];
 
@@ -161,12 +177,18 @@ const logout = () => {
                                 @click="toggleGroup(item.title)"
                             >
                                 <i
+                                    v-if="item.iconType === 'primevue'"
                                     :class="[
                                         'pi',
                                         item.icon,
                                         'w-5 h-5 flex items-center justify-center',
                                     ]"
                                 ></i>
+                                <Icon
+                                    v-else
+                                    :icon="item.icon"
+                                    class="ml-2 mb-1 h-4 w-4 text-gray-600"
+                                />
                                 <span
                                     :class="[
                                         'nav-title flex-1',
@@ -202,7 +224,19 @@ const logout = () => {
                                 ]"
                                 @click="toggleGroup(item.title)"
                             >
-                                <i :class="['pi', item.icon, 'w-5 h-5']"></i>
+                                <i
+                                    v-if="item.iconType === 'primevue'"
+                                    :class="[
+                                        'pi',
+                                        item.icon,
+                                        'w-5 h-5 flex items-center justify-center',
+                                    ]"
+                                ></i>
+                                <Icon
+                                    v-else
+                                    :icon="item.icon"
+                                    class="ml-2 mb-1 h-4 w-4 text-gray-600"
+                                />
                             </div>
 
                             <!-- Subitems -->
@@ -237,12 +271,18 @@ const logout = () => {
                                         ]"
                                     >
                                         <i
+                                            v-if="item.iconType === 'primevue'"
                                             :class="[
                                                 'pi',
-                                                subItem.icon,
-                                                'w-5 h-5',
+                                                item.icon,
+                                                'w-5 h-5 flex items-center justify-center',
                                             ]"
                                         ></i>
+                                        <Icon
+                                            v-else
+                                            :icon="item.icon"
+                                            class="ml-2 mb-1 h-4 w-4"
+                                        />
                                         <span
                                             v-if="!isSidebarCollapsed"
                                             class="nav-title"
@@ -269,7 +309,19 @@ const logout = () => {
                                 },
                             ]"
                         >
-                            <i :class="['pi', item.icon, 'w-5 h-5']"></i>
+                            <i
+                                v-if="item.iconType === 'primevue'"
+                                :class="[
+                                    'pi',
+                                    item.icon,
+                                    'w-5 h-5 flex items-center justify-center',
+                                ]"
+                            ></i>
+                            <Icon
+                                v-else
+                                :icon="item.icon"
+                                class="ml-2 mb-1 h-4 w-4 "
+                            />
                             <span
                                 v-if="!isSidebarCollapsed"
                                 class="nav-title"

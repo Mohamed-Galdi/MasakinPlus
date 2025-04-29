@@ -21,8 +21,8 @@ import {
 
 } from "@fortawesome/free-solid-svg-icons";
 
-import { faBookmark,  } from "@fortawesome/free-regular-svg-icons";
-
+// <i class="fa-solid fa-circle-dollar-to-slot"></i>
+import { faBookmark, faFileZipper } from "@fortawesome/free-regular-svg-icons";
 
 
 // Add the icons to the library
@@ -43,6 +43,7 @@ library.add(
     faBuilding,
     faFileContract,
     faCircleDollarToSlot,
+    faFileZipper,
 );
 
 export { FontAwesomeIcon };
