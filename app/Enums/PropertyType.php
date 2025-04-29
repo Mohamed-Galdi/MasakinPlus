@@ -43,7 +43,7 @@ enum PropertyType: string
     {
         return array_map(fn($type) => [
             'label' => $type->label(),
-            'value' => $type->value,
+            'value' => $type->label(),
         ], self::cases());
     }
 }

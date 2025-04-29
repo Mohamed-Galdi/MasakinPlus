@@ -79,7 +79,6 @@ class PropertyController extends Controller
         $property->title = $request->title;
         $property->description = $request->description;
         $property->type = $request->type;
-        $property->type_label = PropertyType::labelFor($request->type);
         $property->city = $request->city;
         $property->address = $request->address;
         $property->area = $request->area;
@@ -152,7 +151,6 @@ class PropertyController extends Controller
                 'title' => $request->title,
                 'description' => $request->description,
                 'type' => $request->type,
-                'type_label' => PropertyType::labelFor($request->type),
                 'city' => $request->city,
                 'address' => $request->address,
                 'area' => $request->area,

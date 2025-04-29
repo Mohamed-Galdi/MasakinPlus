@@ -5,14 +5,14 @@ namespace App\Enums;
 enum InvestmentRequestStatus: string
 {
     case Pending = 'pending';
-    case Accepted = 'accepted';
+    case Approved = 'approved';
     case Rejected = 'rejected';
 
     public function label(): string
     {
         return match ($this) {
             self::Pending => 'قيد المراجعة',
-            self::Accepted => 'تم القبول',
+            self::Approved => 'تم القبول',
             self::Rejected => 'تم الرفض',
         };
     }

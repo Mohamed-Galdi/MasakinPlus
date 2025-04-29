@@ -19,7 +19,6 @@ return new class extends Migration
             $table->decimal('suggested_daily_rent_price', 10, 2);
             $table->text('owner_note')->nullable();
             $table->enum('status', array_column(InvestmentRequestStatus::cases(), 'value'))->default(InvestmentRequestStatus::Pending->value);
-            $table->enum('status_label', InvestmentRequestStatus::labels())->default(InvestmentRequestStatus::Pending->label());
             $table->text('admin_note')->nullable();
             $table->timestamps();
         });

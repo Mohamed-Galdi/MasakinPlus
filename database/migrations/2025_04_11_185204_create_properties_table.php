@@ -18,8 +18,7 @@ return new class extends Migration
             $table->foreignId('owner_id')->constrained('users')->onDelete('cascade');
             $table->string('title')->index();
             $table->text('description')->nullable();
-            $table->enum('type', array_column(PropertyType::cases(), 'value'))->default(PropertyType::Apartment->value);
-            $table->enum('type_label', PropertyType::labels())->default(PropertyType::Apartment->label());
+            $table->enum('type', PropertyType::labels())->default(PropertyType::Apartment->label());
             $table->string('city');
             $table->string('address')->nullable();
             $table->float('area')->default(0); // Area in square meters
@@ -29,7 +28,6 @@ return new class extends Migration
             $table->decimal('longitude', 10, 6)->nullable();
             $table->decimal('daily_rent_price', 10, 2)->nullable();
             $table->enum('status', array_column(PropertyStatus::cases(), 'value'))->default(PropertyStatus::Draft->value);
-            $table->enum('status_label', PropertyStatus::labels())->default(PropertyStatus::Draft->label());
             $table->timestamps();
         });
     }

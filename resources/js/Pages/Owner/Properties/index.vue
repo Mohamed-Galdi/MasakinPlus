@@ -220,7 +220,7 @@ const textHelpers = useTextHelpers();
                         <p
                             class="bg-slate-800 text-white text-xs px-2 py-1 rounded-full font-sans h-fit"
                         >
-                            {{ property.type_label }}
+                            {{ property.type }}
                         </p>
                     </div>
 

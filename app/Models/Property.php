@@ -15,7 +15,6 @@ class Property extends Model
         'title',
         'description',
         'type',
-        'type_label',
         'city',
         'address',
         'area',

@@ -228,6 +228,10 @@ return [
         'images.max' => 'لا يمكن أن يحتوي حقل الصور على أكثر من 5 صور.',
         'subject'               => 'الموضوع',
         'users_id'              => 'المستخدمين',
+        'property_id'           => 'العقار',
+        'request_id'            => 'الطلب',
+        'suggested_investment_amount'  => 'المبلغ المقترح للاستثمار',
+        'suggested_daily_rent_price'  => 'السعر اليومي المقترح',
     ],
 
 ];
