@@ -44,7 +44,7 @@ const navigationItems = [
     },
     {
         title: "العقارات",
-        path: route("admin.properties"),
+        path: route("admin.properties.index"),
         iconType: "primevue",
         icon: "pi-home",
     },
