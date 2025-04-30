@@ -86,11 +86,15 @@ function resendOtp() {
                     <form @submit.prevent="submit" class="flex flex-col gap-6">
                         <!-- OTP Input -->
                         <div class="w-full flex justify-center" dir="ltr">
-                            <InputOtp v-model="otpForm.otp" :length="6" integerOnly />
+                            <InputOtp
+                                v-model="otpForm.otp"
+                                :length="6"
+                                integerOnly
+                            />
                         </div>
 
                         <Button
-                            severity="contrast"
+                            severity="success"
                             type="button"
                             label="التحقق"
                             :loading="otpForm.processing"
@@ -113,5 +117,4 @@ function resendOtp() {
     </div>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>

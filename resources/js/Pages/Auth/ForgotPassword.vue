@@ -84,7 +84,7 @@ function submit() {
                         </FloatLabel>
 
                         <Button
-                            severity="contrast"
+                            severity="success"
                             type="button"
                             label="إرسال رابط إعادة التعيين"
                             :loading="forgotPasswordForm.processing"

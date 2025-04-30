@@ -40,7 +40,9 @@ function submit() {
         >
             <img src="/assets/logos/logo_white.png" alt="logo" class="w-44" />
 
-            <div class="flex flex-col gap-6 bg-gray-300 w-[25rem] my-12 p-6 rounded-xl">
+            <div
+                class="flex flex-col gap-6 bg-gray-300 w-[25rem] my-12 p-6 rounded-xl"
+            >
                 <div class="text-center">
                     <h1 class="font-bold text-slate-800 font-Bein text-xl">
                         أدخل الرمز المرسل إلى بريدك الإلكتروني للتحقق
@@ -58,7 +60,7 @@ function submit() {
                     </div>
 
                     <Button
-                        severity="contrast"
+                        severity="success"
                         type="button"
                         label="التحقق"
                         :loading="otpForm.processing"

@@ -6,7 +6,7 @@ import FloatLabel from "primevue/floatlabel";
 import Password from "primevue/password";
 import Button from "primevue/button";
 import Checkbox from "primevue/checkbox";
-import Select  from "primevue/select";
+import Select from "primevue/select";
 import { useToast } from "primevue/usetoast";
 import Toast from "primevue/toast";
 import Avatar from "primevue/avatar";
@@ -24,7 +24,6 @@ const props = defineProps({
     },
 });
 
-
 const toast = useToast();
 
 const registerForm = useForm({
@@ -37,9 +36,9 @@ const registerForm = useForm({
 });
 
 const accountTypes = computed(() =>
-    props.userTypes.map(type => ({
+    props.userTypes.map((type) => ({
         ...type,
-        label: 'حساب ' + type.label,
+        label: "حساب " + type.label,
     }))
 );
 
@@ -79,7 +78,7 @@ function submit() {
             <!-- image section -->
             <div class="w-full md:w-1/3 flex justify-center py-2">
                 <div
-                    class="relative  w-[90%] max-w-md h-[37rem] rounded-b-[1rem] rounded-tr-[1rem] rounded-tl-[5rem] overflow-hidden"
+                    class="relative w-[90%] max-w-md h-[37rem] rounded-b-[1rem] rounded-tr-[1rem] rounded-tl-[5rem] overflow-hidden"
                 >
                     <img
                         src="/assets/register_image.jpg"
@@ -220,7 +219,7 @@ function submit() {
                         </div>
 
                         <Button
-                            severity="contrast"
+                            severity="success"
                             type="button"
                             label="إنشاء حساب"
                             :loading="registerForm.processing"

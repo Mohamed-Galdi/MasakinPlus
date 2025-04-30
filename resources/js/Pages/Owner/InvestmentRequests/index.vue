@@ -122,6 +122,11 @@ const openResubmitRequestModal = () => {
     showResubmitRequestModal.value = true;
 };
 
+const closeResubmitRequestModal = () => {
+    showResubmitRequestModal.value = false;
+    resubmitRequestForm.reset();
+};
+
 const submitResubmitRequest = () => {
     resubmitRequestForm.post(route("owner.investment-requests.resubmit"), {
         onSuccess: () => {
@@ -244,7 +249,7 @@ const formatDate = (dateString) => {
                         <Button
                             label=" إرسال الطلب "
                             icon="pi pi-check"
-                            severity="contrast"
+                            severity="success"
                             @click="submitCreateRequest"
                             :loading="createRequestForm.processing"
                         />
@@ -472,19 +477,18 @@ const formatDate = (dateString) => {
                 <!-- Actions -->
                 <div class="flex justify-end gap-2 mt-6">
                     <Button
+                        icon="pi pi-times"
+                        label="إغلاق"
+                        class="border-gray-400 text-gray-700 hover:bg-gray-50"
+                        @click="showRequestDetailsModal = false"
+                    />
+                    <Button
                         v-if="requestDetails.status === 'rejected'"
                         icon="pi pi-refresh"
                         label="تقديم طلب جديد"
-                        outlined
+                        severity="success"
                         class="border-emerald-700 text-emerald-700 hover:bg-emerald-50"
                         @click="openResubmitRequestModal()"
-                    />
-                    <Button
-                        icon="pi pi-times"
-                        label="إغلاق"
-                        outlined
-                        class="border-gray-400 text-gray-700 hover:bg-gray-50"
-                        @click="showRequestDetailsModal = false"
                     />
                 </div>
             </div>
@@ -616,7 +620,7 @@ const formatDate = (dateString) => {
                                     <div
                                         class="bg-slate-800 text-white text-xs px-2 py-1 rounded-full"
                                     >
-                                        {{ requestDetails.property.type}}
+                                        {{ requestDetails.property.type }}
                                     </div>
                                 </div>
                             </div>
@@ -668,15 +672,14 @@ const formatDate = (dateString) => {
                     <div class="flex justify-end gap-2 mt-6">
                         <Button
                             type="button"
-                            class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50"
-                            @click="showNewRequestModal = false"
+                            @click="closeResubmitRequestModal"
                         >
                             إلغاء
                         </Button>
                         <Button
                             label="  إعادة تقديم الطلب  "
                             icon="pi pi-check"
-                            severity="contrast"
+                            severity="success"
                             :loading="resubmitRequestForm.processing"
                             type="submit"
                         />
@@ -730,7 +733,7 @@ const formatDate = (dateString) => {
                 ></i>
             </div>
             <h2 class="text-xl font-semibold text-gray-700 mb-2">
-                لا توجد طلبات استثمار
+                لا توجد طلبات فتح استثمار
             </h2>
             <p class="text-gray-500 max-w-md mx-auto mb-6">
                 لم تقم بإنشاء أي طلبات فتح استثمار بعد. يمكنك إنشاء طلب جديد

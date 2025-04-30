@@ -34,6 +34,8 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     // Investment Requests
     Route::prefix('investment-requests')->name('admin.investment-requests.')->controller(InvestmentRequestController::class)->group(function () {
         Route::get('/', 'index')->name('index');
+        Route::post('/reply', 'reply')->name('reply');
+        Route::post('/change-status', 'changeStatus')->name('changeStatus');
     });
 
 

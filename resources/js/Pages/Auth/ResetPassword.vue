@@ -112,7 +112,7 @@ function submit() {
                         </FloatLabel>
 
                         <Button
-                            severity="contrast"
+                            severity="success"
                             type="button"
                             label="حفظ كلمة المرور الجديدة"
                             :loading="resetPasswordForm.processing"

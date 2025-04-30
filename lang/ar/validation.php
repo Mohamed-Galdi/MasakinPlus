@@ -232,6 +232,11 @@ return [
         'request_id'            => 'الطلب',
         'suggested_investment_amount'  => 'المبلغ المقترح للاستثمار',
         'suggested_daily_rent_price'  => 'السعر اليومي المقترح',
+        'admin_note'            => 'ملاحظات الإدارة',
+        'new_status'            => 'الحالة الجديدة',
+        'send_notification'     => 'إرسال إشعار للمالك',
+        'reply'                 => 'رد',
+        'change_status'         => 'تغيير الحالة',
     ],
 
 ];

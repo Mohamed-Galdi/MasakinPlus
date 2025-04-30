@@ -207,7 +207,7 @@ const deleteProduct = (productId) => {
     <div
         class="max-w-7xl mx-auto px-6 flex flex-col justify-between min-h-screen"
     >
-            <Head title="| Drawer Crud" />
+        <Head title="| Drawer Crud" />
 
         <Toast position="top-center" />
 
@@ -259,7 +259,7 @@ const deleteProduct = (productId) => {
                     type="submit"
                     label="Create"
                     :loading="createProductForm.processing"
-                    severity="contrast"
+                    severity="success"
                     class="w-full"
                 />
             </form>
@@ -314,7 +314,7 @@ const deleteProduct = (productId) => {
                     type="submit"
                     label="Update"
                     :loading="editProductForm.processing"
-                    severity="contrast"
+                    severity="success"
                     class="w-full"
                 />
             </form>

@@ -577,7 +577,7 @@ function submitUpdateProperty() {
                             <Button
                                 label="تعديل العقار"
                                 icon="pi pi-check"
-                                severity="contrast"
+                                severity="success"
                                 @click="submitUpdateProperty"
                                 :loading="propertyForm.processing"
                             />

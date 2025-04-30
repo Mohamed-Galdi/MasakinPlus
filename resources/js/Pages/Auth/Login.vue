@@ -42,14 +42,11 @@ function submit() {
 </script>
 
 <template>
-    <div
-        class="flex items-center justify-center font-BeinNormal pt-40 "
-    >
+    <div class="flex items-center justify-center font-BeinNormal pt-40">
         <Head title="| تسجيل الدخول" />
         <Toast position="top-center" />
 
         <div class="relative w-full max-w-md">
-
             <!-- Login Card -->
             <div
                 class="shadow-xl border border-teal-600 bg-white/95 backdrop-blur-sm rounded-2xl p-6"
@@ -116,7 +113,7 @@ function submit() {
                         </div>
 
                         <Button
-                            severity="contrast"
+                            severity="success"
                             type="button"
                             label="تسجيل الدخول"
                             :loading="loginForm.processing"

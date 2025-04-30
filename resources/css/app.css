@@ -138,4 +138,12 @@ border-color: #0d675b !important;
         font-family: BeinNormal;
 }
 
+.p-button-success{
+    background-color: #0d675b !important;
+    border-color: #0d675b !important;
+}
 
+.p-button-danger{
+    background-color: #a22622 !important;
+    border-color: #a22622 !important;
+}
