@@ -157,11 +157,14 @@ const formatPrice = (price) => {
 };
 // Format date
 const formatDate = (dateString) => {
+    if (!dateString) return "";
     const date = new Date(dateString);
     return new Intl.DateTimeFormat("ar-SA", {
         year: "numeric",
         month: "short",
         day: "numeric",
+        hour: "numeric",
+        minute: "numeric",
     }).format(date);
 };
 </script>
@@ -258,7 +261,7 @@ const formatDate = (dateString) => {
             </div>
         </Dialog>
 
-        <!-- Request Details Modal -->
+        <!-- View Investment Request Modal -->
         <Dialog
             v-model:visible="showRequestDetailsModal"
             modal
@@ -839,6 +842,18 @@ const formatDate = (dateString) => {
                         <div class="text-sm">
                             <i class="pi pi-calendar ml-1"></i>
                             {{ formatDate(slotProps.data.created_at) }}
+                        </div>
+                    </template>
+                </Column>
+                <Column
+                    field="created_at"
+                    header=" آخر تعديل"
+                    class="w-[150px]"
+                >
+                    <template #body="slotProps">
+                        <div class="text-sm">
+                            <i class="pi pi-calendar ml-1"></i>
+                            {{ formatDate(slotProps.data.updated_at) }}
                         </div>
                     </template>
                 </Column>

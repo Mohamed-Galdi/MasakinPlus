@@ -191,7 +191,7 @@ const updateRequestStatus = () => {
         <!-- Toast -->
         <Toast position="top-center" />
 
-        <!-- New Investment Request Modal -->
+        <!-- View Investment Request Modal -->
         <Dialog
             v-model:visible="showRequestDetailsModal"
             modal
@@ -216,12 +216,28 @@ const updateRequestStatus = () => {
 
                     <!-- Property Owner Info -->
                     <div class="bg-slate-50 rounded-lg p-4 mb-4">
-                        <h3 class="text-lg font-semibold text-gray-800 mb-3">
-                            معلومات المالك
-                        </h3>
+                        <div class="flex items-start justify-between">
+                            <h3
+                                class="text-lg font-semibold text-gray-800 mb-3"
+                            >
+                                معلومات المالك
+                            </h3>
+                            <Link
+                                :href="
+                                    route(
+                                        'admin.users.view',
+                                        requestDetails.property.owner.id
+                                    )
+                                "
+                                class="inline-flex items-center px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 rounded-md font-Bein text-sm transition duration-150 ease-in-out"
+                            >
+                                <i class="pi pi-user ml-1"></i>
+                                صفحة المالك
+                            </Link>
+                        </div>
                         <div class="flex items-center">
                             <div
-                                class="w-12 h-12 rounded-full overflow-hidden mr-3"
+                                class="w-12 h-12 rounded-full overflow-hidden ml-3"
                             >
                                 <img
                                     :src="requestDetails.property.owner.image"
@@ -243,9 +259,23 @@ const updateRequestStatus = () => {
 
                 <!-- Property Info -->
                 <div class="bg-gray-50 rounded-lg p-4 mb-4">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-3">
-                        معلومات العقار
-                    </h3>
+                    <div class="flex items-start justify-between">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-3">
+                            معلومات العقار
+                        </h3>
+                        <Link
+                            :href="
+                                route(
+                                    'admin.users.view',
+                                    requestDetails.property.owner.id
+                                )
+                            "
+                            class="inline-flex items-center px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 rounded-md font-Bein text-sm transition duration-150 ease-in-out"
+                        >
+                            <i class="pi pi-home ml-1"></i>
+                            صفحة العقار
+                        </Link>
+                    </div>
 
                     <div class="flex flex-col md:flex-row gap-4">
                         <!-- Property Image -->
@@ -474,7 +504,6 @@ const updateRequestStatus = () => {
                     <Button
                         icon="pi pi-times"
                         label="إغلاق"
-                        outlined
                         @click="showRequestDetailsModal = false"
                     />
                     <Button
@@ -482,20 +511,18 @@ const updateRequestStatus = () => {
                         severity="success"
                         icon="pi pi-refresh"
                         label="تغيير الحالة"
-                        outlined
-                        class="border-blue-600 text-blue-600 hover:bg-blue-50"
                         @click="openChangeStatusModal()"
                     />
                 </div>
             </div>
         </Dialog>
 
-        <!-- Change Status Modal -->
+        <!-- Change Investment Request Status Modal -->
         <Dialog
             v-model:visible="showChangeStatusModal"
             modal
             header="تغيير حالة طلب الاستثمار"
-            :style="{ width: isMobile ? '90%' : '40vw' }"
+            :style="{ width: isMobile ? '90%' : '50vw' }"
             :closable="true"
             :closeOnEscape="true"
         >
@@ -576,7 +603,6 @@ const updateRequestStatus = () => {
                     <Button
                         icon="pi pi-times"
                         label="إلغاء"
-                        outlined
                         class="border-gray-400 text-gray-700 hover:bg-gray-50"
                         @click="closeChangeStatusModal"
                     />

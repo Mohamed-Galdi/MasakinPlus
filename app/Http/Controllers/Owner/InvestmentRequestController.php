@@ -15,7 +15,7 @@ class InvestmentRequestController extends Controller
     {
         $user = auth()->user();
 
-        $investmentRequests = $user->investmentRequests()->paginate(6);
+        $investmentRequests = $user->investmentRequests()->orderBy('updated_at', 'desc')->paginate(10);
         $investmentRequests->load('property.images');
         // $investmentRequests = [];
 
