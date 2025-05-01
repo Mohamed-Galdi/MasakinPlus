@@ -11,7 +11,6 @@ import Column from "primevue/column";
 import Avatar from "primevue/avatar";
 import Tag from "primevue/tag";
 import Button from "primevue/button";
-import Tooltip from "primevue/tooltip";
 
 defineOptions({
     layout: AdminLayout,

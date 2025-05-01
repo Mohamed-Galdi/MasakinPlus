@@ -89,7 +89,7 @@ const currentState = computed(() => {
 
 <template>
     <div
-        dir="ltr"
+        dir=""
         :class="`inline-flex gap-2 items-center ${currentState.bg} ${currentState.text} border ${currentState.border} text-xs font-medium px-2.5 py-0.5 rounded-full`"
     >
         <!-- Animated Ping Effect -->

@@ -26,6 +26,7 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     // Properties
     Route::prefix('properties')->name('admin.properties.')->controller(PropertyController::class)->group(function () {
         Route::get('/', 'index')->name('index');
+        Route::get('/{property}', 'view')->name('view');
     });
 
     // Investment Requests
