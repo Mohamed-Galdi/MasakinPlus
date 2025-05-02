@@ -112,10 +112,10 @@ const getUserTypeArabic = (type) => {
     }
 };
 
-//
-function editUser(id) {
-    router.get(route("admin.users.view", { user: id }));
-}
+// ############################################## View property
+const viewUser = (user) => {
+    router.get(route("admin.users.view", { user: user.id }));
+};
 </script>
 
 <template>
@@ -224,6 +224,9 @@ function editUser(id) {
                 showGridlines
                 tableStyle="min-width: 50rem"
                 class="border-none"
+                @row-click="(event) => viewUser(event.data)"
+                :rowHover="true"
+                :rowClass="() => 'cursor-pointer'"
             >
                 <Column field="image" header="الصورة" class="w-[80px]">
                     <template #body="slotProps">
@@ -277,22 +280,6 @@ function editUser(id) {
                         <div class="text-sm text-gray-600">
                             <i class="pi pi-calendar-plus ml-1"></i>
                             {{ formatDate(slotProps.data.created_at) }}
-                        </div>
-                    </template>
-                </Column>
-
-                <Column header="الإجراءات" class="w-[120px]">
-                    <template #body="slotProps">
-                        <div class="flex gap-1 justify-center">
-                            <Button
-                                @click="editUser(slotProps.data.id)"
-                                v-tooltip="'تعديل المستخدم'"
-                                icon="pi pi-pencil"
-                                text
-                                rounded
-                                aria-label="تعديل"
-                                class="p-button-sm"
-                            />
                         </div>
                     </template>
                 </Column>

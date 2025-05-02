@@ -11,7 +11,6 @@ import InputText from "primevue/inputtext";
 import Textarea from "primevue/textarea";
 import Select from "primevue/select";
 import InputNumber from "primevue/inputnumber";
-import Checkbox from "primevue/checkbox";
 import MultiSelect from "primevue/multiselect";
 import Button from "primevue/button";
 import Stepper from "primevue/stepper";

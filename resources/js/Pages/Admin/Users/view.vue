@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import AdminLayout from "@/Layouts/AdminLayout.vue";
 import { Link, router, useForm } from "@inertiajs/vue3";
 import { useToast } from "primevue/usetoast";
@@ -32,6 +32,9 @@ const confirm = useConfirm();
 const showSuspendDialog = ref(false);
 const suspensionReason = ref("");
 const isUserActive = ref(props.user.is_active === 1);
+
+const isMobile = computed(() => window.innerWidth <= 768);
+
 
 // Function to get tag severity based on user type
 const getTypeSeverity = (type) => {

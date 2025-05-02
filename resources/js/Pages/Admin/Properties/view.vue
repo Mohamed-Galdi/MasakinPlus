@@ -1,6 +1,7 @@
 <script setup>
 import AdminLayout from "@/Layouts/AdminLayout.vue";
 import { ref } from "vue";
+import { Link } from "@inertiajs/vue3";
 import { useTextHelpers } from "@/plugins/textHelpers";
 import { useToast } from "primevue/usetoast";
 import Galleria from "primevue/galleria";
@@ -14,6 +15,7 @@ import Tab from "primevue/tab";
 import TabPanels from "primevue/tabpanels";
 import TabPanel from "primevue/tabpanel";
 import PropertyStatus from "@/Components/PropertyStatus.vue";
+import PropertyMapView from "@/Components/PropertyMapView.vue";
 
 defineOptions({
     layout: AdminLayout,
@@ -33,6 +35,7 @@ const props = defineProps({
 const textHelpers = useTextHelpers();
 const toast = useToast();
 const property = ref(props.property);
+const statusOptions = ref(props.statusOptions);
 
 // Format images for Galleria
 const getGalleriaImages = (images) => {
@@ -65,7 +68,7 @@ const formatPrice = (price) => {
 </script>
 
 <template>
-    <div class="p-6">
+    <div class="">
         <!-- Header -->
         <div class="flex items-center justify-between mb-6">
             <div class="flex items-center gap-3">
@@ -74,7 +77,7 @@ const formatPrice = (price) => {
                     style="font-size: 2.5rem"
                 ></i>
                 <div>
-                    <h1 class="text-3xl font-semibold text-teal-800 m-0">
+                    <h1 class="md:text-3xl text-xl font-semibold text-teal-800 m-0">
                         {{ property.title }}
                     </h1>
                     <p class="text-gray-500 text-sm m-0">
@@ -82,16 +85,22 @@ const formatPrice = (price) => {
                     </p>
                 </div>
             </div>
-            <!-- <PropertyStatus
-                :status="property.status"
-                :status-options="statusOptions"
-            /> -->
+            <Link
+                :href="route('admin.properties.index')"
+                class="flex items-center gap-2 text-gray-600 transition-colors"
+            >
+                <p class="flex gap-1">
+                    العودة
+                    <span class="md:block hidden"> الى قائمة العقارات</span>
+                </p>
+                <i class="pi pi-arrow-left"></i>
+            </Link>
         </div>
 
         <!-- Main Content -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <!-- Left Column: Images, Map, and Tabs -->
-            <div class="lg:col-span-2 space-y-6">
+            <div class="lg:col-span-2 space-y-6 md:order-first order-last">
                 <!-- Image Gallery -->
                 <Card>
                     <template #content>
@@ -106,14 +115,14 @@ const formatPrice = (price) => {
                         >
                             <template #item="slotProps">
                                 <img
-                                    :src="slotProps.item.itemImageSrc"
+                                    :src="'/' + slotProps.item.itemImageSrc"
                                     :alt="slotProps.item.alt"
                                     class="w-full h-[400px] object-cover rounded-lg"
                                 />
                             </template>
                             <template #thumbnail="slotProps">
                                 <img
-                                    :src="slotProps.item.itemImageSrc"
+                                    :src="'/' + slotProps.item.itemImageSrc"
                                     :alt="slotProps.item.alt"
                                     class="w-20 h-20 object-cover rounded-md"
                                 />
@@ -125,29 +134,24 @@ const formatPrice = (price) => {
                 <!-- Location (Map) -->
                 <Card>
                     <template #title>
-                        <h2 class="text-xl font-bold text-teal-800">الموقع</h2>
+                        <div class="flex items-center gap-3 mb-4">
+                            <h2 class="text-xl font-bold text-teal-800">
+                                الموقع
+                            </h2>
+                            <p class="text-gray-600 text-base">
+                                {{ property.address }}, {{ property.city }}
+                            </p>
+                        </div>
                     </template>
+
                     <template #content>
-                        <p class="text-gray-500 text-sm">العنوان</p>
-                        <p class="text-gray-700 mb-4">
-                            {{ property.address }}, {{ property.city }}
-                        </p>
                         <div
                             class="w-full h-[500px] bg-gray-200 rounded-lg overflow-hidden"
                         >
-                            <iframe
-                                class="w-full h-full"
-                                :src="`https://www.openstreetmap.org/export/embed.html?bbox=${
-                                    property.longitude - 0.005
-                                }%2C${property.latitude - 0.005}%2C${
-                                    property.longitude + 0.005
-                                }%2C${
-                                    property.latitude + 0.005
-                                }&layer=mapnik&marker=${property.latitude}%2C${
-                                    property.longitude
-                                }`"
-                                frameborder="0"
-                            ></iframe>
+                            <PropertyMapView
+                                :latitude="property.latitude"
+                                :longitude="property.longitude"
+                            />
                         </div>
                     </template>
                 </Card>
@@ -158,31 +162,49 @@ const formatPrice = (price) => {
                         <Tabs value="0">
                             <TabList>
                                 <Tab value="0">سجل الإيجار</Tab>
-                                <Tab value="1">طلبات الاستثمار</Tab>
+                                <Tab value="1">سجل الاستثمار</Tab>
                             </TabList>
                             <TabPanels>
                                 <TabPanel value="0">
-                                    <p class="text-gray-500 m-0">
-                                        سيتم إضافة سجل الإيجار قريبًا.
-                                    </p>
+                                    <div
+                                        class="flex flex-col items-center justify-center p-10 rounded-lg"
+                                    >
+                                        <i
+                                            class="pi pi-calendar text-gray-300 mb-3"
+                                            style="font-size: 3rem"
+                                        ></i>
+                                        <h3
+                                            class="text-xl font-semibold text-gray-700 mb-2"
+                                        >
+                                            سجل الإيجار
+                                        </h3>
+                                        <p
+                                            class="text-gray-500 text-center max-w-lg"
+                                        >
+                                            سيتم عرض سجل الإيجار والحجوزات
+                                            الخاصة بهذا العقار هنا عندما تكون
+                                            متاحة.
+                                        </p>
+                                    </div>
                                 </TabPanel>
                                 <TabPanel value="1">
-                                    <p class="text-gray-500 m-0">
-                                        سيتم إضافة طلبات الاستثمار قريبًا.
-                                    </p>
                                     <div
-                                        v-if="
-                                            property.investment_requests
-                                                .length > 0
-                                        "
-                                        class="mt-4"
+                                        class="flex flex-col items-center justify-center p-10 rounded-lg"
                                     >
-                                        <p class="text-gray-700">
-                                            عدد الطلبات:
-                                            {{
-                                                property.investment_requests
-                                                    .length
-                                            }}
+                                        <i
+                                            class="pi pi-chart-line text-gray-300 mb-3"
+                                            style="font-size: 3rem"
+                                        ></i>
+                                        <h3
+                                            class="text-xl font-semibold text-gray-700 mb-2"
+                                        >
+                                            معلومات الاستثمار
+                                        </h3>
+                                        <p
+                                            class="text-gray-500 text-center max-w-lg"
+                                        >
+                                            سيتم عرض معلومات الاستثمار الخاصة
+                                            بهذا العقار هنا عندما تكون متاحة.
                                         </p>
                                     </div>
                                 </TabPanel>
@@ -197,9 +219,20 @@ const formatPrice = (price) => {
                 <!-- Owner Info -->
                 <Card>
                     <template #title>
-                        <h2 class="text-xl font-bold text-teal-800">
-                            معلومات المالك
-                        </h2>
+                        <div class="flex items-start justify-between">
+                            <h2 class="text-xl font-bold text-teal-800">
+                                معلومات المالك
+                            </h2>
+                            <Link
+                                :href="
+                                    route('admin.users.view', property.owner.id)
+                                "
+                                class="inline-flex items-center px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 border border-slate-300 rounded-md font-Bein text-sm transition duration-150 ease-in-out"
+                            >
+                                <i class="pi pi-user ml-1"></i>
+                                صفحة المالك
+                            </Link>
+                        </div>
                     </template>
                     <template #content>
                         <div class="flex items-center gap-3">
@@ -217,11 +250,25 @@ const formatPrice = (price) => {
                                 </p>
                             </div>
                         </div>
-                        <div class="mt-4">
-                            <p class="text-gray-500 text-sm">تاريخ التسجيل</p>
-                            <p class="text-gray-700">
-                                {{ formatDate(property.owner.created_at) }}
-                            </p>
+                        <div class="mt-4 flex justify-between items-center">
+                            <div class="">
+                                <p class="text-gray-500 text-sm">
+                                    تاريخ التسجيل
+                                </p>
+                                <p class="text-gray-700">
+                                    {{ formatDate(property.owner.created_at) }}
+                                </p>
+                            </div>
+                            <div
+                                class="flex flex-col items-center justify-center"
+                            >
+                                <p class="text-gray-500 text-sm">
+                                    مجموع العقارات
+                                </p>
+                                <Tag severity="info">
+                                    {{ property.owner.owned_properties_count }}
+                                </Tag>
+                            </div>
                         </div>
                     </template>
                 </Card>
@@ -229,9 +276,15 @@ const formatPrice = (price) => {
                 <!-- Property Details -->
                 <Card>
                     <template #title>
-                        <h2 class="text-xl font-bold text-teal-800">
-                            تفاصيل العقار
-                        </h2>
+                        <div class="flex items-start justify-between">
+                            <h2 class="text-xl font-bold text-teal-800">
+                                تفاصيل العقار
+                            </h2>
+                            <PropertyStatus
+                                :status="property.status"
+                                :status-options="statusOptions"
+                            />
+                        </div>
                     </template>
                     <template #content>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -245,19 +298,17 @@ const formatPrice = (price) => {
                             </div>
                             <div>
                                 <p class="text-gray-500 text-sm">المساحة</p>
-                                <p class="text-lg font-semibold">
-                                    {{ property.area }} م²
-                                </p>
+                                <p class="text-lg">{{ property.area }} م²</p>
                             </div>
                             <div>
                                 <p class="text-gray-500 text-sm">غرف النوم</p>
-                                <p class="text-lg font-semibold">
+                                <p class="text-lg">
                                     {{ property.bedrooms }} غرف
                                 </p>
                             </div>
                             <div>
                                 <p class="text-gray-500 text-sm">الحمامات</p>
-                                <p class="text-lg font-semibold">
+                                <p class="text-lg">
                                     {{ property.bathrooms }} حمامات
                                 </p>
                             </div>
@@ -265,9 +316,7 @@ const formatPrice = (price) => {
                                 <p class="text-gray-500 text-sm">
                                     الإيجار اليومي
                                 </p>
-                                <p
-                                    class="text-lg font-semibold text-emerald-600"
-                                >
+                                <p class="text-lg text-emerald-600">
                                     {{
                                         property.daily_rent_price
                                             ? formatPrice(
@@ -278,19 +327,19 @@ const formatPrice = (price) => {
                                 </p>
                             </div>
                             <div>
-                                <p class="text-gray-500 text-sm">
+                                <p class="text-gray- 500 text-sm">
                                     تاريخ الإضافة
                                 </p>
-                                <p class="text-lg font-semibold">
+                                <p class="text-lg">
                                     {{ formatDate(property.created_at) }}
                                 </p>
                             </div>
-                        </div>
-                        <div class="mt-4">
-                            <p class="text-gray-500 text-sm">الوصف</p>
-                            <p class="text-gray-700">
-                                {{ property.description }}
-                            </p>
+                            <div class="col-span-2">
+                                <p class="text-gray-500 text-sm">الوصف</p>
+                                <p class="text-gray-700">
+                                    {{ property.description }}
+                                </p>
+                            </div>
                         </div>
                     </template>
                 </Card>
@@ -322,48 +371,5 @@ const formatPrice = (price) => {
                 </Card>
             </div>
         </div>
-
-        <!-- Action Buttons -->
-        <div class="flex justify-end gap-3 mt-6">
-            <Button
-                label="تعديل العقار"
-                icon="pi pi-pencil"
-                class="p-button-outlined p-button-teal"
-            />
-            <Button
-                label="رجوع"
-                icon="pi pi-arrow-right"
-                class="p-button-text p-button-teal"
-                :href="route('admin.properties.index')"
-            />
-        </div>
     </div>
 </template>
-
-<style scoped>
-:deep(.p-galleria .p-galleria-indicators) {
-    background: rgba(0, 0, 0, 0.5);
-    padding: 0.5rem;
-    border-radius: 0 0 0.5rem 0.5rem;
-}
-:deep(.p-galleria .p-galleria-item-navigator) {
-    background: rgba(0, 0, 0, 0.7);
-    color: white;
-}
-:deep(.p-card) {
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
-        0 2px 4px -1px rgba(0, 0, 0, 0.06);
-}
-:deep(.p-tabs-nav) {
-    background: #f8fafc;
-    border-bottom: 2px solid #e2e8f0;
-}
-:deep(.p-tab) {
-    font-weight: 500;
-    color: #475569;
-}
-:deep(.p-tab.p-highlight) {
-    color: #0f766e;
-    border-bottom: 2px solid #0f766e;
-}
-</style>

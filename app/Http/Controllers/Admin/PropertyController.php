@@ -55,7 +55,11 @@ class PropertyController extends Controller
 
     public function view(Request $request, Property $property)
     {
-        $property->load('amenities', 'images', 'owner', 'investmentRequests');
-        return inertia('Admin/Properties/view', compact('property'));
+        $statusOptions = PropertyStatus::options();
+
+        $property->load(['amenities', 'images', 'owner' => function ($query) {
+            $query->withCount('ownedProperties');
+        }, 'investmentRequests']);
+        return inertia('Admin/Properties/view', compact('property', 'statusOptions'));
     }
 }
