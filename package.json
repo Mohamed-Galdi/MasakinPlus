@@ -26,6 +26,7 @@
         "@fortawesome/vue-fontawesome": "^3.0.8",
         "@mapbox/mapbox-gl-geocoder": "^5.0.3",
         "@primevue/themes": "^4.3.2",
+        "chart.js": "^4.4.9",
         "filepond": "^4.32.7",
         "filepond-plugin-file-validate-size": "^2.2.8",
         "filepond-plugin-file-validate-type": "^1.2.9",

@@ -343,49 +343,4 @@ const viewUser = (user) => {
     </div>
 </template>
 
-<style scoped>
-/* Table styling */
-:deep(.p-datatable .p-datatable-thead > tr > th) {
-    background-color: #f8fafc;
-    color: #475569;
-    font-weight: 600;
-    padding: 1rem;
-    border-bottom: 1px solid #e2e8f0;
-}
 
-:deep(.p-datatable .p-datatable-tbody > tr > td) {
-    padding: 0.75rem 1rem;
-    border-bottom: 1px solid #f1f5f9;
-}
-
-:deep(.p-datatable .p-datatable-tbody > tr:hover) {
-    background-color: #f8fafc;
-}
-
-:deep(.p-datatable-wrapper) {
-    border-radius: 0.75rem;
-}
-
-/* Ensure RTL support for PrimeVue components */
-:deep(.p-inputtext),
-:deep(.p-dropdown) {
-    text-align: right;
-}
-
-/* Empty state animation */
-.empty-state-icon {
-    animation: pulse 2s infinite ease-in-out;
-}
-
-@keyframes pulse {
-    0% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.05);
-    }
-    100% {
-        transform: scale(1);
-    }
-}
-</style>

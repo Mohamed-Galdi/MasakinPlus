@@ -72,7 +72,7 @@ function submit() {
                 </FloatLabel>
 
                 <Button
-                    severity="success"
+                    severity="contrast"
                     type="button"
                     label="تسجيل الدخول"
                     :loading="loginForm.processing"

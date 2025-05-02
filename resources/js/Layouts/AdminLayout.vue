@@ -35,6 +35,12 @@ const navigationItems = [
     //         },
     //     ],
     // },
+    {
+        title: "لوحة المشرف",
+        path: route("admin.dashboard.index"),
+        iconType: "primevue",
+        icon: "pi-chart-bar scale-x-[-1]",
+    },
 
     {
         title: "المستخدمين",

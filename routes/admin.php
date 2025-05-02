@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AdminAuthenticatedSessionController;
 use App\Http\Controllers\Admin\AccountController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\InvestmentRequestController;
 use App\Http\Controllers\Admin\PropertyController;
 use App\Http\Controllers\Admin\SupportController;
@@ -12,7 +13,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
 
-    Route::redirect('/', '/admin/users')->name('admin.dashboard');
+    Route::redirect('/', '/admin/dashboard')->name('admin.dashboard');
+
+    // Dashboard
+    Route::prefix('dashboard')->name('admin.dashboard.')->controller(DashboardController::class)->group(function () {
+        Route::get('/', 'index')->name('index');
+    });
 
     // Users
     Route::prefix('users')->name('admin.users.')->controller(UserController::class)->group(function () {
