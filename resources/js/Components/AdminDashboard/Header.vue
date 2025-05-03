@@ -12,6 +12,10 @@ defineProps({
         type: String,
         required: true,
     },
+    isFontAwesome: {
+        type: Boolean,
+        default: false,
+    },
 });
 </script>
 
@@ -35,10 +39,11 @@ defineProps({
             <!-- Left Section: Icon, Title, Subtitle -->
             <div class="flex items-center gap-4 sm:gap-5 w-full sm:w-auto">
                 <div class="flex-shrink-0">
-                    <i
+                    <i v-if="!isFontAwesome"
                         :class="`pi ${icon} text-white`"
                         style="font-size: 2.5rem;"
                     ></i>
+                    <Icon v-else :icon="icon" class="text-white w-10 h-10" />
                 </div>
                 <div class="max-w-full">
                     <h1

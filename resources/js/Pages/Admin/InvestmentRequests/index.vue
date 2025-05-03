@@ -620,7 +620,8 @@ const updateRequestStatus = () => {
         <!-- Header Section -->
 
         <Header
-            icon="pi-home"
+            :isFontAwesome="true"
+            icon="fa-regular fa-file-zipper"
             title="طلبات فتح الاستثمار"
             subtitle=" إدارة طلبات فتح الاستثمار على العقارات"
         ></Header>

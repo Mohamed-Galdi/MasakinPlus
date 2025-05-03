@@ -115,7 +115,7 @@ const formatDate = (dateString) => {
     <div>
         <!-- Header Section -->
         <Header
-            icon="pi-users"
+            icon="pi-home"
             title="العقارات "
             subtitle="إدارة عقارات النظام المتاحة للإستثمار و الكراء"
         >
