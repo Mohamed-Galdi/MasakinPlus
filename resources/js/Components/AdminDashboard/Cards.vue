@@ -259,51 +259,24 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="bg-gradient-to-br from-slate-50 to-slate-100 min-h-screen p-8">
+    <div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <div
                 v-for="(metric, index) in metrics"
                 :key="index"
-                class="metric-card relative overflow-hidden rounded-2xl border border-slate-200 bg-white"
-                :style="{
-                    boxShadow: `0 10px 25px -10px ${metric.color.chartFill}`,
-                }"
+                class="relative shadow-sm overflow-hidden rounded-2xl border border-slate-300 bg-white"
             >
                 <!-- Card Content -->
-                <div class="relative z-10 p-6 flex flex-col h-52">
-                    <!-- Header -->
+                <div class="relative z-10 p-6 flex flex-col h-44">
                     <div class="flex justify-between items-start mb-2">
-                        <!-- Icon with gradient background -->
-                       
-
-                        <!-- Trend Indicator -->
-                        <!-- <div
-                            class="trend-badge flex items-center gap-1 text-sm font-semibold px-3 py-1.5 rounded-full"
-                            :class="
-                                metric.trend === 'up'
-                                    ? 'bg-emerald-50 text-emerald-600 border border-emerald-200'
-                                    : 'bg-rose-50 text-rose-600 border border-rose-200'
-                            "
-                        >
-                            <i
-                                :class="[
-                                    'pi text-sm',
-                                    metric.trend === 'up'
-                                        ? 'pi-arrow-up'
-                                        : 'pi-arrow-down',
-                                ]"
-                            ></i>
-                            <span
-                                >{{ Math.abs(metric.change).toFixed(1) }}%</span
-                            >
-                        </div> -->
+                        <!-- Title and Metrics -->
                         <div class="mb-4 text-right">
-                            <h3 class="text-slate-500 text-sm font-medium mb-1">
+                            <h3 class="text-slate-700 mb-1">
                                 {{ metric.title }}
                             </h3>
                             <div class="flex items-baseline justify-start">
                                 <span
-                                    class="counter-value text-3xl font-bold text-slate-800"
+                                    class="counter-value text-3xl font-bold text-slate-700"
                                     :data-target="metric.value"
                                     >0</span
                                 >
@@ -312,7 +285,8 @@ onMounted(() => {
                                 }}</span>
                             </div>
                         </div>
-                         <div
+                        <!-- Icon -->
+                        <div
                             class="h-14 w-14 rounded-2xl flex items-center justify-center icon-container"
                             :style="{ background: metric.color.gradient }"
                         >
@@ -324,10 +298,8 @@ onMounted(() => {
                         </div>
                     </div>
 
-                    <!-- Value -->
-
                     <!-- Chart -->
-                    <div class="absolute bottom-0 left-0 h-24 w-full">
+                    <div class="absolute bottom-0 left-0 h-16 w-full">
                         <Chart
                             type="line"
                             :data="metric.chartData"
@@ -338,12 +310,14 @@ onMounted(() => {
                 </div>
 
                 <!-- Decorative elements -->
+                <!-- Top Bar -->
                 <div
                     class="absolute top-0 left-0 w-full h-1"
                     :style="{ background: metric.color.gradient }"
                 ></div>
+                <!-- Circle -->
                 <div
-                    class="absolute -top-10 -right-10 w-32 h-32 rounded-full opacity-10"
+                    class="absolute -top-10 -left-10 w-32 h-32 rounded-full opacity-10"
                     :style="{ background: metric.color.gradient }"
                 ></div>
             </div>
