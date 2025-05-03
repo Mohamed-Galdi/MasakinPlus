@@ -9,9 +9,10 @@ import Button from "primevue/button";
 import Avatar from "primevue/avatar";
 import Tag from "primevue/tag";
 import ProgressBar from "primevue/progressbar";
-import Dropdown from "primevue/dropdown";
+import Select from "primevue/select";
 import Badge from "primevue/badge";
 import Cards from "@/Components/AdminDashboard/Cards.vue";
+import Header from "@/Components/AdminDashboard/Header.vue";
 
 defineOptions({
     layout: AdminLayout,
@@ -25,8 +26,6 @@ const timePeriods = ref([
     { label: "هذا العام", value: "year" },
 ]);
 const selectedPeriod = ref("month");
-
-
 
 // Recent properties
 const recentProperties = ref([
@@ -198,28 +197,28 @@ const userGrowthData = ref({
 const topInvestors = ref([
     {
         name: "محمد العبدالله",
-        image: "https://via.placeholder.com/40",
+        image: "https://primefaces.org/cdn/primevue/images/avatar/onyamalimba.png",
         investments: 12,
         amount: "٥,٢٠٠,٠٠٠ ر.س",
         roi: 8.5,
     },
     {
         name: "سارة الفهد",
-        image: "https://via.placeholder.com/40",
+        image: "https://primefaces.org/cdn/primevue/images/avatar/asiyajavayant.png",
         investments: 8,
         amount: "٣,٨٠٠,٠٠٠ ر.س",
         roi: 7.9,
     },
     {
         name: "عبدالرحمن السالم",
-        image: "https://via.placeholder.com/40",
+        image: "https://primefaces.org/cdn/primevue/images/avatar/xuxuefeng.png",
         investments: 6,
         amount: "٢,٥٠٠,٠٠٠ ر.س",
         roi: 8.2,
     },
     {
         name: "نورة العمري",
-        image: "https://via.placeholder.com/40",
+        image: "https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png",
         investments: 5,
         amount: "٢,١٠٠,٠٠٠ ر.س",
         roi: 7.5,
@@ -413,31 +412,20 @@ const formatDate = (dateString) => {
 <template>
     <div>
         <!-- Header Section -->
-        <div class="flex items-center justify-between mb-6">
-            <div class="flex items-center gap-3">
-                <i
-                    class="pi pi-chart-line text-teal-800 h-full"
-                    style="font-size: 2.5rem"
-                ></i>
-                <div class="">
-                    <h1 class="text-3xl font-semibold m-0 text-teal-800">
-                        لوحة التحكم
-                    </h1>
-                    <p class="text-gray-500 text-sm m-0">
-                        نظرة عامة على أداء المنصة والإحصائيات
-                    </p>
-                </div>
-            </div>
-            <div>
-                <Dropdown
-                    v-model="selectedPeriod"
-                    :options="timePeriods"
-                    optionLabel="label"
-                    optionValue="value"
-                    class="w-48 border border-gray-200 rounded-lg shadow-sm"
-                />
-            </div>
-        </div>
+
+        <Header
+            icon="pi-chart-bar scale-x-[-1]"
+            title="لوحة التحكم"
+            subtitle="نظرة عامة على أداء المنصة والإحصائيات"
+        >
+            <Select
+                v-model="selectedPeriod"
+                :options="timePeriods"
+                optionLabel="label"
+                optionValue="value"
+                class="w-48 border border-gray-200 rounded-lg shadow-sm"
+            />
+        </Header>
 
         <!-- Metrics Cards 1 -->
         <Cards />
@@ -558,7 +546,7 @@ const formatDate = (dateString) => {
             </div>
         </div>
 
-        <!-- Recent Properties and Top Investors -->
+        <!-- Recent Properties and Latest Activites -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
             <!-- Recent Properties -->
             <div class="bg-white rounded-xl shadow-sm overflow-hidden">
@@ -582,11 +570,11 @@ const formatDate = (dateString) => {
                     <Column field="image" header="العقار">
                         <template #body="slotProps">
                             <div class="flex items-center gap-2 p-2">
-                                <Avatar
+                                <!-- <Avatar
                                     :image="slotProps.data.image"
                                     size="normal"
                                     shape="circle"
-                                />
+                                /> -->
                                 <div>
                                     <div class="font-medium">
                                         {{ slotProps.data.title }}

@@ -141,6 +141,7 @@ border-color: #0d675b !important;
 .p-button-success{
     background-color: #0d675b !important;
     border-color: #0d675b !important;
+    color: white !important;
 }
 
 .p-button-danger{

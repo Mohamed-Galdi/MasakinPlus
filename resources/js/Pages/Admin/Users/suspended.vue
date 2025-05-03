@@ -12,6 +12,7 @@ import Avatar from "primevue/avatar";
 import Tag from "primevue/tag";
 import Button from "primevue/button";
 import Tooltip from "primevue/tooltip";
+import Header from "@/Components/AdminDashboard/Header.vue";
 
 defineOptions({
     layout: AdminLayout,
@@ -113,40 +114,28 @@ const getUserTypeArabic = (type) => {
     }
 };
 
-//
-function editUser(id) {
-    router.get(route("admin.users.view", { user: id }));
-}
+// ############################################## View property
+const viewUser = (user) => {
+    router.get(route("admin.users.view", { user: user.id }));
+};
 </script>
 
 <template>
     <div>
         <!-- Header Section -->
-        <div class="flex items-center justify-between mb-6">
-            <div class="flex items-center gap-3">
-                <i
-                    class="pi pi-users text-rose-800 h-full"
-                    style="font-size: 2.5rem"
-                ></i>
-                <div class="">
-                    <h1 class="text-3xl font-semibold m-0 text-rose-800">
-                        المستخدمين المحضورين
-                    </h1>
-                    <p class="text-gray-500 text-sm m-0">
-                        إدارة حسابات المستخدمين في النظام
-                    </p>
-                </div>
-            </div>
-            <div>
-                <Link
-                    :href="route('admin.users.index')"
-                    class="btn bg-teal-600 hover:bg-teal-700 text-white"
-                >
-                    <p>قائمة المستخدمين</p>
-                    <i class="pi pi-users"></i>
-                </Link>
-            </div>
-        </div>
+        <Header
+            icon="pi-users"
+            title="المستخدمين المحضورين"
+            subtitle=" إدارة حسابات المستخدمين في النظام"
+        >
+             <Link
+                :href="route('admin.users.index')"
+                class="btn bg-slate-200 hover:bg-slate-100 text-slate-800"
+            >
+                <p class="flex gap-1">العودة</p>
+                <i class="pi pi-arrow-left"></i>
+            </Link>
+        </Header>
 
         <!-- Filters Section -->
         <div
@@ -227,6 +216,9 @@ function editUser(id) {
                 showGridlines
                 tableStyle="min-width: 50rem"
                 class="border-none"
+                @row-click="(event) => viewUser(event.data)"
+                :rowHover="true"
+                :rowClass="() => 'cursor-pointer'"
             >
                 <Column field="image" header="الصورة" class="w-[80px]">
                     <template #body="slotProps">
@@ -293,22 +285,6 @@ function editUser(id) {
                                     "--"
                                 }}
                             </p>
-                        </div>
-                    </template>
-                </Column>
-
-                <Column header="الإجراءات" class="w-[120px]">
-                    <template #body="slotProps">
-                        <div class="flex gap-1 justify-center">
-                            <Button
-                                @click="editUser(slotProps.data.id)"
-                                v-tooltip="'تعديل المستخدم'"
-                                icon="pi pi-pencil"
-                                text
-                                rounded
-                                aria-label="تعديل"
-                                class="p-button-sm"
-                            />
                         </div>
                     </template>
                 </Column>

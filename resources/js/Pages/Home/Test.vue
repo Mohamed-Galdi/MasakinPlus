@@ -1,352 +1,54 @@
 <script setup>
-import Chart from "primevue/chart";
+import AdminLayout from "@/Layouts/AdminLayout.vue";
 import { ref, onMounted } from "vue";
 
-// Enhanced color palette with gradients for light theme
-const colors = {
-    teal: {
-        main: "#0D9488",
-        gradient: "linear-gradient(135deg, #0F766E 0%, #2DD4BF 100%)",
-        chartLine: "#0F766E",
-        chartFill: "rgba(15, 118, 110, 0.08)",
-        light: "#CCFBF1",
-    },
-    purple: {
-        main: "#7E22CE",
-        gradient: "linear-gradient(135deg, #7E22CE 0%, #A855F7 100%)",
-        chartLine: "#7E22CE",
-        chartFill: "rgba(126, 34, 206, 0.08)",
-        light: "#F3E8FF",
-    },
-    blue: {
-        main: "#1D4ED8",
-        gradient: "linear-gradient(135deg, #1D4ED8 0%, #3B82F6 100%)",
-        chartLine: "#1D4ED8",
-        chartFill: "rgba(29, 78, 216, 0.08)",
-        light: "#DBEAFE",
-    },
-    emerald: {
-        main: "#047857",
-        gradient: "linear-gradient(135deg, #047857 0%, #10B981 100%)",
-        chartLine: "#047857",
-        chartFill: "rgba(4, 120, 87, 0.08)",
-        light: "#D1FAE5",
-    },
-};
-
-// dummy data with trends
-const metrics = ref([
-    {
-        title: "إجمالي العقارات",
-        value: "1,248",
-        subtext: "عقار",
-        change: 12.4,
-        trend: "up",
-        icon: "pi pi-building",
-        color: colors.teal,
-        chartData: {
-            labels: [
-                "يناير",
-                "فبراير",
-                "مارس",
-                "أبريل",
-                "مايو",
-                "يونيو",
-                "يوليو",
-            ],
-            datasets: [
-                {
-                    data: [950, 1005, 1102, 1080, 1175, 1210, 1248],
-                    borderColor: colors.teal.chartLine,
-                    backgroundColor: colors.teal.chartFill,
-                    borderWidth: 2.5,
-                    pointRadius: 0,
-                    tension: 0.4,
-                    fill: true,
-                },
-            ],
-        },
-        stats: "نمو بنسبة 31% منذ بداية العام",
-    },
-    {
-        title: "إجمالي المستثمرين",
-        value: "842",
-        subtext: "مستثمر",
-        change: 8.7,
-        trend: "up",
-        icon: "pi pi-briefcase",
-        color: colors.purple,
-        chartData: {
-            labels: [
-                "يناير",
-                "فبراير",
-                "مارس",
-                "أبريل",
-                "مايو",
-                "يونيو",
-                "يوليو",
-            ],
-            datasets: [
-                {
-                    data: [720, 710, 765, 780, 810, 825, 842],
-                    borderColor: colors.purple.chartLine,
-                    backgroundColor: colors.purple.chartFill,
-                    borderWidth: 2.5,
-                    pointRadius: 0,
-                    tension: 0.4,
-                    fill: true,
-                },
-            ],
-        },
-        stats: "8 مستثمرين جدد هذا الشهر",
-    },
-    {
-        title: "إجمالي المستأجرين",
-        value: "1,563",
-        subtext: "مستأجر",
-        change: -4.2,
-        trend: "down",
-        icon: "pi pi-users",
-        color: colors.blue,
-        chartData: {
-            labels: [
-                "يناير",
-                "فبراير",
-                "مارس",
-                "أبريل",
-                "مايو",
-                "يونيو",
-                "يوليو",
-            ],
-            datasets: [
-                {
-                    data: [1400, 1450, 1630, 1580, 1600, 1632, 1563],
-                    borderColor: colors.blue.chartLine,
-                    backgroundColor: colors.blue.chartFill,
-                    borderWidth: 2.5,
-                    pointRadius: 0,
-                    tension: 0.4,
-                    fill: true,
-                },
-            ],
-        },
-        stats: "انخفاض مؤقت بسبب انتهاء 69 عقد إيجار",
-    },
-    {
-        title: "إجمالي الإيرادات",
-        value: "٢,٥٤٨,٠٠٠",
-        subtext: "ر.س",
-        change: 18.5,
-        trend: "up",
-        icon: "pi pi-wallet",
-        color: colors.emerald,
-        chartData: {
-            labels: [
-                "يناير",
-                "فبراير",
-                "مارس",
-                "أبريل",
-                "مايو",
-                "يونيو",
-                "يوليو",
-            ],
-            datasets: [
-                {
-                    data: [
-                        2000000, 2150000, 2200000, 2500000, 2700000, 2600000,
-                        2548000,
-                    ],
-                    borderColor: colors.emerald.chartLine,
-                    backgroundColor: colors.emerald.chartFill,
-                    borderWidth: 2.5,
-                    pointRadius: 0,
-                    tension: 0.4,
-                    fill: true,
-                },
-            ],
-        },
-        stats: "زيادة قياسية مقارنة بالعام السابق",
-    },
-]);
-
-// Advanced chart options
-const chartOptions = ref({
-    plugins: {
-        legend: {
-            display: false,
-        },
-        tooltip: {
-            enabled: true,
-            backgroundColor: "rgba(15, 23, 42, 0.8)",
-            titleColor: "#ffffff",
-            bodyColor: "#ffffff",
-            cornerRadius: 8,
-            padding: 12,
-            displayColors: false,
-            callbacks: {
-                title: () => "",
-                label: (context) => {
-                    const value = context.dataset.data[context.dataIndex];
-                    return value.toLocaleString();
-                },
-            },
-        },
-    },
-    scales: {
-        x: {
-            display: false,
-        },
-        y: {
-            display: false,
-            min: (context) => {
-                const values = context.chart.data.datasets[0].data;
-                return Math.min(...values) * 0.8;
-            },
-        },
-    },
-    responsive: true,
-    maintainAspectRatio: false,
-    elements: {
-        line: {
-            tension: 0.5,
-        },
-        point: {
-            radius: 0,
-            hoverRadius: 6,
-        },
-    },
-    interaction: {
-        intersect: false,
-        mode: "index",
-    },
-});
-
-// Animation utilities
-const animateCounters = () => {
-    const counters = document.querySelectorAll(".counter-value");
-    counters.forEach((counter) => {
-        const value = parseFloat(
-            counter.getAttribute("data-target").replace(/,/g, "")
-        );
-        const duration = 1500;
-        const startTimestamp = performance.now();
-
-        const updateCounter = (timestamp) => {
-            const elapsed = timestamp - startTimestamp;
-            const progress = Math.min(elapsed / duration, 1);
-            const easeProgress =
-                progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
-
-            const currentValue = Math.floor(easeProgress * value);
-            counter.textContent = isNaN(currentValue)
-                ? counter.getAttribute("data-target")
-                : currentValue.toLocaleString();
-
-            if (progress < 1) {
-                requestAnimationFrame(updateCounter);
-            } else {
-                counter.textContent = counter.getAttribute("data-target");
-            }
-        };
-
-        requestAnimationFrame(updateCounter);
-    });
-};
-
-onMounted(() => {
-    animateCounters();
+defineOptions({
+    layout: AdminLayout,
 });
 </script>
 
 <template>
-    <div class="bg-gradient-to-br from-slate-50 to-slate-100 min-h-screen p-8">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <header
+        class="relative bg-gradient-to-r from-teal-600 to-teal-800 text-white rounded-xl shadow-lg p-4 mb-8 overflow-hidden"
+    >
+        <!-- Background Decorative Elements -->
+        <div class="absolute inset-0 opacity-10">
             <div
-                v-for="(metric, index) in metrics"
-                :key="index"
-                class="metric-card relative overflow-hidden rounded-2xl border border-slate-200 bg-white"
-                :style="{
-                    boxShadow: `0 10px 25px -10px ${metric.color.chartFill}`,
-                }"
-            >
-                <!-- Card Content -->
-                <div class="relative z-10 p-6 flex flex-col h-52">
-                    <!-- Header -->
-                    <div class="flex justify-between items-start mb-2">
-                        <!-- Icon with gradient background -->
-                       
+                class="absolute top-0 left-0 w-32 h-32 bg-white rounded-full -translate-x-16 -translate-y-16"
+            ></div>
+            <div
+                class="absolute bottom-0 right-0 w-48 h-48 bg-white rounded-full translate-x-24 translate-y-24"
+            ></div>
+        </div>
 
-                        <!-- Trend Indicator -->
-                        <!-- <div
-                            class="trend-badge flex items-center gap-1 text-sm font-semibold px-3 py-1.5 rounded-full"
-                            :class="
-                                metric.trend === 'up'
-                                    ? 'bg-emerald-50 text-emerald-600 border border-emerald-200'
-                                    : 'bg-rose-50 text-rose-600 border border-rose-200'
-                            "
-                        >
-                            <i
-                                :class="[
-                                    'pi text-sm',
-                                    metric.trend === 'up'
-                                        ? 'pi-arrow-up'
-                                        : 'pi-arrow-down',
-                                ]"
-                            ></i>
-                            <span
-                                >{{ Math.abs(metric.change).toFixed(1) }}%</span
-                            >
-                        </div> -->
-                        <div class="mb-4 text-right">
-                            <h3 class="text-slate-500 text-sm font-medium mb-1">
-                                {{ metric.title }}
-                            </h3>
-                            <div class="flex items-baseline justify-start">
-                                <span
-                                    class="counter-value text-3xl font-bold text-slate-800"
-                                    :data-target="metric.value"
-                                    >0</span
-                                >
-                                <span class="text-slate-500 text-sm mr-1">{{
-                                    metric.subtext
-                                }}</span>
-                            </div>
-                        </div>
-                         <div
-                            class="h-14 w-14 rounded-2xl flex items-center justify-center icon-container"
-                            :style="{ background: metric.color.gradient }"
-                        >
-                            <i
-                                :class="metric.icon"
-                                class="text-white"
-                                style="font-size: 1.5rem"
-                            ></i>
-                        </div>
-                    </div>
-
-                    <!-- Value -->
-
-                    <!-- Chart -->
-                    <div class="absolute bottom-0 left-0 h-24 w-full">
-                        <Chart
-                            type="line"
-                            :data="metric.chartData"
-                            :options="chartOptions"
-                            class="h-full w-full"
-                        />
-                    </div>
+        <div class="flex items-center justify-between relative z-10">
+            <!-- Left Section: Icon, Title, Subtitle -->
+            <div class="flex items-center gap-5">
+                <div class="flex-shrink-0 relative">
+                    <i
+                        class="pi pi-home text-white"
+                        style="font-size: 2.5rem"
+                    ></i>
                 </div>
+                <div>
+                    <h1 class="text-3xl">العقارات</h1>
+                    <p class="text-teal-100 text-sm mt-1 max-w-md">
+                        إدارة عقارات النظام المتاحة للإستثمار و الكراء
+                    </p>
+                </div>
+            </div>
 
-                <!-- Decorative elements -->
-                <div
-                    class="absolute top-0 left-0 w-full h-1"
-                    :style="{ background: metric.color.gradient }"
-                ></div>
-                <div
-                    class="absolute -top-10 -right-10 w-32 h-32 rounded-full opacity-10"
-                    :style="{ background: metric.color.gradient }"
-                ></div>
+            <!-- Right Section: Button -->
+            <div>
+                <button
+                    class="flex items-center gap-2 bg-white text-teal-700 px-5 py-2.5 rounded-full font-medium hover:bg-amber-100 transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-1"
+                >
+                    <span>إضافة عقار</span>
+                    <i class="pi pi-plus"></i>
+                </button>
             </div>
         </div>
-    </div>
+    </header>
 </template>
+
+<style scoped></style>

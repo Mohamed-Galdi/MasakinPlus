@@ -11,6 +11,7 @@ import Column from "primevue/column";
 import Avatar from "primevue/avatar";
 import Tag from "primevue/tag";
 import Button from "primevue/button";
+import Header from "@/Components/AdminDashboard/Header.vue";
 
 defineOptions({
     layout: AdminLayout,
@@ -121,31 +122,19 @@ const viewUser = (user) => {
 <template>
     <div>
         <!-- Header Section -->
-        <div class="flex items-center justify-between mb-6">
-            <div class="flex items-center gap-3">
-                <i
-                    class="pi pi-users text-teal-800 h-full"
-                    style="font-size: 2.5rem"
-                ></i>
-                <div class="">
-                    <h1 class="text-3xl font-semibold m-0 text-teal-800">
-                        المستخدمين
-                    </h1>
-                    <p class="text-gray-500 text-sm m-0">
-                        إدارة حسابات المستخدمين في النظام
-                    </p>
-                </div>
-            </div>
-            <div>
-                <Link
+        <Header
+            icon="pi-users"
+            title="المستخدمين "
+            subtitle=" إدارة حسابات المستخدمين في النظام"
+        >
+             <Link
                     :href="route('admin.users.suspended')"
-                    class="btn bg-rose-600 hover:bg-rose-700 text-white"
+                    class="btn bg-slate-700 hover:bg-slate-800 text-white"
                 >
                     <p>المستخدمين المحضورين</p>
                     <i class="pi pi-ban"></i>
                 </Link>
-            </div>
-        </div>
+        </Header>
 
         <!-- Filters Section -->
         <div
@@ -216,7 +205,7 @@ const viewUser = (user) => {
         <!-- Users Table -->
         <div
             v-else
-            class="rounded-xl overflow-hidden flex flex-col justify-between  min-h-[75vh]"
+            class="rounded-xl overflow-hidden flex flex-col justify-between min-h-[75vh]"
         >
             <DataTable
                 :value="props.users.data"
@@ -342,5 +331,3 @@ const viewUser = (user) => {
         </div>
     </div>
 </template>
-
-

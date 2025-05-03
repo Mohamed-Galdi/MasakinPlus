@@ -15,6 +15,7 @@ import Dialog from "primevue/dialog";
 import Textarea from "primevue/textarea";
 import Checkbox from "primevue/checkbox";
 import InvestmentRequestStatus from "@/Components/InvestmentRequestStatus.vue";
+import Header from "@/Components/AdminDashboard/Header.vue";
 
 defineOptions({
     layout: AdminLayout,
@@ -266,8 +267,8 @@ const updateRequestStatus = () => {
                         <Link
                             :href="
                                 route(
-                                    'admin.users.view',
-                                    requestDetails.property.owner.id
+                                    'admin.properties.view',
+                                    requestDetails.property.id
                                 )
                             "
                             class="inline-flex items-center px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 rounded-md font-Bein text-sm transition duration-150 ease-in-out"
@@ -616,24 +617,13 @@ const updateRequestStatus = () => {
                 </div>
             </div>
         </Dialog>
-
         <!-- Header Section -->
-        <div class="flex items-center justify-between mb-6">
-            <div class="flex items-center gap-3">
-                <Icon
-                    icon="fa-regular fa-file-zipper"
-                    class="block h-10 text-teal-800"
-                />
-                <div class="">
-                    <h1 class="text-3xl font-semibold m-0 text-teal-800">
-                        طلبات فتح الاستثمار
-                    </h1>
-                    <p class="text-gray-500 text-sm m-0">
-                        إدارة طلبات فتح الاستثمار على العقارات
-                    </p>
-                </div>
-            </div>
-        </div>
+
+        <Header
+            icon="pi-home"
+            title="طلبات فتح الاستثمار"
+            subtitle=" إدارة طلبات فتح الاستثمار على العقارات"
+        ></Header>
 
         <!-- Filters Section -->
         <div

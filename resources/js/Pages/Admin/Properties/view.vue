@@ -16,6 +16,7 @@ import TabPanels from "primevue/tabpanels";
 import TabPanel from "primevue/tabpanel";
 import PropertyStatus from "@/Components/PropertyStatus.vue";
 import PropertyMapView from "@/Components/PropertyMapView.vue";
+import Header from "@/Components/AdminDashboard/Header.vue";
 
 defineOptions({
     layout: AdminLayout,
@@ -69,33 +70,21 @@ const formatPrice = (price) => {
 
 <template>
     <div class="">
-        <!-- Header -->
-        <div class="flex items-center justify-between mb-6">
-            <div class="flex items-center gap-3">
-                <i
-                    class="pi pi-home text-teal-800"
-                    style="font-size: 2.5rem"
-                ></i>
-                <div>
-                    <h1 class="md:text-3xl text-xl font-semibold text-teal-800 m-0">
-                        {{ property.title }}
-                    </h1>
-                    <p class="text-gray-500 text-sm m-0">
-                        {{ property.city }} - {{ property.address }}
-                    </p>
-                </div>
-            </div>
+        <!-- Header Section -->
+        <Header
+            icon="pi-home"
+            :title="property.title"
+            :subtitle="property.address + ' - ' + property.city"
+        >
             <Link
                 :href="route('admin.properties.index')"
-                class="flex items-center gap-2 text-gray-600 transition-colors"
+                class="btn bg-slate-200 hover:bg-slate-100 text-slate-800"
             >
-                <p class="flex gap-1">
-                    العودة
-                    <span class="md:block hidden"> الى قائمة العقارات</span>
-                </p>
+                <p class="flex gap-1">العودة</p>
                 <i class="pi pi-arrow-left"></i>
             </Link>
-        </div>
+           
+        </Header>
 
         <!-- Main Content -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">

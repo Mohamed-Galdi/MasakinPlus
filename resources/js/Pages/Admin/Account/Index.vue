@@ -15,6 +15,8 @@ import TabList from "primevue/tablist";
 import Tab from "primevue/tab";
 import TabPanels from "primevue/tabpanels";
 import TabPanel from "primevue/tabpanel";
+import Header from "@/Components/AdminDashboard/Header.vue";
+
 
 defineOptions({
     layout: AdminLayout,
@@ -148,7 +150,7 @@ function updateImage() {
 </script>
 
 <template>
-    <div class="container mx-auto px-4 py-8 max-w-7xl">
+    <div class="">
         <Head title="| Account" />
 
         <Toast position="top-center" />
@@ -217,6 +219,13 @@ function updateImage() {
                 />
             </form>
         </Dialog>
+
+        <!-- Header Section -->
+         <Header
+            icon="pi-user"
+            title="الحساب"
+            subtitle=" معلومات الحساب وإعدادات الأمان"
+        ></Header>
 
         <!-- Main Content -->
         <div class="flex flex-col lg:flex-row gap-6">

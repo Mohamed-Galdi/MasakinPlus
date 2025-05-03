@@ -19,6 +19,7 @@ import { useForm } from "@inertiajs/vue3";
 import { useToast } from "primevue/usetoast";
 import Toast from "primevue/toast";
 import MultiSelect from "primevue/multiselect";
+import Header from "@/Components/AdminDashboard/Header.vue";
 
 defineOptions({
     layout: AdminLayout,
@@ -413,31 +414,19 @@ const sendReply = () => {
         </Drawer>
 
         <!-- Header Section -->
-        <div class="flex items-center justify-between mb-6">
-            <div class="flex items-center gap-3">
-                <i
-                    class="pi pi-comments text-teal-800 h-full"
-                    style="font-size: 2rem"
-                ></i>
-                <div class="">
-                    <h1 class="text-3xl font-semibold m-0 text-teal-800">
-                        الدعم الفني
-                    </h1>
-                    <p class="text-gray-500 text-sm m-0">
-                        إدارة تذاكر الدعم الفني والاستفسارات
-                    </p>
-                </div>
-            </div>
-            <div>
-                <button
-                    @click="showNewTicketDrawer = !showNewTicketDrawer"
-                    class="btn bg-teal-600 hover:bg-teal-700 text-white"
-                >
-                    <p>إنشاء تذكرة</p>
-                    <i class="pi pi-plus"></i>
-                </button>
-            </div>
-        </div>
+        <Header
+            icon="pi-comments"
+            title="الدعم الفني"
+            subtitle=" إدارة تذاكر الدعم الفني والاستفسارات"
+        >
+            <button
+                @click="showNewTicketDrawer = !showNewTicketDrawer"
+                class="btn bg-slate-200 hover:bg-slate-100 text-slate-800"
+            >
+                <p>إنشاء تذكرة</p>
+                <i class="pi pi-plus"></i>
+            </button>
+        </Header>
 
         <!-- Filters Section -->
         <div

@@ -15,6 +15,7 @@ import Drawer from "primevue/drawer";
 import InputText from "primevue/inputtext";
 import Textarea from "primevue/textarea";
 import FloatLabel from "primevue/floatlabel";
+import Header from "@/Components/AdminDashboard/Header.vue";
 
 defineOptions({
     layout: AdminLayout,
@@ -34,7 +35,6 @@ const suspensionReason = ref("");
 const isUserActive = ref(props.user.is_active === 1);
 
 const isMobile = computed(() => window.innerWidth <= 768);
-
 
 // Function to get tag severity based on user type
 const getTypeSeverity = (type) => {
@@ -304,25 +304,16 @@ const sendTicket = () => {
             </template>
         </Dialog>
 
-        <!-- Header with Back Button -->
-        <div class="flex items-center justify-between mb-6">
-            <Link
-                v-if="isUserActive"
+        <!-- Header Section -->
+        <Header icon="pi-user" :title="user.name" :subtitle="user.email">
+             <Link
                 :href="route('admin.users.index')"
-                class="flex items-center gap-2 text-gray-600 transition-colors"
+                class="btn bg-slate-200 hover:bg-slate-100 text-slate-800"
             >
-                <i class="pi pi-arrow-right"></i>
-                <span>العودة إلى قائمة المستخدمين</span>
+                <p class="flex gap-1">العودة</p>
+                <i class="pi pi-arrow-left"></i>
             </Link>
-            <Link
-                v-else
-                :href="route('admin.users.suspended')"
-                class="flex items-center gap-2 text-gray-600 transition-colors"
-            >
-                <i class="pi pi-arrow-right"></i>
-                <span>العودة إلى قائمة المستخدمين المحضورين</span>
-            </Link>
-        </div>
+        </Header>
 
         <!-- Main Content -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">

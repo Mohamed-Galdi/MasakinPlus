@@ -14,6 +14,7 @@ import Tag from "primevue/tag";
 import { useToast } from "primevue/usetoast";
 import PropertyStatus from "@/Components/PropertyStatus.vue";
 import { cities } from "@/plugins/cities";
+import Header from "@/Components/AdminDashboard/Header.vue";
 
 defineOptions({
     layout: AdminLayout,
@@ -113,22 +114,12 @@ const formatDate = (dateString) => {
 <template>
     <div>
         <!-- Header Section -->
-        <div class="flex items-center justify-between mb-6">
-            <div class="flex items-center gap-3">
-                <i
-                    class="pi pi-home text-teal-800 h-full"
-                    style="font-size: 2.5rem"
-                ></i>
-                <div class="">
-                    <h1 class="text-3xl font-semibold m-0 text-teal-800">
-                        العقارات
-                    </h1>
-                    <p class="text-gray-500 text-sm m-0">
-                        إدارة عقارات النظام المتاحة للإستثمار و الكراء
-                    </p>
-                </div>
-            </div>
-        </div>
+        <Header
+            icon="pi-users"
+            title="العقارات "
+            subtitle="إدارة عقارات النظام المتاحة للإستثمار و الكراء"
+        >
+        </Header>
 
         <!-- Filters Section -->
         <div class="flex flex-wrap gap-3 p-4 bg-white rounded-lg mb-6">
