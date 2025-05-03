@@ -18,6 +18,7 @@ import FloatLabel from "primevue/floatlabel";
 import Badge from "primevue/badge";
 import Divider from "primevue/divider";
 import DatePicker from "primevue/datepicker";
+import Header from "@/Components/Header.vue";
 
 defineOptions({
     layout: DynamicLayout,
@@ -403,23 +404,12 @@ const totalWithdraws = computed(() => {
             </div>
         </Dialog>
 
-        <!-- Header Section -->
-        <div class="flex items-center justify-between mb-6">
-            <div class="flex items-center gap-3">
-                <Icon
-                    icon="fa-solid fa-wallet"
-                    class="block h-8 text-teal-800"
-                />
-                <div class="">
-                    <h1 class="text-3xl font-semibold m-0 text-teal-800">
-                        المحفظة
-                    </h1>
-                    <p class="text-gray-500 text-sm m-0">
-                        إدارة رصيدك والمعاملات المالية
-                    </p>
-                </div>
-            </div>
-        </div>
+        <!-- Header -->
+        <Header
+            icon="fa-solid fa-wallet"
+            title="المحفظة"
+            subtitle="إدارة رصيدك والمعاملات المالية"
+        ></Header>
 
         <!-- Main Content -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
@@ -555,7 +545,7 @@ const totalWithdraws = computed(() => {
                         </div>
 
                         <!-- Date Range -->
-                        <div  class="w-full md:w-auto">
+                        <div class="w-full md:w-auto">
                             <DatePicker
                                 v-model="dateRange"
                                 selectionMode="range"

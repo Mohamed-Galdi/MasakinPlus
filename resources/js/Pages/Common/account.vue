@@ -1,6 +1,6 @@
 <script setup>
 import DynamicLayout from "@/Layouts/DynamicLayout.vue";
-import { Head, useForm } from "@inertiajs/vue3";
+import { Head, useForm, router } from "@inertiajs/vue3";
 import { ref, computed } from "vue";
 import FileUpload from "@/Components/PrimeVilt/FileUpload.vue";
 import InputText from "primevue/inputtext";
@@ -11,6 +11,7 @@ import Password from "primevue/password";
 import Image from "primevue/image";
 import Button from "primevue/button";
 import Message from "primevue/message";
+import  Header from "@/Components/Header.vue";
 
 defineOptions({
     layout: DynamicLayout,
@@ -192,6 +193,11 @@ const menuItems = [
     { id: "profile", label: "الملف الشخصي", icon: "pi pi-user" },
     { id: "security", label: "الأمان", icon: "pi pi-shield" },
 ];
+
+// Logout
+const logout = () => {
+    router.post(route("logout"));
+};
 </script>
 
 <template>
@@ -262,8 +268,23 @@ const menuItems = [
             </form>
         </Dialog>
 
+        <!-- Header -->
+        <Header
+            icon="fa-solid fa-user"
+            title="إعدادات الحساب"
+            subtitle="إدارة إعدادات الحساب وإعدادات الأمان"
+        >
+            <button
+                @click="logout"
+                class="btn bg-slate-200 hover:bg-slate-100 text-slate-800 md:w-fit w-full mt-2 md:mt-0"
+            >
+                <span>تسجيل الخروج</span>
+                <i class="pi pi-sign-out scale-x-[-1]"></i>
+            </button>            
+        </Header>
+
         <!-- Main Content -->
-        <div class="container mx-auto px-4 py-8 max-w-7xl font-BeinNormal">
+        <div class="container mx-auto max-w-7xl font-BeinNormal">
             <div class="flex flex-col lg:flex-row gap-8">
                 <!-- Sidebar -->
                 <div class="lg:w-1/4">

@@ -18,6 +18,7 @@ import StepList from "primevue/steplist";
 import Step from "primevue/step";
 import StepPanels from "primevue/steppanels";
 import StepPanel from "primevue/steppanel";
+import Header from "@/Components/Header.vue";
 
 defineOptions({
     layout: OwnerLayout,
@@ -112,35 +113,23 @@ function submitCreateProperty() {
 
 <template>
     <div class="container mx-auto" dir="rtl">
-        <Toast position="top-center" />
-        <!-- Header-->
-        <div
-            class="flex flex-col md:flex-row justify-between items-start md:items-center mb-12"
+        <Toast position="top-center" />        
+        <!-- Header -->
+        <Header
+            icon="fa-solid fa-building"
+            title="إضافة عقار جديد "
+            subtitle="أدخل معلومات العقار الخاص بك بالتفصيل لجذب المزيد من
+                        المستأجرين والمستثمرين"
         >
-            <div class="flex items-center gap-3">
-                <Icon
-                    icon="fa-solid fa-building"
-                    class="block h-8 text-teal-800"
-                />
-                <div class="">
-                    <h1 class="text-3xl font-semibold m-0 text-teal-800">
-                        إضافة عقار جديد
-                    </h1>
-                    <p class="text-gray-500 text-sm m-0">
-                        أدخل معلومات العقار الخاص بك بالتفصيل لجذب المزيد من
-                        المستأجرين والمستثمرين
-                    </p>
-                </div>
-            </div>
-            <!-- back button -->
             <Link
                 :href="route('owner.properties.index')"
-                class="btn bg-emerald-600 hover:bg-emerald-700 text-white md:w-fit w-full mt-2 md:mt-0"
+                class="btn bg-slate-200 hover:bg-slate-100 text-slate-800 md:w-fit w-full mt-2 md:mt-0"
             >
-                <span>العودة للعقارات</span>
-                <i class="pi pi-arrow-left"></i>
+            <span>العودة </span>
+            <i class="pi pi-arrow-left"></i>
             </Link>
-        </div>
+        </Header>
+
         <!-- Stepper -->
         <div class="mb-10">
             <Stepper v-model:value="activeStep" class="w-full">

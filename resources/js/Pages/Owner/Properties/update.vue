@@ -18,6 +18,7 @@ import StepList from "primevue/steplist";
 import Step from "primevue/step";
 import StepPanels from "primevue/steppanels";
 import StepPanel from "primevue/steppanel";
+import Header from "@/Components/Header.vue";
 
 defineOptions({
     layout: OwnerLayout,
@@ -147,38 +148,21 @@ function submitUpdateProperty() {
 <template>
     <div class="container mx-auto" dir="rtl">
         <Toast position="top-center" />
-        <!-- Header-->
-        <div
-            class="flex flex-col md:flex-row justify-between items-start md:items-center mb-12"
+        <!-- Header -->
+        <Header
+            icon="fa-solid fa-building"
+            title="تعديل معلومات العقار "
+            subtitle="بعد تعديل معلومات العقار ستتعير حالته الى غير جاهز و سيتعين عليك إعادة تقديم طلب الإستتمار او العرض"
         >
-            <div class="flex items-center gap-3">
-                <Icon
-                    icon="fa-solid fa-building"
-                    class="block h-8 text-teal-800"
-                />
-                <div class="">
-                    <h1 class="text-3xl font-semibold m-0 text-teal-800">
-                        تعديل معلومات العقار
-                    </h1>
-                    <p class="text-gray-500 text-sm m-0">
-                        بعد تعديل معلومات العقار ستتعير حالته الى
-                        <span class="font-Bein text-teal-800">"غير جاهز"</span>
-                        و سيتعيل عليك إعادة تقديم طلب
-                        <span class="font-Bein text-teal-800">الإستتمار</span>
-                        او
-                        <span class="font-Bein text-teal-800">العرض</span>
-                    </p>
-                </div>
-            </div>
-            <!-- back button -->
             <Link
                 :href="route('owner.properties.index')"
-                class="btn bg-emerald-600 hover:bg-emerald-700 text-white md:w-fit w-full mt-2 md:mt-0"
+                class="btn bg-slate-200 hover:bg-slate-100 text-slate-800 md:w-fit w-full mt-2 md:mt-0"
             >
-                <span>العودة للعقارات</span>
-                <i class="pi pi-arrow-left"></i>
+            <i class="pi pi-arrow-left"></i>
+            <span>العودة </span>
             </Link>
-        </div>
+        </Header>
+
         <!-- Stepper -->
         <div class="mb-10">
             <Stepper

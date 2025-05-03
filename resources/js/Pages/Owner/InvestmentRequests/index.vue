@@ -14,6 +14,7 @@ import { useForm } from "@inertiajs/vue3";
 import Toast from "primevue/toast";
 import { useToast } from "primevue/usetoast";
 import InvestmentRequestStatus from "@/Components/InvestmentRequestStatus.vue";
+import Header from "@/Components/Header.vue";
 
 defineOptions({
     layout: OwnerLayout,
@@ -692,35 +693,20 @@ const formatDate = (dateString) => {
         </Dialog>
 
         <!-- Header -->
-        <div
-            class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6"
+        <Header
+            icon="fa-solid fa-circle-dollar-to-slot"
+            title="طلبات فتح الاستثمار"
+            subtitle="إدارة طلبات فتح الاستثمار على عقاراتك"
         >
-            <div class="flex items-center gap-3">
-                <Icon
-                    icon="fa-solid fa-circle-dollar-to-slot"
-                    class="block h-8 text-teal-800"
-                />
-                <div class="">
-                    <h1 class="text-3xl font-semibold m-0 text-teal-800">
-                        طلبات فتح الاستثمار
-                    </h1>
-                    <p class="text-gray-500 text-sm m-0">
-                        إدارة طلبات فتح الاستثمار على عقاراتك
-                    </p>
-                </div>
-            </div>
             <button
                 @click="openCreateRequestModal"
-                :class="
-                    isThereAvailableProperty
-                        ? 'btn bg-emerald-600 hover:bg-emerald-700 text-white md:w-fit w-full mt-2 md:mt-0'
-                        : 'btn bg-gray-500 hover:bg-gray-600 text-white md:w-fit w-full mt-2 md:mt-0 cursor-not-allowed'
-                "
+                class="btn bg-slate-200 hover:bg-slate-100 text-slate-800 md:w-fit w-full mt-2 md:mt-0"
+                :class="isThereAvailableProperty ? '' : ' cursor-not-allowed'"
             >
                 <i class="pi pi-plus"></i>
                 <span>طلب فتح استثمار جديد</span>
             </button>
-        </div>
+        </Header>
 
         <!-- Empty State -->
         <div

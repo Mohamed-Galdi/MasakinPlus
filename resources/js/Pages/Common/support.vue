@@ -17,6 +17,7 @@ import { useForm } from "@inertiajs/vue3";
 import { useToast } from "primevue/usetoast";
 import Toast from "primevue/toast";
 import Divider from "primevue/divider";
+import Header from "@/Components/Header.vue";
 
 defineOptions({
     layout: DynamicLayout,
@@ -351,72 +352,24 @@ const sendReply = () => {
             </div>
         </Drawer>
 
+        <!-- Header -->
+        <Header
+            icon="fa-solid fa-headset"
+            title="مركز الدعم"
+            subtitle="نحن هنا لمساعدتك"
+        >
+            <button
+                @click="showNewTicketDrawer = !showNewTicketDrawer"
+                class="btn bg-slate-200 hover:bg-slate-100 text-slate-800 md:w-fit w-full mt-2 md:mt-0"
+            >
+                <span>إنشاء تذكرة جديدة</span>
+                <i class="pi pi-plus"></i>
+            </button>
+        </Header>
+
         <!-- Main Content -->
         <div class="flex flex-col md:flex-row gap-6">
-            <!-- Left Sidebar -->
-            <div class="md:w-1/4 w-full">
-                <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
-                    <div class="flex items-center gap-3 mb-6">
-                        <i
-                            class="pi pi-comments text-teal-700"
-                            style="font-size: 1.5rem"
-                        ></i>
-                        <div>
-                            <h2 class="text-xl font-semibold m-0 text-teal-800">
-                                مركز الدعم
-                            </h2>
-                            <p class="text-gray-500 text-sm m-0">
-                                نحن هنا لمساعدتك
-                            </p>
-                        </div>
-                    </div>
-
-                    <Button
-                        label="تذكرة جديدة"
-                        icon="pi pi-plus"
-                        class="w-full bg-teal-700 hover:bg-teal-800 mb-6"
-                        @click="showNewTicketDrawer = true"
-                    />
-
-                    <div
-                        class="flex justify-between items-center border-gray-100"
-                    >
-                        <span class="text-gray-600">إجمالي التذاكر</span>
-                        <span class="font-semibold">{{
-                            props.tickets.total
-                        }}</span>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-xl shadow-sm p-6">
-                    <h3 class="text-lg font-semibold mb-4 text-teal-800">
-                        روابط مفيدة
-                    </h3>
-                    <div class="flex flex-col gap-3">
-                        <Link
-                            :href="route('home') + '#faq'"
-                            class="flex items-center gap-2 text-gray-600 hover:text-teal-700"
-                        >
-                            <i class="pi pi-question-circle"></i>
-                            <span>الأسئلة الشائعة</span>
-                        </Link>
-                        <Link
-                            :href="route('about-us') + '#contact'"
-                            class="flex items-center gap-2 text-gray-600 hover:text-teal-700"
-                        >
-                            <i class="pi pi-phone"></i>
-                            <span>اتصل بنا</span>
-                        </Link>
-                        <Link
-                            :href="route('privacy-policy')"
-                            class="flex items-center gap-2 text-gray-600 hover:text-teal-700"
-                        >
-                            <i class="pi pi-book"></i>
-                            <span>سياسة الخصوصية </span>
-                        </Link>
-                    </div>
-                </div>
-            </div>
+            
 
             <!-- Right Content Area -->
             <div class="md:w-3/4 w-full">
@@ -630,6 +583,37 @@ const sendReply = () => {
                                 </template>
                             </div>
                         </nav>
+                    </div>
+                </div>
+            </div>
+            <!-- Left Sidebar -->
+            <div class="md:w-1/4 w-full">
+                <div class="bg-white rounded-xl shadow-sm p-6">
+                    <h3 class="text-lg font-semibold mb-4 text-teal-800">
+                        روابط مفيدة
+                    </h3>
+                    <div class="flex flex-col gap-3">
+                        <Link
+                            :href="route('home') + '#faq'"
+                            class="flex items-center gap-2 text-gray-600 hover:text-teal-700"
+                        >
+                            <i class="pi pi-question-circle"></i>
+                            <span>الأسئلة الشائعة</span>
+                        </Link>
+                        <Link
+                            :href="route('about-us') + '#contact'"
+                            class="flex items-center gap-2 text-gray-600 hover:text-teal-700"
+                        >
+                            <i class="pi pi-phone"></i>
+                            <span>اتصل بنا</span>
+                        </Link>
+                        <Link
+                            :href="route('privacy-policy')"
+                            class="flex items-center gap-2 text-gray-600 hover:text-teal-700"
+                        >
+                            <i class="pi pi-book"></i>
+                            <span>سياسة الخصوصية </span>
+                        </Link>
                     </div>
                 </div>
             </div>

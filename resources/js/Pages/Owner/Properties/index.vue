@@ -7,6 +7,7 @@ import Select from "primevue/select";
 import Galleria from "primevue/galleria";
 import PropertyStatus from "@/Components/PropertyStatus.vue";
 import { useTextHelpers } from "@/plugins/textHelpers";
+import Header from "@/Components/Header.vue";
 
 defineOptions({
     layout: OwnerLayout,
@@ -106,31 +107,19 @@ const textHelpers = useTextHelpers();
 <template>
     <div class="container mx-auto">
         <!-- Header -->
-        <div
-            class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6"
+        <Header
+            icon="fa-solid fa-building"
+            title="العقارات "
+            subtitle="إدارة العقارات الخاصة بك"
         >
-            <div class="flex items-center gap-3">
-                <Icon
-                    icon="fa-solid fa-building"
-                    class="block h-8 text-teal-800"
-                />
-                <div class="">
-                    <h1 class="text-3xl font-semibold m-0 text-teal-800">
-                        العقارات
-                    </h1>
-                    <p class="text-gray-500 text-sm m-0">
-                        إدارة العقارات الخاصة بك
-                    </p>
-                </div>
-            </div>
             <Link
                 :href="route('owner.properties.create')"
-                class="btn bg-emerald-600 hover:bg-emerald-700 text-white md:w-fit w-full mt-2 md:mt-0"
+                class="btn bg-slate-200 hover:bg-slate-100 text-slate-800 md:w-fit w-full mt-2 md:mt-0"
             >
                 <i class="pi pi-plus"></i>
                 <span>إضافة عقار جديد</span>
             </Link>
-        </div>
+        </Header>
 
         <!-- Search and Filter -->
         <div class="bg-white rounded-lg shadow p-4 mb-6">
