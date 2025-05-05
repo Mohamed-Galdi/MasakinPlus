@@ -235,7 +235,7 @@ const formatDate = (dateString) => {
                     </template>
                 </Column>
 
-                <Column field="created_at" header=" عنوان العقار">
+                <Column field="created_at" header=" إسم العقار">
                     <template #body="slotProps">
                         <div class="text-sm">
                             <p

@@ -21,7 +21,7 @@ defineProps({
 
 <template>
     <header
-        class="relative bg-gradient-to-r from-teal-600 to-teal-800 text-white rounded-xl shadow-lg p-4 sm:p-6 mb-8 overflow-hidden "
+        class="relative bg-gradient-to-r from-teal-600 to-teal-800 text-white rounded-xl shadow-lg p-4  mb-8 overflow-hidden "
     >
         <!-- Background Decorative Elements -->
         <div class="absolute inset-0 opacity-10">

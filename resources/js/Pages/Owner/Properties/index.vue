@@ -8,6 +8,7 @@ import Galleria from "primevue/galleria";
 import PropertyStatus from "@/Components/PropertyStatus.vue";
 import { useTextHelpers } from "@/plugins/textHelpers";
 import Header from "@/Components/Header.vue";
+import Button from "primevue/button";
 
 defineOptions({
     layout: OwnerLayout,
@@ -124,13 +125,6 @@ const textHelpers = useTextHelpers();
         <!-- Search and Filter -->
         <div class="bg-white rounded-lg shadow p-4 mb-6">
             <div class="flex md:flex-row flex-col items-center gap-4">
-                <div class="hidden md:block">
-                    <i
-                        class="pi pi-filter text-slate-400 mt-2"
-                        style="font-size: 1rem"
-                    ></i>
-                </div>
-
                 <!-- type -->
                 <Select
                     v-model="typeFilter"
@@ -150,13 +144,15 @@ const textHelpers = useTextHelpers();
                     class="md:w-56 w-full"
                 />
                 <!-- Clear Filter Button -->
-                <button
-                    v-if="isFilterActive()"
-                    @click="clearFilters"
-                    class="px-3 py-2 text-red-600 rounded-md hover:text-red-500 transition-colors"
-                >
-                    <span>إزالة الفلتر</span>
-                </button>
+                <div class="flex-none">
+                    <Button
+                        icon="pi pi-filter-slash"
+                        outlined
+                        rounded
+                        severity="secondary"
+                        @click="clearFilters"
+                    />
+                </div>
             </div>
         </div>
 

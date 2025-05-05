@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\PropertyStatus;
 use Illuminate\Support\Facades\Route;
 
 // Home Pages
@@ -22,7 +23,8 @@ Route::get('/dashboard', function () {
 
 
 Route::get('/test', function () {
-    return inertia('Home/Test');
+    $statusOptions = PropertyStatus::options();
+    return inertia('Home/Test', compact('statusOptions'));
 })->name('test');
 
 
