@@ -648,7 +648,7 @@ const updateRequestStatus = () => {
                         :options="investmentRequestsStatusOptions"
                         optionLabel="label"
                         optionValue="value"
-                        placeholder="نوع الحساب"
+                        placeholder="حالة الطلب "
                         class="md:w-60 w-full rounded-lg"
                     />
                     <Button
