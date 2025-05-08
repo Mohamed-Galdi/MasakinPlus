@@ -16,7 +16,7 @@ const team = ref([
     },
     {
         name: "عبدالعزيز الدوسري ",
-        position: "مديرة العمليات",
+        position: "مدير العمليات",
         image: "assets/about_us_images/team/4444.jpg",
         quote: "نبني جسرا بين أصحاب العقارات والمستثمرين",
     },
@@ -28,7 +28,7 @@ const team = ref([
     },
     {
         name: "فهد المطيري ",
-        position: "مديرة التسويق",
+        position: "مدير التسويق",
         image: "assets/about_us_images/team/1111.jpg",
         quote: "نصنع مستقبلا أفضل للسوق العقاري السعودي",
     },
