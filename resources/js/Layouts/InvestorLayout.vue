@@ -16,19 +16,14 @@ const currentPath = ref(usePage().url);
 // Navigation items using Ziggy routes
 const navigationItems = ref([
     {
-        name: "عقاراتي ",
-        href: route("investor.dashboard"),
-        icon: "fa-solid fa-building",
+        name: "العروض ",
+        href: route("investor.offers.index"),
+        icon: "fa-solid fa-fire",
     },
     {
-        name: "الإيجارات ",
-        href: route("investor.properties"),
-        icon: "fa-solid fa-file-contract",
-    },
-    {
-        name: "التقارير",
-        href: route("test"),
-        icon: "fa-solid fa-chart-pie",
+        name: "إستثماراتي",
+        href: route("investor.investment.index"),
+        icon: "fa-solid fa-house-circle-check",
     },
     {
         name: "المحفظة",
@@ -109,7 +104,7 @@ function logout() {
                                 'inline-flex items-center px-1 pt-1 text-sm font-medium h-16',
                             ]"
                         >
-                            <Icon :icon="item.icon" class="ml-2 mb-1 h-4 w-4" />
+                            <Icon :icon="item.icon" class="ml-2 mb-1 h-4 w-6" />
                             {{ item.name }}
                         </Link>
                     </div>

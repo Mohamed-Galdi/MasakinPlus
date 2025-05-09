@@ -18,6 +18,8 @@ import {
     faBuilding,
     faFileContract,
     faCircleDollarToSlot,
+    faHouseCircleCheck,
+    faFire
 
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -44,6 +46,8 @@ library.add(
     faFileContract,
     faCircleDollarToSlot,
     faFileZipper,
+    faHouseCircleCheck,
+    faFire
 );
 
 export { FontAwesomeIcon };

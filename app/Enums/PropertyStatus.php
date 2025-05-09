@@ -7,6 +7,7 @@ enum PropertyStatus: string
     case Draft = 'draft';
     case InvestmentPending = 'investment_pending';
     case InvestmentRejected = 'investment_rejected';
+    case PreparingInvestmentOffer = 'preparing_investment_offer';
     case OpenForInvestment = 'open_for_investment';
     case FundedUnderMaintenance = 'funded_under_maintenance';
     case VerifiedForRent = 'verified_for_rent';
@@ -18,6 +19,7 @@ enum PropertyStatus: string
             self::Draft => 'غير جاهز',
             self::InvestmentPending => 'قيد المراجعة للاستثمار',
             self::InvestmentRejected => 'تم رفض طلب الاستثمار',
+            self::PreparingInvestmentOffer => 'تحضير عرض الاستثمار',
             self::OpenForInvestment => 'متاح للاستثمار',
             self::FundedUnderMaintenance => 'تم التمويل - قيد التجهيز',
             self::VerifiedForRent => 'تم التحقق - جاهز للإيجار',

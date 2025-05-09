@@ -8,7 +8,7 @@ use App\Models\PropertyImage;
 use App\Enums\PropertyStatus;
 use Illuminate\Database\Seeder;
 
-class PropertySeeder extends Seeder
+class OwnerPropertiesSeeder extends Seeder
 {
     public function run(): void
     {

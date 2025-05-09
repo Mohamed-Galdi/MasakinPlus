@@ -48,7 +48,7 @@ class InvestmentRequestController extends Controller
 
         if ($request->reply === 'approve') {
             $investmentRequest->status = InvestmentRequestStatus::Approved;
-            $property->status = PropertyStatus::OpenForInvestment;
+            $property->status = PropertyStatus::PreparingInvestmentOffer;
         } else if ($request->reply === 'reject') {
             $investmentRequest->status = InvestmentRequestStatus::Rejected;
             $property->status = PropertyStatus::InvestmentRejected;
@@ -75,7 +75,7 @@ class InvestmentRequestController extends Controller
 
         if ($request->new_status === InvestmentRequestStatus::Approved->value) {
             $investmentRequest->status = InvestmentRequestStatus::Approved->value;
-            $property->status = PropertyStatus::OpenForInvestment->value;
+            $property->status = PropertyStatus::PreparingInvestmentOffer->value;
         } else if ($request->new_status === InvestmentRequestStatus::Rejected->value) {
             $investmentRequest->status = InvestmentRequestStatus::Rejected->value;
             $property->status = PropertyStatus::InvestmentRejected->value;
