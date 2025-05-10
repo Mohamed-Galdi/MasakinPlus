@@ -66,6 +66,12 @@ const navigationItems = [
         iconType: "primevue",
         icon: "pi-comments",
     },
+    {
+        title: "الاعدادات",
+        path: route("admin.settings.index"),
+        iconType: "primevue",
+        icon: "pi-cog",
+    },
 ];
 
 // Track expanded menu groups - initialize with all groups closed by default
@@ -326,7 +332,7 @@ const logout = () => {
                             <Icon
                                 v-else
                                 :icon="item.icon"
-                                class="ml-2 mb-1 h-4 w-4 "
+                                class="ml-2 mb-1 h-4 w-4"
                             />
                             <span
                                 v-if="!isSidebarCollapsed"

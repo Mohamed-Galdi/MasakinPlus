@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\AccountController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\InvestmentRequestController;
 use App\Http\Controllers\Admin\PropertyController;
+use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\SupportController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\TempFileController;
@@ -57,6 +58,11 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
         Route::post('/edit-account', [AccountController::class, 'editAccount'])->name('admin.account.editAccount');
         Route::post('/update-password', [AccountController::class, 'updatePassword'])->name('admin.account.updatePassword');
     });
+
+    // Settings
+    Route::prefix('settings')->group(function () {
+        Route::get('/', [SettingsController::class, 'index'])->name('admin.settings.index');
+    });
 });
 
 // admin auth
@@ -68,5 +74,3 @@ Route::middleware('guest')->group(function () {
 // file upload
 Route::post('/upload', [TempFileController::class, 'upload'])->name('file.upload');
 Route::post('/revert/{id}', [TempFileController::class, 'revert'])->name('file.revert');
-
-
