@@ -7,10 +7,20 @@ import TabList from "primevue/tablist";
 import Tab from "primevue/tab";
 import TabPanels from "primevue/tabpanels";
 import TabPanel from "primevue/tabpanel";
+import { ref } from "vue";
 
 defineOptions({
     layout: AdminLayout,
 });
+
+const props = defineProps({
+    propertyStatusOptions: Array,
+    propertyStatusDescriptions: Object,
+});
+
+const propertyStatusOptions = ref(props.propertyStatusOptions);
+const propertyStatusDescriptions = ref(props.propertyStatusDescriptions);
+
 </script>
 
 <template>
@@ -34,7 +44,9 @@ defineOptions({
                         </TabList>
                         <TabPanels>
                             <TabPanel value="0">
-                                <PropertyStatusGuide />
+                                <PropertyStatusGuide  :statuses="propertyStatusOptions"
+                                :descriptions="propertyStatusDescriptions" />
+                           
                             </TabPanel>
 
                             <TabPanel value="1">
