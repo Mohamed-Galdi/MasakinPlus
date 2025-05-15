@@ -14,22 +14,22 @@ enum PropertyStatus: string
     case ListedForRent = 'listed_for_rent'; // the property is listed for rent
     case Rented = 'rented'; // Property has an active tenant
     case LeaseEnded = 'lease_ended'; // Lease ended, pending re-listing
-    case Unlisted = 'unlisted'; // Property is not listed for investment or rent
+    // case Unlisted = 'unlisted'; // Property is not listed for investment or rent
 
     public function label(): string
     {
         return match ($this) {
-            self::Draft => 'عقار غير منشور',
+            self::Draft => ' غير جاهز',
             self::InvestmentRequested => 'طلب فتح استثمار',
             self::InvestmentOfferSent => 'عرض استثمار بانتظار الموافقة',
             self::OpenForInvestment => 'متاح للاستثمار',
             self::FundedUnderMaintenance => 'ممول ويجري تجهيزه',
             self::RentRequested => 'طلب إدراج للإيجار',
             self::RentRejected => 'تم رفض الإدراج للإيجار',
-            self::ListedForRent => 'عقار متاح للإيجار',
-            self::Rented => 'عقار مؤجر حالياً',
+            self::ListedForRent => ' متاح للإيجار',
+            self::Rented => ' مؤجر حالياً',
             self::LeaseEnded => 'انتهى عقد الإيجار',
-            self::Unlisted => 'عقار غير مفعل حالياً',
+            // self::Unlisted => ' عقار ملغي حالياً',
         };
     }
 
@@ -56,7 +56,7 @@ enum PropertyStatus: string
 
             self::LeaseEnded => 'انتهت مدة عقد الإيجار ولم يتم تجديده أو توقيع عقد جديد بعد. العقار حالياً غير متاح للمستأجرين، ويمكن للمالك طلب إعادة إدراجه للإيجار أو تعديله. من الممكن أيضاً فتح دورة صيانة جديدة أو تحديث بيانات العقار قبل عرضه مرة أخرى.',
 
-            self::Unlisted => 'العقار غير مفعل حالياً، ولا هو معروض للاستثمار ولا للإيجار. قد يتم إدخاله في هذه الحالة بشكل يدوي من قبل الإدارة أو بعد انتهاء دورة الإيجار دون اتخاذ إجراء. يمكن استخدام هذه الحالة لتجميد العقار مؤقتاً دون حذفه، سواء من قبل المالك أو النظام.',
+            // self::Unlisted => 'العقار غير مفعل حالياً، ولا هو معروض للاستثمار ولا للإيجار. قد يتم إدخاله في هذه الحالة بشكل يدوي من قبل الإدارة أو بعد انتهاء دورة الإيجار دون اتخاذ إجراء. يمكن استخدام هذه الحالة لتجميد العقار مؤقتاً دون حذفه، سواء من قبل المالك أو النظام.',
         };
     }
 
