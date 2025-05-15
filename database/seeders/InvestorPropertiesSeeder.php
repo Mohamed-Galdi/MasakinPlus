@@ -285,7 +285,7 @@ class InvestorPropertiesSeeder extends Seeder
                 PropertyType::Land => fake()->numberBetween(500, 5000),
             };
 
-            $status =  $i < 4 ? PropertyStatus::PreparingInvestmentOffer->value :  PropertyStatus::OpenForInvestment->value;
+            $status =  $i < 4 ? PropertyStatus::InvestmentOfferSent->value :  PropertyStatus::OpenForInvestment->value;
 
             $propertyData = [
                 'owner_id' => $ownerId,

@@ -34,8 +34,8 @@ class OwnerPropertiesSeeder extends Seeder
             $data['status'] = $status->value;
             $data['daily_rent_price'] = in_array($status->value, [
                 PropertyStatus::Draft->value,
-                PropertyStatus::InvestmentPending->value,
-                PropertyStatus::InvestmentRejected->value,
+                PropertyStatus::InvestmentRequested->value,
+                PropertyStatus::InvestmentOfferSent->value,                
             ]) ? null : round(fake()->numberBetween(100, 1000) / 50) * 50;
 
             $data['latitude'] = 24.7136;

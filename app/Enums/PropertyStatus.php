@@ -27,7 +27,7 @@ enum PropertyStatus: string
             self::RentRequested => 'طلب إدراج للإيجار',
             self::RentRejected => 'تم رفض الإدراج للإيجار',
             self::ListedForRent => 'عقار متاح للإيجار',
-            self::Rented => 'عقار مؤجّر حالياً',
+            self::Rented => 'عقار مؤجر حالياً',
             self::LeaseEnded => 'انتهى عقد الإيجار',
             self::Unlisted => 'عقار غير مفعل حالياً',
         };

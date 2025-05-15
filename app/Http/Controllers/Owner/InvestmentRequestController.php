@@ -45,7 +45,7 @@ class InvestmentRequestController extends Controller
         $investmentRequest->save();
         
         $property = Property::find($request->property_id);
-        $property->status = PropertyStatus::InvestmentPending;
+        // $property->status = PropertyStatus::InvestmentPending;
         $property->save();
 
         return back();
@@ -68,7 +68,7 @@ class InvestmentRequestController extends Controller
         $investmentRequest->save();
         
         $property = Property::find($investmentRequest->property_id);
-        $property->status = PropertyStatus::InvestmentPending;
+        // $property->status = PropertyStatus::InvestmentPending;
         $property->save();
 
         return back();
