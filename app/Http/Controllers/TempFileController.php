@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\TempFile;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class TempFileController extends Controller
@@ -18,7 +18,7 @@ class TempFileController extends Controller
             $file = $request->file('filepond');
             $fileName = $file->getClientOriginalName();
             $folder = uniqid();
-            $file->storeAs('TempFiles/' . $folder, $fileName, 'public');
+            $file->storeAs('TempFiles/'.$folder, $fileName, 'public');
 
             TempFile::create([
                 'name' => $fileName,
@@ -37,7 +37,7 @@ class TempFileController extends Controller
     {
         $tempFile = TempFile::where('folder', $fileFolder)->first();
         if ($tempFile) {
-            Storage::disk('public')->deleteDirectory('TempFiles/' . $tempFile->folder);
+            Storage::disk('public')->deleteDirectory('TempFiles/'.$tempFile->folder);
             $tempFile->delete();
         }
 

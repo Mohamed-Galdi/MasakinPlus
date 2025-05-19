@@ -10,10 +10,10 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules;
 use Inertia\Inertia;
 use Inertia\Response;
-use Illuminate\Validation\Rule;
 
 class RegisteredUserController extends Controller
 {
@@ -23,6 +23,7 @@ class RegisteredUserController extends Controller
     public function create(): Response
     {
         $userTypes = array_values(UserType::optionsExcluding(UserType::Admin));
+
         return Inertia::render('Auth/Register', compact('userTypes'));
     }
 
@@ -40,7 +41,6 @@ class RegisteredUserController extends Controller
             Rule::in(array_column(UserType::casesExcluding(UserType::Admin), 'value')),
         ]);
 
-
         $user = User::create([
             'name' => $request->username,
             'email' => $request->email,
@@ -49,7 +49,7 @@ class RegisteredUserController extends Controller
         ]);
 
         Auth::login($user);
-        
+
         // this will send the email verification email
         // event(new Registered($user));
 

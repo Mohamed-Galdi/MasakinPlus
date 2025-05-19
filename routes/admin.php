@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Auth\AdminAuthenticatedSessionController;
 use App\Http\Controllers\Admin\AccountController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\InvestmentRequestController;
@@ -8,9 +7,9 @@ use App\Http\Controllers\Admin\PropertyController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\SupportController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Auth\AdminAuthenticatedSessionController;
 use App\Http\Controllers\TempFileController;
 use Illuminate\Support\Facades\Route;
-
 
 Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
 

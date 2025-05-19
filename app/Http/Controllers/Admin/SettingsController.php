@@ -12,8 +12,8 @@ class SettingsController extends Controller
     {
         $propertyStatusOptions = PropertyStatus::options();
 
-        $propertyStatusDescriptions = collect(PropertyStatus::cases())->mapWithKeys(fn($status) => [
-            $status->value => $status->description()
+        $propertyStatusDescriptions = collect(PropertyStatus::cases())->mapWithKeys(fn ($status) => [
+            $status->value => $status->description(),
         ]);
 
         return inertia('Admin/Settings/index', compact('propertyStatusOptions', 'propertyStatusDescriptions'));

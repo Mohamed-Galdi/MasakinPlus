@@ -31,7 +31,7 @@ enum PropertyType: string
 
     public static function labels(): array
     {
-        return array_map(fn($type) => $type->label(), self::cases());
+        return array_map(fn ($type) => $type->label(), self::cases());
     }
 
     public static function labelFor(string $value): string
@@ -41,7 +41,7 @@ enum PropertyType: string
 
     public static function options(): array
     {
-        return array_map(fn($type) => [
+        return array_map(fn ($type) => [
             'label' => $type->label(),
             'value' => $type->label(),
         ], self::cases());

@@ -62,7 +62,7 @@ enum PropertyStatus: string
 
     public static function labels(): array
     {
-        return array_map(fn($status) => $status->label(), self::cases());
+        return array_map(fn ($status) => $status->label(), self::cases());
     }
 
     public static function labelFor(string $value): string
@@ -77,7 +77,7 @@ enum PropertyStatus: string
 
     public static function options(): array
     {
-        return array_map(fn($type) => [
+        return array_map(fn ($type) => [
             'label' => $type->label(),
             'value' => $type->value,
             'description' => $type->description(),

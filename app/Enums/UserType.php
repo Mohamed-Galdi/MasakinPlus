@@ -21,7 +21,7 @@ enum UserType: string
 
     public static function labels(): array
     {
-        return array_map(fn($type) => $type->label(), self::cases());
+        return array_map(fn ($type) => $type->label(), self::cases());
     }
 
     public static function labelFor(string $value): string
@@ -31,7 +31,7 @@ enum UserType: string
 
     public static function options(): array
     {
-        return array_map(fn($type) => [
+        return array_map(fn ($type) => [
             'label' => $type->label(),
             'value' => $type->value,
         ], self::cases());
@@ -39,12 +39,12 @@ enum UserType: string
 
     public static function casesExcluding(UserType ...$excluded): array
     {
-        return array_filter(self::cases(), fn($case) => !in_array($case, $excluded));
+        return array_filter(self::cases(), fn ($case) => ! in_array($case, $excluded));
     }
 
     public static function optionsExcluding(UserType ...$excluded): array
     {
-        return array_map(fn($type) => [
+        return array_map(fn ($type) => [
             'label' => $type->label(),
             'value' => $type->value,
         ], self::casesExcluding(...$excluded));

@@ -4,9 +4,8 @@ use App\Http\Controllers\Owner\InvestmentRequestController;
 use App\Http\Controllers\Owner\PropertyController;
 use Illuminate\Support\Facades\Route;
 
-
 Route::prefix('/owner')->middleware(['auth', 'verified', 'owner'])->group(function () {
-    
+
     Route::redirect('/', '/owner/properties')->name('owner.dashboard');
 
     // Properties
@@ -23,6 +22,6 @@ Route::prefix('/owner')->middleware(['auth', 'verified', 'owner'])->group(functi
         Route::get('/', 'index')->name('index');
         Route::post('/create', 'create')->name('create');
         Route::post('/resubmit', 'resubmit')->name('resubmit');
-       
+
     });
 });

@@ -2,20 +2,19 @@
 
 namespace App\Http\Controllers\Common;
 
+use App\Http\Controllers\Controller;
 use App\Models\Ticket;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-
 
 class SupportController extends Controller
 {
     public function index(Request $request)
     {
-        
+
         $tickets = Ticket::with(['messages'])
             ->where('user_id', auth()->id())  // Get only tickets for the authenticated user
             ->when($request->search, function ($query) use ($request) {
-                $query->where('subject', 'like', '%' . $request->search . '%');
+                $query->where('subject', 'like', '%'.$request->search.'%');
             })
             ->orderBy('last_message_at', 'desc')
             ->paginate(10)

@@ -5,16 +5,16 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\TempFile;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class AccountController extends Controller
 {
     public function index()
     {
         $user = auth()->user();
+
         return inertia('Admin/Account/Index', compact('user'));
     }
 
@@ -30,10 +30,10 @@ class AccountController extends Controller
         if ($tempFile) {
             $imgPath = 'users_images/';
 
-            Storage::disk('public')->move($tempFile->path, $imgPath . $tempFile->name);
-            $admin->image = '/storage/' . $imgPath . $tempFile->name;
+            Storage::disk('public')->move($tempFile->path, $imgPath.$tempFile->name);
+            $admin->image = '/storage/'.$imgPath.$tempFile->name;
 
-            Storage::disk('public')->deleteDirectory('TempFiles/' . $tempFile->folder);
+            Storage::disk('public')->deleteDirectory('TempFiles/'.$tempFile->folder);
             $tempFile->delete();
         }
         $admin->save();

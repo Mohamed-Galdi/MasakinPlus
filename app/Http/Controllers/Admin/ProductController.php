@@ -6,8 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Services\FileService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
@@ -18,7 +18,7 @@ class ProductController extends Controller
             $query->where('status', $request->productFilter);
         })
             ->when($request->search && $request->search !== 'all', function ($query) use ($request) {
-                $query->where('name', 'like', '%' . $request->search . '%');
+                $query->where('name', 'like', '%'.$request->search.'%');
             })
             ->orderBy('created_at', 'desc')
             ->paginate(12)
@@ -42,7 +42,7 @@ class ProductController extends Controller
             $query->where('status', $request->productFilter);
         })
             ->when($request->search && $request->search !== 'all', function ($query) use ($request) {
-                $query->where('name', 'like', '%' . $request->search . '%');
+                $query->where('name', 'like', '%'.$request->search.'%');
             })
             ->orderBy('created_at', 'desc')
             ->paginate(12)
@@ -69,7 +69,7 @@ class ProductController extends Controller
             'status' => 'required|string|max:255',
         ]);
 
-        $product = new Product();
+        $product = new Product;
         $product->name = $request->name;
         $product->price = $request->price;
         $product->status = $request->status;
@@ -77,7 +77,7 @@ class ProductController extends Controller
         $productName = Str::slug($request->name);
 
         if ($request->has('image') && $request->image !== null) {
-            $product->image = FileService::moveTempFile($request->image, "products/{$productName}", $productName . '-image');
+            $product->image = FileService::moveTempFile($request->image, "products/{$productName}", $productName.'-image');
         }
         $product->save();
 
@@ -100,7 +100,7 @@ class ProductController extends Controller
         $product->status = $request->status;
 
         if ($request->has('image') && $request->image !== null) {
-            $product->image = FileService::moveTempFile($request->image, "products/{$product->name}", $product->name . '-image');
+            $product->image = FileService::moveTempFile($request->image, "products/{$product->name}", $product->name.'-image');
         }
         $product->save();
 

@@ -32,7 +32,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'type',
         'image',
         'otp_code',
-        'otp_expires_at'
+        'otp_expires_at',
     ];
 
     /**
@@ -74,7 +74,6 @@ class User extends Authenticatable implements MustVerifyEmail
             'id'               // Local key on Property
         );
     }
-
 
     /**
      * Properties the user has invested in (for investors).

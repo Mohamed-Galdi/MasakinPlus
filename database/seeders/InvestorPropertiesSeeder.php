@@ -2,13 +2,13 @@
 
 namespace Database\Seeders;
 
-use App\Models\Property;
-use App\Models\Amenity;
-use App\Models\PropertyImage;
-use App\Models\User;
 use App\Enums\PropertyStatus;
 use App\Enums\PropertyType;
 use App\Enums\UserType;
+use App\Models\Amenity;
+use App\Models\Property;
+use App\Models\PropertyImage;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class InvestorPropertiesSeeder extends Seeder
@@ -24,6 +24,7 @@ class InvestorPropertiesSeeder extends Seeder
         // If no other owners found, exit
         if (empty($ownerIds)) {
             $this->command->info('No other owners found. Please create some first.');
+
             return;
         }
 
@@ -44,7 +45,7 @@ class InvestorPropertiesSeeder extends Seeder
             'الدمام' => ['حي الشاطئ', 'حي الفيصلية', 'حي العزيزية', 'حي البحيرة', 'حي الروضة', 'حي الجلوية', 'حي المزروعية'],
             'مكة' => ['حي العزيزية', 'حي الشوقية', 'حي النسيم', 'حي العوالي', 'حي الزاهر', 'حي الرصيفة', 'حي العمرة'],
             'المدينة المنورة' => ['حي السلام', 'حي العنابس', 'حي النصر', 'حي الأزهري', 'حي قباء', 'حي العوالي', 'حي الدار'],
-            'default' => ['حي الياسمين', 'حي الربيع', 'حي السلام', 'حي النزهة', 'حي الفيصلية']
+            'default' => ['حي الياسمين', 'حي الربيع', 'حي السلام', 'حي النزهة', 'حي الفيصلية'],
         ];
 
         // Collection of unique property titles for each type
@@ -82,21 +83,21 @@ class InvestorPropertiesSeeder extends Seeder
             'عقار تجاري استثماري',
             'أرض سكنية',
             'أرض تجارية',
-            'أرض زراعية'
+            'أرض زراعية',
         ];
 
         // Collection of unique property descriptions
         $descriptionTemplates = [
-            "{type} رائعة في موقع متميز، {features}، تتميز بـ{unique_feature}. {location_desc}",
-            "{type} بتصميم عصري وإطلالة مميزة على {view}، {features}. مثالية لـ{target}.",
-            "{type} فاخرة بمساحات واسعة ومرافق متكاملة، {features}. {location_desc}",
-            "{type} مجددة بالكامل مع تشطيبات حديثة، {features}. {added_value}",
-            "{type} مميزة في أرقى أحياء {city}، تمتاز بـ{unique_feature} و{features}. مناسبة لـ{target}.",
-            "{type} فسيحة ومضاءة جيداً، {features}. {location_desc} {added_value}",
-            "{view_desc} {type} مع مساحات رحبة، {features}. {security_desc}",
-            "{type} بتصميم فريد، {features}، تحتوي على {unique_feature}. {added_value}",
-            "{type} استثمارية ممتازة في {city}، {features}. العائد الاستثماري ممتاز.",
-            "{type} في موقع استراتيجي في {neighborhood}، {features}. {location_desc}"
+            '{type} رائعة في موقع متميز، {features}، تتميز بـ{unique_feature}. {location_desc}',
+            '{type} بتصميم عصري وإطلالة مميزة على {view}، {features}. مثالية لـ{target}.',
+            '{type} فاخرة بمساحات واسعة ومرافق متكاملة، {features}. {location_desc}',
+            '{type} مجددة بالكامل مع تشطيبات حديثة، {features}. {added_value}',
+            '{type} مميزة في أرقى أحياء {city}، تمتاز بـ{unique_feature} و{features}. مناسبة لـ{target}.',
+            '{type} فسيحة ومضاءة جيداً، {features}. {location_desc} {added_value}',
+            '{view_desc} {type} مع مساحات رحبة، {features}. {security_desc}',
+            '{type} بتصميم فريد، {features}، تحتوي على {unique_feature}. {added_value}',
+            '{type} استثمارية ممتازة في {city}، {features}. العائد الاستثماري ممتاز.',
+            '{type} في موقع استراتيجي في {neighborhood}، {features}. {location_desc}',
         ];
 
         $features = [
@@ -108,7 +109,7 @@ class InvestorPropertiesSeeder extends Seeder
             'مطبخ مجهز بالكامل',
             'غرف نوم فسيحة',
             'حمامات حديثة',
-            'تكييف مركزي'
+            'تكييف مركزي',
         ];
 
         $uniqueFeatures = [
@@ -124,7 +125,7 @@ class InvestorPropertiesSeeder extends Seeder
             'نظام ذكي للمنزل',
             'مصعد خاص',
             'مسطحات مائية',
-            'مساحة ترفيهية'
+            'مساحة ترفيهية',
         ];
 
         $views = [
@@ -136,7 +137,7 @@ class InvestorPropertiesSeeder extends Seeder
             'الحي',
             'المنتزه',
             'البحيرة',
-            'الشارع الرئيسي'
+            'الشارع الرئيسي',
         ];
 
         $locationDesc = [
@@ -147,7 +148,7 @@ class InvestorPropertiesSeeder extends Seeder
             'على مقربة من المساجد والمدارس',
             'موقع استراتيجي قريب من الطرق الرئيسية',
             'قريبة من المستشفيات والمرافق الصحية',
-            'محاطة بالمساحات الخضراء والحدائق'
+            'محاطة بالمساحات الخضراء والحدائق',
         ];
 
         $addedValue = [
@@ -157,14 +158,14 @@ class InvestorPropertiesSeeder extends Seeder
             'تحتوي على أنظمة توفير الطاقة',
             'الموقع يضمن خصوصية تامة',
             'سند ملكية جاهز ومفرز',
-            'تتميز بتهوية طبيعية ممتازة'
+            'تتميز بتهوية طبيعية ممتازة',
         ];
 
         $securityDesc = [
             'مؤمنة بنظام مراقبة على مدار الساعة',
             'تقع في مجمع سكني آمن ومحروس',
             'مزودة بأنظمة أمان متطورة',
-            'تحتوي على بوابات إلكترونية'
+            'تحتوي على بوابات إلكترونية',
         ];
 
         $target = [
@@ -174,14 +175,14 @@ class InvestorPropertiesSeeder extends Seeder
             'الأزواج الجدد',
             'الشركات الناشئة',
             'المستأجرين طويلي الأمد',
-            'العوائل الكبيرة'
+            'العوائل الكبيرة',
         ];
 
         $viewDesc = [
             'إطلالة بانورامية على',
             'إطلالة جزئية على',
             'إطلالة مباشرة على',
-            'نوافذ تطل على'
+            'نوافذ تطل على',
         ];
 
         $imagesToInsert = [];
@@ -197,7 +198,7 @@ class InvestorPropertiesSeeder extends Seeder
             PropertyType::Building,
             PropertyType::Warehouse,
             PropertyType::Commercial,
-            PropertyType::Land
+            PropertyType::Land,
         ];
 
         // Create 18 new properties
@@ -237,7 +238,7 @@ class InvestorPropertiesSeeder extends Seeder
                     '{city}',
                     '{view_desc}',
                     '{security_desc}',
-                    '{neighborhood}'
+                    '{neighborhood}',
                 ],
                 [
                     $typeLabel,
@@ -248,9 +249,9 @@ class InvestorPropertiesSeeder extends Seeder
                     $targetAudience,
                     $addedVal,
                     $city,
-                    $viewDescription . ' ' . $view,
+                    $viewDescription.' '.$view,
                     $secDesc,
-                    $neighborhood
+                    $neighborhood,
                 ],
                 $descTemplate
             );
@@ -285,7 +286,7 @@ class InvestorPropertiesSeeder extends Seeder
                 PropertyType::Land => fake()->numberBetween(500, 5000),
             };
 
-            $status =  $i < 4 ? PropertyStatus::InvestmentOfferSent->value :  PropertyStatus::OpenForInvestment->value;
+            $status = $i < 4 ? PropertyStatus::InvestmentOfferSent->value : PropertyStatus::OpenForInvestment->value;
 
             $propertyData = [
                 'owner_id' => $ownerId,
@@ -306,7 +307,7 @@ class InvestorPropertiesSeeder extends Seeder
             $property = Property::create($propertyData);
 
             // Attach random amenities (between 3-6 amenities per property)
-            if (!empty($allAmenities)) {
+            if (! empty($allAmenities)) {
                 $amenityCount = fake()->numberBetween(3, min(6, count($allAmenities)));
                 $selectedAmenities = fake()->randomElements($allAmenities, $amenityCount);
                 $property->amenities()->attach($selectedAmenities);
@@ -324,7 +325,7 @@ class InvestorPropertiesSeeder extends Seeder
         }
 
         // Bulk insert images
-        if (!empty($imagesToInsert)) {
+        if (! empty($imagesToInsert)) {
             PropertyImage::insert($imagesToInsert);
         }
 

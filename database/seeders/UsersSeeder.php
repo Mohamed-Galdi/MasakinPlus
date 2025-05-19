@@ -2,13 +2,12 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
 use App\Enums\UserType;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\DB;
 
 class UsersSeeder extends Seeder
 {
@@ -40,7 +39,7 @@ class UsersSeeder extends Seeder
             'رنا',
             'سلمى',
             'لينا',
-            'دانة'
+            'دانة',
         ];
 
         $arabicLastNames = [
@@ -61,7 +60,7 @@ class UsersSeeder extends Seeder
             'الرشيدي',
             'الشهراني',
             'الجهني',
-            'البقمي'
+            'البقمي',
         ];
 
         $userTypes = [
@@ -78,11 +77,11 @@ class UsersSeeder extends Seeder
             for ($i = 0; $i < 12; $i++) {
                 $firstName = $arabicFirstNames[array_rand($arabicFirstNames)];
                 $lastName = $arabicLastNames[array_rand($arabicLastNames)];
-                $fullName = $firstName . ' ' . $lastName;
+                $fullName = $firstName.' '.$lastName;
 
                 // Create unique email based on name and a random number
-                $emailName = Str::slug($firstName . $lastName . rand(100, 999), '');
-                $email = $emailName . '@example.com';
+                $emailName = Str::slug($firstName.$lastName.rand(100, 999), '');
+                $email = $emailName.'@example.com';
 
                 $createdAt = Carbon::now()->subDays(rand(1, 365));
 

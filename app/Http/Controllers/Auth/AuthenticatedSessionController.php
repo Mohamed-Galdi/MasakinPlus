@@ -6,17 +6,15 @@ use App\Enums\UserType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Mail\OTP;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use Inertia\Response;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
-use Carbon\Carbon;
-use App\Models\User;
-use Illuminate\Support\Facades\Session;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -43,12 +41,12 @@ class AuthenticatedSessionController extends Controller
             ->select('email', 'type', 'is_active')
             ->first();
 
-        if (!$user) {
+        if (! $user) {
             return back()->withErrors(['email' => __('auth.failed')]);
         }
 
         // Check if the user account is active
-        if (!$user->is_active) {
+        if (! $user->is_active) {
             return back()->withErrors(['email' => __('auth.failed')]);
         }
 
@@ -68,7 +66,6 @@ class AuthenticatedSessionController extends Controller
 
         return redirect()->intended(route('dashboard', absolute: false));
     }
-
 
     // login with otp
 
@@ -100,8 +97,6 @@ class AuthenticatedSessionController extends Controller
 
     //     return redirect()->route('otp');
     // }
-
-
 
     /**
      * Destroy an authenticated session.

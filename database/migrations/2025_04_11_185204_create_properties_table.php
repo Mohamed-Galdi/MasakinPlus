@@ -1,10 +1,10 @@
 <?php
 
+use App\Enums\PropertyStatus;
+use App\Enums\PropertyType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use App\Enums\PropertyStatus;
-use App\Enums\PropertyType;
 
 return new class extends Migration
 {
@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('city');
             $table->string('address')->nullable();
             $table->float('area')->default(0); // Area in square meters
-            $table->integer('bedrooms')->default(1); 
+            $table->integer('bedrooms')->default(1);
             $table->integer('bathrooms')->default(1);
             $table->decimal('latitude', 10, 6)->nullable();
             $table->decimal('longitude', 10, 6)->nullable();

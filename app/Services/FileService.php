@@ -2,9 +2,9 @@
 
 namespace App\Services;
 
+use App\Models\TempFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use App\Models\TempFile;
 
 class FileService
 {
@@ -14,7 +14,7 @@ class FileService
 
         if ($tempFile) {
             $slug = Str::slug($title);
-            $uniqueName = "{$slug}-" . time() . "-" . Str::random(8) . "." . pathinfo($tempFile->name, PATHINFO_EXTENSION);
+            $uniqueName = "{$slug}-".time().'-'.Str::random(8).'.'.pathinfo($tempFile->name, PATHINFO_EXTENSION);
             $filePath = "{$destinationPath}/{$uniqueName}";
 
             Storage::disk('public')->move($tempFile->path, $filePath);
@@ -22,7 +22,7 @@ class FileService
             Storage::disk('public')->deleteDirectory("TempFiles/{$tempFile->folder}");
             $tempFile->delete();
 
-            $finalFilePath = 'storage/' . $filePath;
+            $finalFilePath = 'storage/'.$filePath;
 
             return $finalFilePath;
         }

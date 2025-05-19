@@ -12,7 +12,7 @@ class SupportController extends Controller
 {
     public function index(Request $request)
     {
-        
+
         $tickets = Ticket::with(['messages', 'user'])
             ->whereHas('user', function ($query) {
                 $query->whereNot('type', UserType::Admin->value)
@@ -20,9 +20,9 @@ class SupportController extends Controller
             })
             ->when($request->search, function ($query) use ($request) {
                 $query->where(function ($subQuery) use ($request) {
-                    $subQuery->where('subject', 'like', '%' . $request->search . '%')
+                    $subQuery->where('subject', 'like', '%'.$request->search.'%')
                         ->orWhereHas('user', function ($userQuery) use ($request) {
-                            $userQuery->where('name', 'like', '%' . $request->search . '%')
+                            $userQuery->where('name', 'like', '%'.$request->search.'%')
                                 ->whereNot('type', UserType::Admin->value);
                         });
                 });
@@ -35,8 +35,6 @@ class SupportController extends Controller
             ->orderBy('last_message_at', 'desc')
             ->paginate(10)
             ->withQueryString();
-
-
 
         $users = User::where('type', '!=', UserType::Admin->value)
             ->where('is_active', true)

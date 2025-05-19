@@ -6,7 +6,6 @@ use App\Enums\InvestmentRequestStatus;
 use App\Enums\PropertyStatus;
 use App\Models\InvestmentRequest;
 use App\Models\Property;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class InvestmentRequestSeeder extends Seeder

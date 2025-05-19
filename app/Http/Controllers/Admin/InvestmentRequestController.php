@@ -7,7 +7,6 @@ use App\Enums\PropertyStatus;
 use App\Http\Controllers\Controller;
 use App\Models\InvestmentRequest;
 use App\Models\Property;
-use App\Models\User;
 use Illuminate\Http\Request;
 
 class InvestmentRequestController extends Controller
@@ -16,23 +15,23 @@ class InvestmentRequestController extends Controller
     {
         $investmentRequests = InvestmentRequest::with('property.owner', 'property.images')
             ->when($request->statusFilter, function ($query) use ($request) {
-                $query->where('status',  $request->statusFilter);
+                $query->where('status', $request->statusFilter);
             })
             ->when($request->search, function ($query) use ($request) {
                 // Owner filter
                 $query->whereHas('property.owner', function ($query) use ($request) {
-                    $query->where('name', 'like', '%' . $request->search . '%');
+                    $query->where('name', 'like', '%'.$request->search.'%');
                 });
             })
             ->orderBy('updated_at', 'desc')
             ->paginate(10)
             ->withQueryString();
 
-
         $statusFilter = $request->get('statusFilter') ?? '';
         $search = $request->get('search') ?? '';
 
         $investmentRequestsStatusOptions = InvestmentRequestStatus::options();
+
         return inertia('Admin/InvestmentRequests/index', compact('investmentRequests', 'investmentRequestsStatusOptions', 'statusFilter', 'search'));
     }
 
@@ -49,7 +48,7 @@ class InvestmentRequestController extends Controller
         if ($request->reply === 'approve') {
             $investmentRequest->status = InvestmentRequestStatus::Approved;
             $property->status = PropertyStatus::PreparingInvestmentOffer;
-        } else if ($request->reply === 'reject') {
+        } elseif ($request->reply === 'reject') {
             $investmentRequest->status = InvestmentRequestStatus::Rejected;
             $property->status = PropertyStatus::InvestmentRejected;
         }
@@ -76,10 +75,10 @@ class InvestmentRequestController extends Controller
         if ($request->new_status === InvestmentRequestStatus::Approved->value) {
             $investmentRequest->status = InvestmentRequestStatus::Approved->value;
             $property->status = PropertyStatus::PreparingInvestmentOffer->value;
-        } else if ($request->new_status === InvestmentRequestStatus::Rejected->value) {
+        } elseif ($request->new_status === InvestmentRequestStatus::Rejected->value) {
             $investmentRequest->status = InvestmentRequestStatus::Rejected->value;
             $property->status = PropertyStatus::InvestmentRejected->value;
-        } else if ($request->new_status === InvestmentRequestStatus::Pending->value) {
+        } elseif ($request->new_status === InvestmentRequestStatus::Pending->value) {
             $investmentRequest->status = InvestmentRequestStatus::Pending->value;
             $property->status = PropertyStatus::Draft->value;
         }

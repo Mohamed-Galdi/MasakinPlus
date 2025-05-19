@@ -8,13 +8,12 @@ use App\Http\Controllers\Controller;
 use App\Models\Amenity;
 use App\Models\Property;
 use App\Services\FileService;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
-
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class PropertyController extends Controller
 {
@@ -54,6 +53,7 @@ class PropertyController extends Controller
     {
         $typeOptions = PropertyType::options();
         $amenities = Amenity::select('id', 'name')->get();
+
         return inertia('Owner/Properties/create', compact('typeOptions', 'amenities'));
     }
 
@@ -92,7 +92,7 @@ class PropertyController extends Controller
             $property->amenities()->attach($amenity['id']);
         }
 
-        $propertyImagesFolderName = 'property_' . $property->id . '_' . rand(100000, 999999);
+        $propertyImagesFolderName = 'property_' . $property->id . '_' . Str::random(6);
 
         foreach ($request->images as $image) {
 
@@ -213,10 +213,6 @@ class PropertyController extends Controller
 
     /**
      * Get the folder name for storing images, reusing the folder of existing images if available.
-     *
-     * @param array $images
-     * @param string $propertyId
-     * @return string
      */
     private function getImageFolder(array $images, string $propertyId): string
     {
@@ -236,6 +232,6 @@ class PropertyController extends Controller
         }
 
         // If no existing folder found, create a new one with a simpler unique name
-        return 'property_' . $propertyId . '_' . substr(md5(uniqid()), 0, 8);
+        return 'property_' . $propertyId . '_' . Str::random(8);
     }
 }

@@ -3,13 +3,13 @@
 namespace App\Models;
 
 use App\Enums\PropertyStatus;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Model;
 
 class Property extends Model
 {
     use HasUuids;
-    
+
     protected $fillable = [
         'owner_id',
         'title',

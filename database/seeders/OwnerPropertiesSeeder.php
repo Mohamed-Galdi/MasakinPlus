@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\Property;
-use App\Models\Amenity;
-use App\Models\PropertyImage;
 use App\Enums\PropertyStatus;
+use App\Models\Amenity;
+use App\Models\Property;
+use App\Models\PropertyImage;
 use Illuminate\Database\Seeder;
 
 class OwnerPropertiesSeeder extends Seeder
@@ -35,7 +35,7 @@ class OwnerPropertiesSeeder extends Seeder
             $data['daily_rent_price'] = in_array($status->value, [
                 PropertyStatus::Draft->value,
                 PropertyStatus::InvestmentRequested->value,
-                PropertyStatus::InvestmentOfferSent->value,                
+                PropertyStatus::InvestmentOfferSent->value,
             ]) ? null : round(fake()->numberBetween(100, 1000) / 50) * 50;
 
             $data['latitude'] = 24.7136;

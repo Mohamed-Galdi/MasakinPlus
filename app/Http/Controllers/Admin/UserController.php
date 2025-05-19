@@ -15,8 +15,8 @@ class UserController extends Controller
             ->where('is_active', true)
             ->when($request->search, function ($query) use ($request) {
                 $query->where(function ($subQuery) use ($request) {
-                    $subQuery->where('name', 'like', '%' . $request->search . '%')
-                        ->orWhere('email', 'like', '%' . $request->search . '%');
+                    $subQuery->where('name', 'like', '%'.$request->search.'%')
+                        ->orWhere('email', 'like', '%'.$request->search.'%');
                 });
             })
             ->when($request->userType, function ($query) use ($request) {
@@ -39,8 +39,8 @@ class UserController extends Controller
             ->where('is_active', false)
             ->when($request->search, function ($query) use ($request) {
                 $query->where(function ($subQuery) use ($request) {
-                    $subQuery->where('name', 'like', '%' . $request->search . '%')
-                        ->orWhere('email', 'like', '%' . $request->search . '%');
+                    $subQuery->where('name', 'like', '%'.$request->search.'%')
+                        ->orWhere('email', 'like', '%'.$request->search.'%');
                 });
             })
             ->when($request->userType, function ($query) use ($request) {
@@ -60,6 +60,7 @@ class UserController extends Controller
     public function view($id)
     {
         $user = User::whereNot('type', UserType::Admin->value)->findOrFail($id);
+
         return inertia('Admin/Users/view', compact('user'));
     }
 
@@ -73,6 +74,7 @@ class UserController extends Controller
         $user->suspension_reason = $request->suspension_reason;
         $user->suspended_at = now();
         $user->save();
+
         return back();
     }
 
@@ -83,6 +85,7 @@ class UserController extends Controller
         $user->suspension_reason = null;
         $user->suspended_at = null;
         $user->save();
+
         return back();
     }
 }

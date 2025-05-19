@@ -4,12 +4,12 @@ namespace App\Providers;
 
 use App\Models\Property;
 use App\Policies\PropertyOwnerPolicy;
-use Illuminate\Support\Facades\Vite;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Auth\Notifications\VerifyEmail;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Vite;
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {

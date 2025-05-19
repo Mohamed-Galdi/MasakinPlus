@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
 
 class OTPLoginController extends Controller
 {
@@ -22,7 +22,7 @@ class OTPLoginController extends Controller
 
         $user = User::find(session('otp_user_id'));
 
-        if (!$user || $user->otp_code !== $request->otp || now()->greaterThan($user->otp_expires_at)) {
+        if (! $user || $user->otp_code !== $request->otp || now()->greaterThan($user->otp_expires_at)) {
             return back()->withErrors(['otp' => 'الرمز المدخل غير صحيح أو غير صالح.']);
         }
 

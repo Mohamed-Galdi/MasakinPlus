@@ -2,21 +2,22 @@
 
 namespace App\Http\Controllers\Common;
 
+use App\Http\Controllers\Controller;
 use App\Models\TempFile;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\Controller;
-
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class UserAccountController extends Controller
 {
     public function index()
     {
         $user = auth()->user();
+
         return inertia('Common/account', compact('user'));
     }
+
     public function changeImage(Request $request)
     {
         $request->validate([
@@ -29,10 +30,10 @@ class UserAccountController extends Controller
         if ($tempFile) {
             $imgPath = 'users_images/';
 
-            Storage::disk('public')->move($tempFile->path, $imgPath . $tempFile->name);
-            $user->image = '/storage/' . $imgPath . $tempFile->name;
+            Storage::disk('public')->move($tempFile->path, $imgPath.$tempFile->name);
+            $user->image = '/storage/'.$imgPath.$tempFile->name;
 
-            Storage::disk('public')->deleteDirectory('TempFiles/' . $tempFile->folder);
+            Storage::disk('public')->deleteDirectory('TempFiles/'.$tempFile->folder);
             $tempFile->delete();
         }
         $user->save();
@@ -52,7 +53,7 @@ class UserAccountController extends Controller
 
         return redirect()->route('account.index');
     }
-    
+
     public function editEmail(Request $request)
     {
         $request->validate([
