@@ -10,7 +10,7 @@ class InvestmentRequest extends Model
         'property_id',
         'owner_id',
         'suggested_investment_amount',
-        'suggested_daily_rent_price',
+        'suggested_nightly_rent',
         'owner_note',
         'status',
         'admin_note',

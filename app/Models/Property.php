@@ -15,6 +15,7 @@ class Property extends Model
         'title',
         'description',
         'type',
+        'status',
         'city',
         'address',
         'area',
@@ -22,8 +23,13 @@ class Property extends Model
         'bathrooms',
         'latitude',
         'longitude',
-        'daily_rent_price',
-        'status',
+        'nightly_rent',
+        'investment_required',
+        'property_valuation',
+        'owner_share',
+        'investor_share',
+        'platform_fee_share',
+        'monthly_operating_cost',
     ];
 
     protected $casts = [

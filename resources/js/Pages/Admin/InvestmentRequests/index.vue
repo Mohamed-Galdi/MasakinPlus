@@ -391,7 +391,7 @@ const updateRequestStatus = () => {
                             <p class="text-xl font-bold text-blue-700">
                                 {{
                                     formatPrice(
-                                        requestDetails.suggested_daily_rent_price
+                                        requestDetails.suggested_nightly_rent
                                     )
                                 }}
                                 ريال

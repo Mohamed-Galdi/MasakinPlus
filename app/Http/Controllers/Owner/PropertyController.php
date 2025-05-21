@@ -24,8 +24,8 @@ class PropertyController extends Controller
 
         $properties = auth()->user()->ownedProperties()
             ->with([
-                'amenities' => fn($query) => $query->select('amenities.id', 'name'),
-                'images' => fn($query) => $query->select('property_images.id', 'property_id', 'path'),
+                'amenities' => fn ($query) => $query->select('amenities.id', 'name'),
+                'images' => fn ($query) => $query->select('property_images.id', 'property_id', 'path'),
             ])
             ->when($typeFilter && $typeFilter !== 'all', function ($query) use ($typeFilter) {
                 $query->where('type', $typeFilter);
@@ -74,7 +74,7 @@ class PropertyController extends Controller
             'images' => 'required|array',
         ]);
 
-        $property = new Property();
+        $property = new Property;
         $property->owner_id = auth()->user()->id;
         $property->title = $request->title;
         $property->description = $request->description;
@@ -92,7 +92,7 @@ class PropertyController extends Controller
             $property->amenities()->attach($amenity['id']);
         }
 
-        $propertyImagesFolderName = 'property_' . $property->id . '_' . Str::random(6);
+        $propertyImagesFolderName = 'property_'.$property->id.'_'.Str::random(6);
 
         foreach ($request->images as $image) {
 
@@ -172,7 +172,7 @@ class PropertyController extends Controller
                 }, $request->removedImages);
 
                 // Bulk delete from database
-                $property->images()->whereIn('path', array_map(fn($path) => 'storage/' . $path, $imagePaths))->delete();
+                $property->images()->whereIn('path', array_map(fn ($path) => 'storage/'.$path, $imagePaths))->delete();
 
                 // Delete from storage
                 foreach ($imagePaths as $imagePath) {
@@ -222,7 +222,7 @@ class PropertyController extends Controller
         });
 
         // If we have existing images, extract the folder name from the first one
-        if (!empty($existingImages)) {
+        if (! empty($existingImages)) {
             $firstImage = reset($existingImages);
 
             // Extract folder name using regex - matches the pattern in storage/property_images/FOLDER_NAME/filename
@@ -232,6 +232,6 @@ class PropertyController extends Controller
         }
 
         // If no existing folder found, create a new one with a simpler unique name
-        return 'property_' . $propertyId . '_' . Str::random(8);
+        return 'property_'.$propertyId.'_'.Str::random(8);
     }
 }

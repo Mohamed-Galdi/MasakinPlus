@@ -31,14 +31,14 @@ class InvestmentRequestController extends Controller
         $request->validate([
             'property_id' => 'required|exists:properties,id',
             'suggested_investment_amount' => 'required|numeric|min:0|max:1000000',
-            'suggested_daily_rent_price' => 'required|numeric|min:0|max:10000',
+            'suggested_nightly_rent' => 'required|numeric|min:0|max:10000',
             'owner_note' => 'max:1500',
         ]);
 
         $investmentRequest = new InvestmentRequest;
         $investmentRequest->property_id = $request->property_id;
         $investmentRequest->suggested_investment_amount = $request->suggested_investment_amount;
-        $investmentRequest->suggested_daily_rent_price = $request->suggested_daily_rent_price;
+        $investmentRequest->suggested_nightly_rent = $request->suggested_nightly_rent;
         $investmentRequest->owner_note = $request->owner_note;
         $investmentRequest->status = InvestmentRequestStatus::Pending;
         $investmentRequest->save();
@@ -56,13 +56,13 @@ class InvestmentRequestController extends Controller
         $request->validate([
             'request_id' => 'required|exists:investment_requests,id',
             'suggested_investment_amount' => 'required|numeric|min:0|max:1000000',
-            'suggested_daily_rent_price' => 'required|numeric|min:0|max:10000',
+            'suggested_nightly_rent' => 'required|numeric|min:0|max:10000',
             'owner_note' => 'max:1500',
         ]);
 
         $investmentRequest = InvestmentRequest::find($request->request_id);
         $investmentRequest->suggested_investment_amount = $request->suggested_investment_amount;
-        $investmentRequest->suggested_daily_rent_price = $request->suggested_daily_rent_price;
+        $investmentRequest->suggested_nightly_rent = $request->suggested_nightly_rent;
         $investmentRequest->owner_note = $request->owner_note;
         $investmentRequest->status = InvestmentRequestStatus::Pending;
         $investmentRequest->save();

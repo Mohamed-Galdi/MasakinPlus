@@ -22,7 +22,7 @@ class InvestmentRequestSeeder extends Seeder
             InvestmentRequest::create([
                 'property_id' => $property->id,
                 'suggested_investment_amount' => fake()->numberBetween(200000, 800000),
-                'suggested_daily_rent_price' => fake()->numberBetween(150, 500),
+                'suggested_nightly_rent' => fake()->numberBetween(150, 500),
                 'owner_note' => fake()->sentence(),
                 'status' => InvestmentRequestStatus::Pending,
                 'admin_note' => null,

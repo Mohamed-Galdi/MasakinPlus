@@ -32,7 +32,7 @@ class OwnerPropertiesSeeder extends Seeder
         $properties->each(function ($data, $index) use (&$imagesToInsert) {
             $status = fake()->randomElement(PropertyStatus::cases());
             $data['status'] = $status->value;
-            $data['daily_rent_price'] = in_array($status->value, [
+            $data['nightly_rent'] = in_array($status->value, [
                 PropertyStatus::Draft->value,
                 PropertyStatus::InvestmentRequested->value,
                 PropertyStatus::InvestmentOfferSent->value,

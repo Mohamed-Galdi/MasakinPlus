@@ -16,7 +16,7 @@ return new class extends Migration
             $table->id();
             $table->foreignUuid('property_id')->constrained('properties')->onDelete('cascade');
             $table->decimal('suggested_investment_amount', 15, 2);
-            $table->decimal('suggested_daily_rent_price', 10, 2);
+            $table->decimal('suggested_nightly_rent', 10, 2);
             $table->text('owner_note')->nullable();
             $table->enum('status', array_column(InvestmentRequestStatus::cases(), 'value'))->default(InvestmentRequestStatus::Pending->value);
             $table->text('admin_note')->nullable();

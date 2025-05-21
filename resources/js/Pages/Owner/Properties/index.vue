@@ -274,12 +274,12 @@ const textHelpers = useTextHelpers();
                             <p class="text-sm text-gray-500">الإيجار اليومي</p>
                             <p class="text-lg font-bold text-emerald-600">
                                 <template
-                                    v-if="property.daily_rent_price === null"
+                                    v-if="property.nightly_rent === null"
                                 >
                                     لم يحدد بعد
                                 </template>
                                 <template v-else>
-                                    {{ formatPrice(property.daily_rent_price) }}
+                                    {{ formatPrice(property.nightly_rent) }}
                                     ريال
                                 </template>
                             </p>

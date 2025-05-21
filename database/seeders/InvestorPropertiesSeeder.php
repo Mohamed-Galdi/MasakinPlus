@@ -299,7 +299,7 @@ class InvestorPropertiesSeeder extends Seeder
                 'bedrooms' => $bedrooms,
                 'bathrooms' => $bathrooms,
                 'status' => $status,
-                'daily_rent_price' => round(fake()->numberBetween(200, 1500) / 50) * 50,
+                'nightly_rent' => round(fake()->numberBetween(200, 1500) / 50) * 50,
                 'latitude' => fake()->randomFloat(4, 24.0, 26.0),
                 'longitude' => fake()->randomFloat(4, 45.0, 50.0),
             ];

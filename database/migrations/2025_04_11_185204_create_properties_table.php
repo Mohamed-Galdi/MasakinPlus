@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('title')->index();
             $table->text('description')->nullable();
             $table->enum('type', PropertyType::labels())->default(PropertyType::Apartment->label());
+            $table->enum('status', array_column(PropertyStatus::cases(), 'value'))->default(PropertyStatus::Draft->value);
             $table->string('city');
             $table->string('address')->nullable();
             $table->float('area')->default(0); // Area in square meters
@@ -26,8 +27,13 @@ return new class extends Migration
             $table->integer('bathrooms')->default(1);
             $table->decimal('latitude', 10, 6)->nullable();
             $table->decimal('longitude', 10, 6)->nullable();
-            $table->decimal('daily_rent_price', 10, 2)->nullable();
-            $table->enum('status', array_column(PropertyStatus::cases(), 'value'))->default(PropertyStatus::Draft->value);
+            $table->decimal('property_valuation', 12, 2)->default(0.00); // Price of the property
+            $table->decimal('investment_required', 12, 2)->default(0.00); // Required investment amount
+            $table->decimal('monthly_operating_cost', 10, 2)->default(0.00); // Monthly operating cost
+            $table->decimal('nightly_rent', 10, 2)->default(0.00)->nullable(); // Rent price per night
+            $table->decimal('owner_share', 5, 2)->default(0.00); // Proportion of the owner (e.g., 0.60 for 60%)
+            $table->decimal('investor_share', 5, 2)->default(0.00); // Proportion of the investors
+            $table->decimal('platform_fee_share', 5, 2)->default(0.00); // Proportion of the platform
             $table->timestamps();
         });
     }

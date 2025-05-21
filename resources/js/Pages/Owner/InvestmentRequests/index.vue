@@ -53,7 +53,7 @@ const isThereAvailableProperty = computed(() => {
 const createRequestForm = useForm({
     property_id: "",
     suggested_investment_amount: null,
-    suggested_daily_rent_price: null,
+    suggested_nightly_rent: null,
     owner_note: "",
 });
 
@@ -108,7 +108,7 @@ const showResubmitRequestModal = ref(false);
 const resubmitRequestForm = useForm({
     request_id: "",
     suggested_investment_amount: 0,
-    suggested_daily_rent_price: 0,
+    suggested_nightly_rent: 0,
     owner_note: "",
 });
 
@@ -116,8 +116,8 @@ const openResubmitRequestModal = () => {
     resubmitRequestForm.request_id = requestDetails.value.id;
     resubmitRequestForm.suggested_investment_amount =
         requestDetails.value.suggested_investment_amount;
-    resubmitRequestForm.suggested_daily_rent_price =
-        requestDetails.value.suggested_daily_rent_price;
+    resubmitRequestForm.suggested_nightly_rent =
+        requestDetails.value.suggested_nightly_rent;
 
     showRequestDetailsModal.value = false;
     showResubmitRequestModal.value = true;
@@ -222,9 +222,7 @@ const formatDate = (dateString) => {
                             >سعر الإيجار اليومي المقترح (ريال)</label
                         >
                         <InputNumber
-                            v-model="
-                                createRequestForm.suggested_daily_rent_price
-                            "
+                            v-model="createRequestForm.suggested_nightly_rent"
                             :min="0"
                             class="w-full"
                             suffix=" ريال"
@@ -404,7 +402,7 @@ const formatDate = (dateString) => {
                             <p class="text-xl font-bold text-blue-700">
                                 {{
                                     formatPrice(
-                                        requestDetails.suggested_daily_rent_price
+                                        requestDetails.suggested_nightly_rent
                                     )
                                 }}
                                 ريال
@@ -653,9 +651,7 @@ const formatDate = (dateString) => {
                             >سعر الإيجار اليومي المقترح (ريال)</label
                         >
                         <InputNumber
-                            v-model="
-                                resubmitRequestForm.suggested_daily_rent_price
-                            "
+                            v-model="resubmitRequestForm.suggested_nightly_rent"
                             :min="0"
                             class="w-full"
                             suffix=" ريال"
@@ -794,7 +790,7 @@ const formatDate = (dateString) => {
                 </Column>
 
                 <Column
-                    field="suggested_daily_rent_price"
+                    field="suggested_nightly_rent"
                     header="الإيجار اليومي"
                     class="w-[150px]"
                 >
@@ -802,7 +798,7 @@ const formatDate = (dateString) => {
                         <div class="font-semibold">
                             {{
                                 formatPrice(
-                                    slotProps.data.suggested_daily_rent_price
+                                    slotProps.data.suggested_nightly_rent
                                 )
                             }}
                             ريال

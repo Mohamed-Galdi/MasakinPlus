@@ -307,9 +307,9 @@ const formatPrice = (price) => {
                                 </p>
                                 <p class="text-lg text-emerald-600">
                                     {{
-                                        property.daily_rent_price
+                                        property.nightly_rent
                                             ? formatPrice(
-                                                  property.daily_rent_price
+                                                  property.nightly_rent
                                               )
                                             : "لم يحدد بعد"
                                     }}
