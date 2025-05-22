@@ -1,6 +1,6 @@
 <script setup>
 import OwnerLayout from "@/Layouts/OwnerLayout.vue";
-import { ref, reactive, watch, computed } from "vue";
+import { ref, computed } from "vue";
 import { Link, router } from "@inertiajs/vue3";
 import Dialog from "primevue/dialog";
 import Button from "primevue/button";
@@ -9,7 +9,6 @@ import InputNumber from "primevue/inputnumber";
 import Select from "primevue/select";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
-import Badge from "primevue/badge";
 import { useForm } from "@inertiajs/vue3";
 import Toast from "primevue/toast";
 import { useToast } from "primevue/usetoast";
@@ -52,7 +51,9 @@ const isThereAvailableProperty = computed(() => {
 // New request form
 const createRequestForm = useForm({
     property_id: "",
+    suggested_valuation: null,
     suggested_investment_amount: null,
+    suggested_monthly_operating_cost: null,
     suggested_nightly_rent: null,
     owner_note: "",
 });
@@ -96,59 +97,9 @@ const submitCreateRequest = () => {
 };
 
 // ########################################################################################## View request details
-const showRequestDetailsModal = ref(false);
-const requestDetails = ref({});
+
 const viewRequestDetails = (request) => {
-    showRequestDetailsModal.value = true;
-    requestDetails.value = request;
-};
-
-// ######################################################################################## Resubmit request
-const showResubmitRequestModal = ref(false);
-const resubmitRequestForm = useForm({
-    request_id: "",
-    suggested_investment_amount: 0,
-    suggested_nightly_rent: 0,
-    owner_note: "",
-});
-
-const openResubmitRequestModal = () => {
-    resubmitRequestForm.request_id = requestDetails.value.id;
-    resubmitRequestForm.suggested_investment_amount =
-        requestDetails.value.suggested_investment_amount;
-    resubmitRequestForm.suggested_nightly_rent =
-        requestDetails.value.suggested_nightly_rent;
-
-    showRequestDetailsModal.value = false;
-    showResubmitRequestModal.value = true;
-};
-
-const closeResubmitRequestModal = () => {
-    showResubmitRequestModal.value = false;
-    resubmitRequestForm.reset();
-};
-
-const submitResubmitRequest = () => {
-    resubmitRequestForm.post(route("owner.investment-requests.resubmit"), {
-        onSuccess: () => {
-            showResubmitRequestModal.value = false;
-            toast.add({
-                severity: "success",
-                summary: "تم",
-                detail: "تم إرسال الطلب بنجاح",
-                life: 3000,
-            });
-        },
-        onError: () => {
-            const errorMessage = Object.values(resubmitRequestForm.errors)[0];
-            toast.add({
-                severity: "error",
-                summary: "خطأ",
-                detail: errorMessage,
-                life: 3000,
-            });
-        },
-    });
+    router.get(route("owner.investment-requests.show", request.id), {});
 };
 
 // ########################################################################################## utils
@@ -175,519 +126,6 @@ const formatDate = (dateString) => {
         <!-- Toast -->
         <Toast position="top-center" />
 
-        <!-- New Investment Request Modal -->
-        <Dialog
-            v-model:visible="showNewRequestModal"
-            modal
-            header="طلب فتح استثمار جديد"
-            :style="{ width: isMobile ? '90%' : '50vw' }"
-            :closable="true"
-            :closeOnEscape="true"
-        >
-            <div class="p-4">
-                <form @submit.prevent="submitRequest" class="font-BeinNormal">
-                    <!-- Property Selection -->
-
-                    <div class="mb-6">
-                        <label> العقار</label>
-                        <Select
-                            v-model="createRequestForm.property_id"
-                            :options="properties"
-                            optionLabel="title"
-                            optionValue="id"
-                            placeholder="اختر  العقار"
-                            class="w-full"
-                        />
-                    </div>
-
-                    <!-- Investment Amount -->
-                    <div class="mb-6">
-                        <label class="block text-gray-700 mb-2"
-                            >قيمة الاستثمار المقترحة (ريال)</label
-                        >
-                        <InputNumber
-                            v-model="
-                                createRequestForm.suggested_investment_amount
-                            "
-                            :min="0"
-                            :step="1000"
-                            class="w-full"
-                            suffix=" ريال"
-                        />
-                    </div>
-
-                    <!-- Daily Rent Price -->
-                    <div class="mb-6">
-                        <label class="block text-gray-700 mb-2"
-                            >سعر الإيجار اليومي المقترح (ريال)</label
-                        >
-                        <InputNumber
-                            v-model="createRequestForm.suggested_nightly_rent"
-                            :min="0"
-                            class="w-full"
-                            suffix=" ريال"
-                        />
-                    </div>
-
-                    <!-- Notes -->
-                    <div class="mb-4">
-                        <label class="block text-gray-700 mb-2">ملاحظات</label>
-                        <Textarea
-                            v-model="createRequestForm.owner_note"
-                            rows="3"
-                            class="w-full"
-                            placeholder="أضف أي ملاحظات أو تفاصيل إضافية عن عرض الاستثمار"
-                        />
-                    </div>
-
-                    <div class="flex justify-end gap-2 mt-6">
-                        <Button
-                            type="button"
-                            class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50"
-                            @click="showNewRequestModal = false"
-                        >
-                            إلغاء
-                        </Button>
-                        <Button
-                            label=" إرسال الطلب "
-                            icon="pi pi-check"
-                            severity="success"
-                            @click="submitCreateRequest"
-                            :loading="createRequestForm.processing"
-                        />
-                    </div>
-                </form>
-            </div>
-        </Dialog>
-
-        <!-- View Investment Request Modal -->
-        <Dialog
-            v-model:visible="showRequestDetailsModal"
-            modal
-            header="تفاصيل طلب الاستثمار"
-            :style="{ width: isMobile ? '90%' : '50vw' }"
-            :closable="true"
-            :closeOnEscape="true"
-        >
-            <div class="p-4 font-BeinNormal" v-if="requestDetails.id">
-                <!-- Request Status -->
-                <div class="mb-6 flex flex-col items-center justify-center">
-                    <InvestmentRequestStatus
-                        :status="requestDetails.status"
-                        :statusOptions="InvestmentRequestStatusOptions"
-                    />
-
-                    <p class="text-gray-500 mt-2 text-sm">
-                        تم إنشاء الطلب في
-                        {{ formatDate(requestDetails.created_at) }}
-                    </p>
-                </div>
-
-                <!-- Property Info -->
-                <div class="bg-gray-50 rounded-lg p-4 mb-4">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-3">
-                        معلومات العقار
-                    </h3>
-
-                    <div class="flex flex-col md:flex-row gap-4">
-                        <!-- Property Image -->
-                        <div class="md:w-1/3 mb-3 md:mb-0">
-                            <div class="h-40 rounded-lg overflow-hidden">
-                                <img
-                                    :src="
-                                        '/' +
-                                        requestDetails.property.images[0].path
-                                    "
-                                    class="w-full h-full object-cover"
-                                    alt="Property Image"
-                                />
-                            </div>
-                        </div>
-
-                        <!-- Property Details -->
-                        <div class="md:w-2/3">
-                            <div class="flex justify-between items-start">
-                                <h4 class="text-md font-semibold text-teal-800">
-                                    {{ requestDetails.property.title }}
-                                </h4>
-                            </div>
-
-                            <div class="flex items-center text-gray-600 mt-2">
-                                <i class="pi pi-map-marker ml-1"></i>
-                                <span
-                                    >{{ requestDetails.property.city }} -
-                                    {{ requestDetails.property.address }}</span
-                                >
-                            </div>
-
-                            <div class="flex flex-wrap gap-3 mt-3">
-                                <div
-                                    class="flex items-center"
-                                    v-if="requestDetails.property.bedrooms > 0"
-                                >
-                                    <i
-                                        class="pi pi-home ml-1 text-gray-500"
-                                    ></i>
-                                    <span class="text-sm"
-                                        >{{
-                                            requestDetails.property.bedrooms
-                                        }}
-                                        غرف</span
-                                    >
-                                </div>
-                                <div
-                                    class="flex items-center"
-                                    v-if="requestDetails.property.bathrooms > 0"
-                                >
-                                    <i
-                                        class="pi pi-inbox ml-1 text-gray-500"
-                                    ></i>
-                                    <span class="text-sm"
-                                        >{{
-                                            requestDetails.property.bathrooms
-                                        }}
-                                        حمامات</span
-                                    >
-                                </div>
-                                <div class="flex items-center">
-                                    <i
-                                        class="pi pi-stop ml-1 text-gray-500"
-                                    ></i>
-                                    <span class="text-sm"
-                                        >{{
-                                            requestDetails.property.area
-                                        }}
-                                        م²</span
-                                    >
-                                </div>
-                            </div>
-                            <div class="mt-2 w-fit">
-                                <div
-                                    class="bg-slate-800 text-white text-xs px-2 py-1 rounded-full"
-                                >
-                                    {{ requestDetails.property.type }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Investment Details -->
-                <div
-                    class="bg-white rounded-lg p-4 border border-gray-200 mb-4"
-                >
-                    <h3 class="text-lg font-semibold text-gray-800 mb-3">
-                        تفاصيل الاستثمار
-                    </h3>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="bg-emerald-50 rounded-lg p-3">
-                            <p class="text-gray-600 text-sm">
-                                قيمة الاستثمار المقترحة
-                            </p>
-                            <p class="text-xl font-bold text-emerald-700">
-                                {{
-                                    formatPrice(
-                                        requestDetails.suggested_investment_amount
-                                    )
-                                }}
-                                ريال
-                            </p>
-                        </div>
-
-                        <div class="bg-blue-50 rounded-lg p-3">
-                            <p class="text-gray-600 text-sm">
-                                سعر الإيجار اليومي المقترح
-                            </p>
-                            <p class="text-xl font-bold text-blue-700">
-                                {{
-                                    formatPrice(
-                                        requestDetails.suggested_nightly_rent
-                                    )
-                                }}
-                                ريال
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Notes Section -->
-                <div
-                    class="bg-white rounded-lg p-4 border border-gray-200 mb-3"
-                >
-                    <h3 class="text-lg font-semibold text-gray-800 mb-2">
-                        الملاحظات
-                    </h3>
-
-                    <!-- Owner Notes -->
-                    <div class="mb-3">
-                        <p class="text-gray-600 text-sm mb-1">
-                            ملاحظات المالك:
-                        </p>
-                        <div class="p-3 bg-gray-50 rounded-lg text-gray-700">
-                            {{ requestDetails.owner_note || "لا توجد ملاحظات" }}
-                        </div>
-                    </div>
-
-                    <!-- Admin Notes (if any) -->
-                    <div v-if="requestDetails.status !== 'pending'">
-                        <p class="text-gray-600 text-sm mb-1">
-                            ملاحظات الإدارة:
-                        </p>
-                        <div class="p-3 bg-gray-50 rounded-lg text-gray-700">
-                            {{ requestDetails.admin_note || "لا توجد ملاحظات" }}
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Admin Response (shown if request is not pending) -->
-                <div
-                    class="bg-blue-50 rounded-lg p-4 border border-blue-100"
-                    v-if="requestDetails.status === 'approved'"
-                >
-                    <div class="flex items-center">
-                        <i
-                            class="pi pi-check-circle text-blue-600 text-xl ml-2"
-                        ></i>
-                        <h3 class="text-md font-semibold text-blue-800">
-                            تمت الموافقة على طلبك!
-                        </h3>
-                    </div>
-                    <p class="text-blue-700 mt-2 text-sm">
-                        سيتم إضافة عقارك لقائمة العقارات المتاحة للاستثمار
-                        قريبًا. ستصلك إشعارات عند وجود مستثمرين مهتمين.
-                    </p>
-                </div>
-
-                <div
-                    class="bg-red-50 rounded-lg p-4 border border-red-100"
-                    v-if="requestDetails.status === 'rejected'"
-                >
-                    <div class="flex items-center">
-                        <i
-                            class="pi pi-times-circle text-red-600 text-xl ml-2"
-                        ></i>
-                        <h3 class="text-md font-semibold text-red-800">
-                            تم رفض طلبك
-                        </h3>
-                    </div>
-                    <p class="text-red-700 mt-2 text-sm">
-                        يمكنك مراجعة ملاحظات الإدارة وتقديم طلب جديد.
-                    </p>
-                </div>
-
-                <!-- Actions -->
-                <div class="flex justify-end gap-2 mt-6">
-                    <Button
-                        icon="pi pi-times"
-                        label="إغلاق"
-                        class="border-gray-400 text-gray-700 hover:bg-gray-50"
-                        @click="showRequestDetailsModal = false"
-                    />
-                    <Button
-                        v-if="requestDetails.status === 'rejected'"
-                        icon="pi pi-refresh"
-                        label="تقديم طلب جديد"
-                        severity="success"
-                        class="border-emerald-700 text-emerald-700 hover:bg-emerald-50"
-                        @click="openResubmitRequestModal()"
-                    />
-                </div>
-            </div>
-        </Dialog>
-
-        <!-- Resubmit Request Modal -->
-        <Dialog
-            v-model:visible="showResubmitRequestModal"
-            modal
-            header="إعادة إرسال طلب الاستثمار"
-            :style="{ width: isMobile ? '90%' : '50vw' }"
-            :closable="true"
-            :closeOnEscape="true"
-        >
-            <div class="p-4">
-                <form
-                    @submit.prevent="submitResubmitRequest"
-                    class="font-BeinNormal"
-                >
-                    <!-- Admin note -->
-                    <div
-                        class="bg-red-50 rounded-lg p-4 border border-red-100 mb-6"
-                    >
-                        <div class="flex items-center">
-                            <i
-                                class="pi pi-times-circle text-red-600 text-xl ml-2"
-                            ></i>
-                            <h3 class="text-md font-semibold text-red-800">
-                                ملاحظة الرفض من قبل الادارة
-                            </h3>
-                        </div>
-                        <p class="text-red-700 mt-2 text-sm">
-                            {{ requestDetails.admin_note || "لا توجد ملاحظات" }}
-                        </p>
-                    </div>
-
-                    <!-- Property Info -->
-                    <div class="bg-gray-50 rounded-lg p-4 mb-4">
-                        <h3 class="text-lg font-semibold text-gray-800 mb-3">
-                            معلومات العقار
-                        </h3>
-
-                        <div class="flex flex-col md:flex-row gap-4">
-                            <!-- Property Image -->
-                            <div class="md:w-1/3 mb-3 md:mb-0">
-                                <div class="h-40 rounded-lg overflow-hidden">
-                                    <img
-                                        :src="
-                                            '/' +
-                                            requestDetails.property.images[0]
-                                                .path
-                                        "
-                                        class="w-full h-full object-cover"
-                                        alt="Property Image"
-                                    />
-                                </div>
-                            </div>
-
-                            <!-- Property Details -->
-                            <div class="md:w-2/3">
-                                <div class="flex justify-between items-start">
-                                    <h4
-                                        class="text-md font-semibold text-teal-800"
-                                    >
-                                        {{ requestDetails.property.title }}
-                                    </h4>
-                                </div>
-
-                                <div
-                                    class="flex items-center text-gray-600 mt-2"
-                                >
-                                    <i class="pi pi-map-marker ml-1"></i>
-                                    <span
-                                        >{{ requestDetails.property.city }} -
-                                        {{
-                                            requestDetails.property.address
-                                        }}</span
-                                    >
-                                </div>
-
-                                <div class="flex flex-wrap gap-3 mt-3">
-                                    <div
-                                        class="flex items-center"
-                                        v-if="
-                                            requestDetails.property.bedrooms > 0
-                                        "
-                                    >
-                                        <i
-                                            class="pi pi-home ml-1 text-gray-500"
-                                        ></i>
-                                        <span class="text-sm"
-                                            >{{
-                                                requestDetails.property.bedrooms
-                                            }}
-                                            غرف</span
-                                        >
-                                    </div>
-                                    <div
-                                        class="flex items-center"
-                                        v-if="
-                                            requestDetails.property.bathrooms >
-                                            0
-                                        "
-                                    >
-                                        <i
-                                            class="pi pi-inbox ml-1 text-gray-500"
-                                        ></i>
-                                        <span class="text-sm"
-                                            >{{
-                                                requestDetails.property
-                                                    .bathrooms
-                                            }}
-                                            حمامات</span
-                                        >
-                                    </div>
-                                    <div class="flex items-center">
-                                        <i
-                                            class="pi pi-stop ml-1 text-gray-500"
-                                        ></i>
-                                        <span class="text-sm"
-                                            >{{
-                                                requestDetails.property.area
-                                            }}
-                                            م²</span
-                                        >
-                                    </div>
-                                </div>
-                                <div class="mt-2 w-fit">
-                                    <div
-                                        class="bg-slate-800 text-white text-xs px-2 py-1 rounded-full"
-                                    >
-                                        {{ requestDetails.property.type }}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Investment Amount -->
-                    <div class="mb-6">
-                        <label class="block text-gray-700 mb-2"
-                            >قيمة الاستثمار المقترحة (ريال)</label
-                        >
-                        <InputNumber
-                            v-model="
-                                resubmitRequestForm.suggested_investment_amount
-                            "
-                            :min="0"
-                            :step="1000"
-                            class="w-full"
-                            suffix=" ريال"
-                        />
-                    </div>
-
-                    <!-- Daily Rent Price -->
-                    <div class="mb-6">
-                        <label class="block text-gray-700 mb-2"
-                            >سعر الإيجار اليومي المقترح (ريال)</label
-                        >
-                        <InputNumber
-                            v-model="resubmitRequestForm.suggested_nightly_rent"
-                            :min="0"
-                            class="w-full"
-                            suffix=" ريال"
-                        />
-                    </div>
-
-                    <!-- Notes -->
-                    <div class="mb-4">
-                        <label class="block text-gray-700 mb-2">ملاحظات</label>
-                        <Textarea
-                            v-model="resubmitRequestForm.owner_note"
-                            rows="3"
-                            class="w-full"
-                            placeholder="أضف أي ملاحظات أو تفاصيل إضافية عن عرض الاستثمار"
-                        />
-                    </div>
-
-                    <div class="flex justify-end gap-2 mt-6">
-                        <Button
-                            type="button"
-                            @click="closeResubmitRequestModal"
-                        >
-                            إلغاء
-                        </Button>
-                        <Button
-                            label="  إعادة تقديم الطلب  "
-                            icon="pi pi-check"
-                            severity="success"
-                            :loading="resubmitRequestForm.processing"
-                            type="submit"
-                        />
-                    </div>
-                </form>
-            </div>
-        </Dialog>
-
         <!-- Header -->
         <Header
             icon="fa-solid fa-circle-dollar-to-slot"
@@ -703,6 +141,149 @@ const formatDate = (dateString) => {
                 <span>طلب فتح استثمار جديد</span>
             </button>
         </Header>
+
+        <!-- New Investment Request Modal -->
+        <Dialog
+            v-model:visible="showNewRequestModal"
+            modal
+            header="طلب فتح استثمار جديد"
+            :style="{ width: isMobile ? '90%' : '50vw' }"
+            :closable="true"
+            :closeOnEscape="true"
+        >
+            <div class="p-4">
+                <form @submit.prevent="submitCreateRequest" class="font-BeinNormal">
+                    <!-- Property Selection -->
+                    <div class="mb-6">
+                        <label> العقار</label>
+                        <Select
+                            v-model="createRequestForm.property_id"
+                            :options="properties"
+                            optionLabel="title"
+                            optionValue="id"
+                            placeholder="اختر  العقار"
+                            class="w-full"
+                        />
+                    </div>
+
+                    <!-- Investment Amount -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="mb-6">
+                            <label class="block text-gray-700 mb-2">
+                                قيمة العقار المقترحة<span class="text-gray-500">
+                                    (ثمن العقار)</span
+                                >
+                            </label>
+                            <InputNumber
+                                v-model="createRequestForm.suggested_valuation"
+                                :min="0"
+                                :step="1000"
+                                placeholder="00.00"
+                                class="w-full"
+                                suffix=" ريال"
+                            />
+                        </div>
+                        <div class="mb-6">
+                            <label class="block text-gray-700 mb-2">
+                                قيمة الاستثمار المقترحة<span
+                                    class="text-gray-500"
+                                >
+                                    (المبلغ المطلوب جمعه )</span
+                                >
+                            </label>
+                            <InputNumber
+                                v-model="
+                                    createRequestForm.suggested_investment_amount
+                                "
+                                :min="0"
+                                placeholder="00.00"
+                                :step="1000"
+                                class="w-full"
+                                suffix=" ريال"
+                            />
+                        </div>
+                    </div>
+
+                    <!-- Daily Rent Price -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="mb-6">
+                            <label class="block text-gray-700 mb-2">
+                                مبلغ التشغيل الشهري المقترح
+                            </label>
+                            <InputNumber
+                                v-model="
+                                    createRequestForm.suggested_monthly_operating_cost
+                                "
+                                :min="0"
+                                placeholder="00.00"
+                                class="w-full"
+                                suffix=" ريال"
+                            />
+                        </div>
+                        <div class="mb-6">
+                            <label class="block text-gray-700 mb-2"
+                                >سعر الإيجار اليومي المقترح
+                            </label>
+                            <InputNumber
+                                v-model="
+                                    createRequestForm.suggested_nightly_rent
+                                "
+                                :min="0"
+                                placeholder="00.00"
+                                class="w-full"
+                                suffix=" ريال"
+                            />
+                        </div>
+                    </div>
+
+                    <!-- Notes -->
+                    <div class="mb-4">
+                        <label class="block text-gray-700 mb-2">ملاحظات</label>
+                        <Textarea
+                            v-model="createRequestForm.owner_note"
+                            rows="3"
+                            class="w-full"
+                            placeholder="أضف أي ملاحظات أو تفاصيل إضافية عن عرض الاستثمار"
+                        />
+                    </div>
+
+                    <div
+                        class="bg-blue-50 rounded-lg p-4 border border-blue-100 font-BeinNormal"
+                    >
+                        <div class="flex items-center">
+                            <i
+                                class="pi pi-check-circle text-blue-600 text-xl ml-2"
+                            ></i>
+                            <h3 class="text-md font-semibold text-blue-800">
+                                ملاحظة
+                            </h3>
+                        </div>
+                        <p class="text-blue-700 mt-2 text-sm">
+                            سيتم تقييم العقار بناء على البيانات التي يتم
+                            إدخالها، و من خلالها سيتم تقديم عرض الإستثمار و
+                            التشغيل المناسب
+                        </p>
+                    </div>
+
+                    <div class="flex justify-end gap-2 mt-6">
+                        <Button
+                            type="button"
+                            class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50"
+                            @click="showNewRequestModal = false"
+                        >
+                            إلغاء
+                        </Button>
+                        <Button
+                            label=" إرسال الطلب "
+                            icon="pi pi-check"
+                            severity="success"
+                            type="submit"
+                            :loading="createRequestForm.processing"
+                        />
+                    </div>
+                </form>
+            </div>
+        </Dialog>
 
         <!-- Empty State -->
         <div
@@ -768,40 +349,6 @@ const formatDate = (dateString) => {
                                     {{ slotProps.data.property.address }}
                                 </p>
                             </div>
-                        </div>
-                    </template>
-                </Column>
-
-                <Column
-                    field="suggested_investment_amount"
-                    header="قيمة الاستثمار"
-                    class="w-[180px]"
-                >
-                    <template #body="slotProps">
-                        <div class="font-semibold text-emerald-700">
-                            {{
-                                formatPrice(
-                                    slotProps.data.suggested_investment_amount
-                                )
-                            }}
-                            ريال
-                        </div>
-                    </template>
-                </Column>
-
-                <Column
-                    field="suggested_nightly_rent"
-                    header="الإيجار اليومي"
-                    class="w-[150px]"
-                >
-                    <template #body="slotProps">
-                        <div class="font-semibold">
-                            {{
-                                formatPrice(
-                                    slotProps.data.suggested_nightly_rent
-                                )
-                            }}
-                            ريال
                         </div>
                     </template>
                 </Column>

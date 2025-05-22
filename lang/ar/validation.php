@@ -230,13 +230,15 @@ return [
         'users_id' => 'المستخدمين',
         'property_id' => 'العقار',
         'request_id' => 'الطلب',
-        'suggested_investment_amount' => 'المبلغ المقترح للاستثمار',
-        'suggested_nightly_rent' => 'السعر اليومي المقترح',
         'admin_note' => 'ملاحظات الإدارة',
         'new_status' => 'الحالة الجديدة',
         'send_notification' => 'إرسال إشعار للمالك',
         'reply' => 'رد',
         'change_status' => 'تغيير الحالة',
+        'suggested_valuation' => 'القيمة المقترحة',
+        'suggested_investment_amount' => 'المبلغ المقترح للاستثمار',
+        'suggested_monthly_operating_cost' => 'المبلغ الشهري المقترح للتشغيل',
+        'suggested_nightly_rent' => 'السعر اليومي المقترح',
     ],
 
 ];

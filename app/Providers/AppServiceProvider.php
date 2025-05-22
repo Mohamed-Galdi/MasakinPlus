@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\InvestmentRequest;
 use App\Models\Property;
+use App\Policies\InvestmentRequestPolicy;
 use App\Policies\PropertyOwnerPolicy;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Database\Eloquent\Model;
@@ -34,5 +36,6 @@ class AppServiceProvider extends ServiceProvider
                 ->view('mail.email-verification', ['actionUrl' => $url]);
         });
         Gate::policy(Property::class, PropertyOwnerPolicy::class);
+        Gate::policy(InvestmentRequest::class, InvestmentRequestPolicy::class);
     }
 }

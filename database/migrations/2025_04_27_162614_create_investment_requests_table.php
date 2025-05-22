@@ -15,8 +15,10 @@ return new class extends Migration
         Schema::create('investment_requests', function (Blueprint $table) {
             $table->id();
             $table->foreignUuid('property_id')->constrained('properties')->onDelete('cascade');
-            $table->decimal('suggested_investment_amount', 15, 2);
-            $table->decimal('suggested_nightly_rent', 10, 2);
+            $table->decimal('suggested_valuation', 15, 2)->nullable();
+            $table->decimal('suggested_investment_amount', 15, 2)->nullable();
+            $table->decimal('suggested_monthly_operating_cost', 10, 2)->nullable();
+            $table->decimal('suggested_nightly_rent', 10, 2)->nullable();
             $table->text('owner_note')->nullable();
             $table->enum('status', array_column(InvestmentRequestStatus::cases(), 'value'))->default(InvestmentRequestStatus::Pending->value);
             $table->text('admin_note')->nullable();

@@ -9,7 +9,9 @@ class InvestmentRequest extends Model
     protected $fillable = [
         'property_id',
         'owner_id',
+        'suggested_valuation',
         'suggested_investment_amount',
+        'suggested_monthly_operating_cost',
         'suggested_nightly_rent',
         'owner_note',
         'status',

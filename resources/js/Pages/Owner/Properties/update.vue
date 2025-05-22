@@ -158,8 +158,8 @@ function submitUpdateProperty() {
                 :href="route('owner.properties.index')"
                 class="btn bg-slate-200 hover:bg-slate-100 text-slate-800 md:w-fit w-full mt-2 md:mt-0"
             >
-            <i class="pi pi-arrow-left"></i>
             <span>العودة </span>
+            <i class="pi pi-arrow-left"></i>
             </Link>
         </Header>
 

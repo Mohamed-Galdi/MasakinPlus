@@ -30,16 +30,11 @@ class OwnerPropertiesSeeder extends Seeder
         $imagesToInsert = [];
 
         $properties->each(function ($data, $index) use (&$imagesToInsert) {
-            $status = fake()->randomElement(PropertyStatus::cases());
-            $data['status'] = $status->value;
-            $data['nightly_rent'] = in_array($status->value, [
-                PropertyStatus::Draft->value,
-                PropertyStatus::InvestmentRequested->value,
-                PropertyStatus::InvestmentOfferSent->value,
-            ]) ? null : round(fake()->numberBetween(100, 1000) / 50) * 50;
 
-            $data['latitude'] = 24.7136;
-            $data['longitude'] = 46.6753;
+            $data['status'] = PropertyStatus::Draft->value;
+
+            $data['latitude'] = fake()->latitude(16.5, 32.5);
+            $data['longitude'] = fake()->longitude(34.5, 55.5);
 
             $amenities = $data['amenities'];
             unset($data['amenities']);

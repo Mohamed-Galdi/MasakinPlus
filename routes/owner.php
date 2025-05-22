@@ -21,7 +21,7 @@ Route::prefix('/owner')->middleware(['auth', 'verified', 'owner'])->group(functi
     Route::prefix('investment-requests')->name('owner.investment-requests.')->controller(InvestmentRequestController::class)->group(function () {
         Route::get('/', 'index')->name('index');
         Route::post('/create', 'create')->name('create');
-        Route::post('/resubmit', 'resubmit')->name('resubmit');
-
+        Route::get('/{investmentRequest}', 'show')->name('show');          
+        Route::put('/update', 'update')->name('update');      
     });
 });

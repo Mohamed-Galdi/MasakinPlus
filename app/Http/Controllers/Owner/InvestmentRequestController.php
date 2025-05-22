@@ -8,6 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Models\InvestmentRequest;
 use App\Models\Property;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class InvestmentRequestController extends Controller
 {
@@ -19,7 +21,7 @@ class InvestmentRequestController extends Controller
         $investmentRequests->load('property.images');
         // $investmentRequests = [];
 
-        $properties = Property::where('owner_id', $user->id)->where('status', 'draft')->whereDoesntHave('investmentRequests')->get();
+        $properties = Property::where('owner_id', $user->id)->where('status', PropertyStatus::Draft->value)->whereDoesntHave('investmentRequests')->get();
 
         $InvestmentRequestStatusOptions = InvestmentRequestStatus::options();
 
@@ -28,47 +30,77 @@ class InvestmentRequestController extends Controller
 
     public function create(Request $request)
     {
+        // authorization
+        $property = Property::findOrFail($request->property_id);
+        Gate::authorize('create', [InvestmentRequest::class, $property]);
+
         $request->validate([
             'property_id' => 'required|exists:properties,id',
-            'suggested_investment_amount' => 'required|numeric|min:0|max:1000000',
+            'suggested_valuation' => 'required|numeric|min:0',
+            'suggested_investment_amount' => 'required|numeric|min:0',
+            'suggested_monthly_operating_cost' => 'required|numeric|min:0',
             'suggested_nightly_rent' => 'required|numeric|min:0|max:10000',
             'owner_note' => 'max:1500',
         ]);
 
-        $investmentRequest = new InvestmentRequest;
-        $investmentRequest->property_id = $request->property_id;
-        $investmentRequest->suggested_investment_amount = $request->suggested_investment_amount;
-        $investmentRequest->suggested_nightly_rent = $request->suggested_nightly_rent;
-        $investmentRequest->owner_note = $request->owner_note;
-        $investmentRequest->status = InvestmentRequestStatus::Pending;
-        $investmentRequest->save();
+        DB::transaction(function () use ($request, $property) {
+            $investmentRequest = new InvestmentRequest;
+            $investmentRequest->property_id = $request->property_id;
+            $investmentRequest->suggested_valuation = $request->suggested_valuation;
+            $investmentRequest->suggested_investment_amount = $request->suggested_investment_amount;
+            $investmentRequest->suggested_monthly_operating_cost = $request->suggested_monthly_operating_cost;
+            $investmentRequest->suggested_nightly_rent = $request->suggested_nightly_rent;
+            $investmentRequest->owner_note = $request->owner_note;
+            $investmentRequest->status = InvestmentRequestStatus::Pending;
+            $investmentRequest->save();
 
-        $property = Property::find($request->property_id);
-        // $property->status = PropertyStatus::InvestmentPending;
-        $property->save();
+            $property->status = PropertyStatus::InvestmentRequested;
+            $property->save();
+        });
 
         return back();
     }
 
-    public function resubmit(Request $request)
+    public function show($id)
     {
+        $investmentRequest = InvestmentRequest::findOrFail($id);
+
+        // authorization
+        Gate::authorize('view', $investmentRequest);
+
+        $investmentRequest->load('property.images');
+
+        $InvestmentRequestStatusOptions = InvestmentRequestStatus::options();
+
+        return inertia('Owner/InvestmentRequests/view', compact('investmentRequest', 'InvestmentRequestStatusOptions'));
+    }
+
+    public function update(Request $request)
+    {
+        $investmentRequest = InvestmentRequest::findOrFail($request->request_id);
+
+        // authorization
+        Gate::authorize('update', $investmentRequest );
 
         $request->validate([
-            'request_id' => 'required|exists:investment_requests,id',
-            'suggested_investment_amount' => 'required|numeric|min:0|max:1000000',
+            'request_id' => 'required',
+            'suggested_valuation' => 'required|numeric|min:0',
+            'suggested_investment_amount' => 'required|numeric|min:0',
+            'suggested_monthly_operating_cost' => 'required|numeric|min:0',
             'suggested_nightly_rent' => 'required|numeric|min:0|max:10000',
             'owner_note' => 'max:1500',
         ]);
 
-        $investmentRequest = InvestmentRequest::find($request->request_id);
+        $investmentRequest->suggested_valuation = $request->suggested_valuation;
         $investmentRequest->suggested_investment_amount = $request->suggested_investment_amount;
-        $investmentRequest->suggested_nightly_rent = $request->suggested_nightly_rent;
-        $investmentRequest->owner_note = $request->owner_note;
+        $investmentRequest->suggested_monthly_operating_cost = $request->suggested_monthly_operating_cost;
+        $investmentRequest->suggested_nightly_rent = $request->suggested_nightly_rent ?? 0;
+        $investmentRequest->owner_note = $request->owner_note ?? '';
         $investmentRequest->status = InvestmentRequestStatus::Pending;
         $investmentRequest->save();
 
-        $property = Property::find($investmentRequest->property_id);
-        // $property->status = PropertyStatus::InvestmentPending;
+        $property = Property::findOrFail($investmentRequest->property_id);
+        $property->status = PropertyStatus::InvestmentRequested;
         $property->save();
 
         return back();
