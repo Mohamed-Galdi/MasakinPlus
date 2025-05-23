@@ -1,7 +1,7 @@
 <script setup>
 import AdminLayout from "@/Layouts/AdminLayout.vue";
-import { ref, watch, computed } from "vue";
-import { router, Link, useForm } from "@inertiajs/vue3";
+import { ref, watch } from "vue";
+import { router, Link } from "@inertiajs/vue3";
 import { useTextHelpers } from "@/plugins/textHelpers";
 import { debounce } from "lodash";
 import Select from "primevue/select";
@@ -10,10 +10,6 @@ import Button from "primevue/button";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import Toast from "primevue/toast";
-import { useToast } from "primevue/usetoast";
-import Dialog from "primevue/dialog";
-import Textarea from "primevue/textarea";
-import Checkbox from "primevue/checkbox";
 import InvestmentRequestStatus from "@/Components/InvestmentRequestStatus.vue";
 import Header from "@/Components/AdminDashboard/Header.vue";
 
@@ -46,10 +42,6 @@ const investmentRequestsStatusOptions = ref(
     props.investmentRequestsStatusOptions
 );
 
-const toast = useToast();
-
-const isMobile = computed(() => window.innerWidth <= 768);
-
 // ############################################## Search and filter
 const textHelpers = useTextHelpers();
 const search = ref(props.search);
@@ -79,10 +71,6 @@ const resetFilters = () => {
     statusFilter.value = "";
 };
 // ########################################################################################## utils
-// Format currency
-const formatPrice = (price) => {
-    return parseFloat(price).toLocaleString("ar-SA");
-};
 // Format date
 const formatDate = (dateString) => {
     if (!dateString) return "";
@@ -97,94 +85,11 @@ const formatDate = (dateString) => {
 };
 
 // ############################################## View request details
-const showRequestDetailsModal = ref(false);
-const requestDetails = ref({});
-const viewRequestDetails = (request) => {
-    showRequestDetailsModal.value = true;
-    requestDetails.value = request;
+
+const viewRequestDetails = (id) => {
+    router.get(route("admin.investment-requests.show", id), {});
 };
 
-// ############################################## Reply to request
-const replyForm = useForm({
-    request_id: "",
-    reply: "",
-    admin_note: "",
-});
-
-const replyToRequest = (reply) => {
-    replyForm.request_id = requestDetails.value.id;
-    replyForm.reply = reply;
-    replyForm.post(route("admin.investment-requests.reply"), {
-        onSuccess: () => {
-            showRequestDetailsModal.value = false;
-            toast.add({
-                severity: "success",
-                summary: "تم",
-                detail: "تم إرسال الرد",
-                life: 3000,
-            });
-            replyForm.reset();
-        },
-        onError: () => {
-            const errorMessage = Object.values(replyForm.errors)[0];
-            toast.add({
-                severity: "error",
-                summary: "خطأ",
-                detail: errorMessage,
-                life: 3000,
-            });
-        },
-    });
-};
-
-// ############################################## Change request status
-const showChangeStatusModal = ref(false);
-const availableStatuses = ref([]);
-
-const changeRequestForm = useForm({
-    request_id: "",
-    new_status: "",
-    admin_note: "",
-    send_notification: false,
-});
-
-const openChangeStatusModal = () => {
-    showRequestDetailsModal.value = false;
-    showChangeStatusModal.value = true;
-    availableStatuses.value = investmentRequestsStatusOptions.value.filter(
-        (status) => status.value !== requestDetails.value.status
-    );
-};
-
-const closeChangeStatusModal = () => {
-    showChangeStatusModal.value = false;
-    changeRequestForm.reset();
-};
-
-const updateRequestStatus = () => {
-    changeRequestForm.request_id = requestDetails.value.id;
-    changeRequestForm.post(route("admin.investment-requests.changeStatus"), {
-        onSuccess: () => {
-            showChangeStatusModal.value = false;
-            toast.add({
-                severity: "success",
-                summary: "تم",
-                detail: "تم تغيير الحالة بنجاح",
-                life: 3000,
-            });
-            changeRequestForm.reset();
-        },
-        onError: () => {
-            const errorMessage = Object.values(changeRequestForm.errors)[0];
-            toast.add({
-                severity: "error",
-                summary: "خطأ",
-                detail: errorMessage,
-                life: 3000,
-            });
-        },
-    });
-};
 </script>
 
 <template>
@@ -192,433 +97,7 @@ const updateRequestStatus = () => {
         <!-- Toast -->
         <Toast position="top-center" />
 
-        <!-- View Investment Request Modal -->
-        <Dialog
-            v-model:visible="showRequestDetailsModal"
-            modal
-            header="تفاصيل طلب الاستثمار"
-            :style="{ width: isMobile ? '90%' : '50vw' }"
-            :closable="true"
-            :closeOnEscape="true"
-        >
-            <div class="p-4 font-BeinNormal" v-if="requestDetails.id">
-                <!-- Request Status and Property Owner Info -->
-                <div class="mb-6">
-                    <div class="flex flex-col items-center justify-center mb-4">
-                        <InvestmentRequestStatus
-                            :status="requestDetails.status"
-                            :statusOptions="investmentRequestsStatusOptions"
-                        />
-                        <p class="text-gray-500 mt-2 text-sm">
-                            تم إنشاء الطلب في
-                            {{ formatDate(requestDetails.created_at) }}
-                        </p>
-                    </div>
-
-                    <!-- Property Owner Info -->
-                    <div class="bg-slate-50 rounded-lg p-4 mb-4">
-                        <div class="flex items-start justify-between">
-                            <h3
-                                class="text-lg font-semibold text-gray-800 mb-3"
-                            >
-                                معلومات المالك
-                            </h3>
-                            <Link
-                                :href="
-                                    route(
-                                        'admin.users.view',
-                                        requestDetails.property.owner.id
-                                    )
-                                "
-                                class="inline-flex items-center px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 rounded-md font-Bein text-sm transition duration-150 ease-in-out"
-                            >
-                                <i class="pi pi-user ml-1"></i>
-                                صفحة المالك
-                            </Link>
-                        </div>
-                        <div class="flex items-center">
-                            <div
-                                class="w-12 h-12 rounded-full overflow-hidden ml-3"
-                            >
-                                <img
-                                    :src="requestDetails.property.owner.image"
-                                    class="w-full h-full object-cover"
-                                    alt="Owner Image"
-                                />
-                            </div>
-                            <div>
-                                <h4 class="text-md font-semibold text-teal-800">
-                                    {{ requestDetails.property.owner.name }}
-                                </h4>
-                                <p class="text-gray-600 text-sm">
-                                    {{ requestDetails.property.owner.email }}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Property Info -->
-                <div class="bg-gray-50 rounded-lg p-4 mb-4">
-                    <div class="flex items-start justify-between">
-                        <h3 class="text-lg font-semibold text-gray-800 mb-3">
-                            معلومات العقار
-                        </h3>
-                        <Link
-                            :href="
-                                route(
-                                    'admin.properties.view',
-                                    requestDetails.property.id
-                                )
-                            "
-                            class="inline-flex items-center px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 rounded-md font-Bein text-sm transition duration-150 ease-in-out"
-                        >
-                            <i class="pi pi-home ml-1"></i>
-                            صفحة العقار
-                        </Link>
-                    </div>
-
-                    <div class="flex flex-col md:flex-row gap-4">
-                        <!-- Property Image -->
-                        <div class="md:w-1/3 mb-3 md:mb-0">
-                            <div class="h-40 rounded-lg overflow-hidden">
-                                <img
-                                    :src="
-                                        '/' +
-                                        requestDetails.property.images[0].path
-                                    "
-                                    class="w-full h-full object-cover"
-                                    alt="Property Image"
-                                />
-                            </div>
-                        </div>
-
-                        <!-- Property Details -->
-                        <div class="md:w-2/3">
-                            <div class="flex justify-between items-start">
-                                <h4 class="text-md font-semibold text-teal-800">
-                                    {{ requestDetails.property.title }}
-                                </h4>
-                            </div>
-
-                            <div class="flex items-center text-gray-600 mt-2">
-                                <i class="pi pi-map-marker ml-1"></i>
-                                <span
-                                    >{{ requestDetails.property.city }} -
-                                    {{ requestDetails.property.address }}</span
-                                >
-                            </div>
-
-                            <div class="flex flex-wrap gap-3 mt-3">
-                                <div
-                                    class="flex items-center"
-                                    v-if="requestDetails.property.bedrooms > 0"
-                                >
-                                    <i
-                                        class="pi pi-home ml-1 text-gray-500"
-                                    ></i>
-                                    <span class="text-sm"
-                                        >{{
-                                            requestDetails.property.bedrooms
-                                        }}
-                                        غرف</span
-                                    >
-                                </div>
-                                <div
-                                    class="flex items-center"
-                                    v-if="requestDetails.property.bathrooms > 0"
-                                >
-                                    <i
-                                        class="pi pi-inbox ml-1 text-gray-500"
-                                    ></i>
-                                    <span class="text-sm"
-                                        >{{
-                                            requestDetails.property.bathrooms
-                                        }}
-                                        حمامات</span
-                                    >
-                                </div>
-                                <div class="flex items-center">
-                                    <i
-                                        class="pi pi-stop ml-1 text-gray-500"
-                                    ></i>
-                                    <span class="text-sm"
-                                        >{{
-                                            requestDetails.property.area
-                                        }}
-                                        م²</span
-                                    >
-                                </div>
-                            </div>
-                            <div class="mt-2 w-fit">
-                                <div
-                                    class="bg-slate-800 text-white text-xs px-2 py-1 rounded-full"
-                                >
-                                    {{ requestDetails.property.type }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Investment Details -->
-                <div
-                    class="bg-white rounded-lg p-4 border border-gray-200 mb-4"
-                >
-                    <h3 class="text-lg font-semibold text-gray-800 mb-3">
-                        تفاصيل الاستثمار
-                    </h3>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="bg-emerald-50 rounded-lg p-3">
-                            <p class="text-gray-600 text-sm">
-                                قيمة الاستثمار المقترحة
-                            </p>
-                            <p class="text-xl font-bold text-emerald-700">
-                                {{
-                                    formatPrice(
-                                        requestDetails.suggested_investment_amount
-                                    )
-                                }}
-                                ريال
-                            </p>
-                        </div>
-
-                        <div class="bg-blue-50 rounded-lg p-3">
-                            <p class="text-gray-600 text-sm">
-                                سعر الإيجار اليومي المقترح
-                            </p>
-                            <p class="text-xl font-bold text-blue-700">
-                                {{
-                                    formatPrice(
-                                        requestDetails.suggested_nightly_rent
-                                    )
-                                }}
-                                ريال
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Owner Notes -->
-                <div
-                    class="bg-white rounded-lg p-4 border border-gray-200 mb-4"
-                >
-                    <h3 class="text-lg font-semibold text-gray-800 mb-3">
-                        ملاحظات المالك
-                    </h3>
-                    <div class="p-3 bg-gray-50 rounded-lg text-gray-700">
-                        {{ requestDetails.owner_note || "لا توجد ملاحظات" }}
-                    </div>
-                </div>
-
-                <!-- Admin Response Form -->
-                <div
-                    class="bg-white rounded-lg p-4 border border-gray-200 mb-4"
-                    v-if="requestDetails.status === 'pending'"
-                >
-                    <h3 class="text-lg font-semibold text-gray-800 mb-3">
-                        الرد على الطلب
-                    </h3>
-
-                    <div class="mb-4">
-                        <label
-                            class="block text-gray-700 text-sm font-bold mb-2"
-                        >
-                            ملاحظات الإدارة
-                        </label>
-                        <Textarea
-                            v-model="replyForm.admin_note"
-                            rows="3"
-                            class="w-full"
-                            placeholder="أدخل ملاحظاتك هنا..."
-                        />
-                    </div>
-
-                    <div class="flex flex-col md:flex-row gap-3 mt-4">
-                        <Button
-                            icon="pi pi-check"
-                            label="موافقة على الطلب"
-                            severity="success"
-                            class="flex-1"
-                            @click="replyToRequest('approve')"
-                            :loading="replyForm.processing"
-                        />
-
-                        <Button
-                            icon="pi pi-times"
-                            label="رفض الطلب"
-                            severity="danger"
-                            class="flex-1"
-                            @click="replyToRequest('reject')"
-                            :loading="replyForm.processing"
-                        />
-                    </div>
-                </div>
-
-                <!-- Admin Response (if already responded) -->
-                <div
-                    class="bg-white rounded-lg p-4 border border-gray-200 mb-4"
-                    v-if="requestDetails.status !== 'pending'"
-                >
-                    <h3 class="text-lg font-semibold text-gray-800 mb-3">
-                        رد الإدارة
-                    </h3>
-
-                    <div class="mb-3">
-                        <div class="flex items-center mb-2">
-                            <i
-                                class="pi"
-                                :class="{
-                                    'pi-check-circle text-emerald-600':
-                                        requestDetails.status === 'approved',
-                                    'pi-times-circle text-red-600':
-                                        requestDetails.status === 'rejected',
-                                }"
-                                style="font-size: 1.2rem; margin-left: 0.5rem"
-                            ></i>
-                            <span
-                                class="font-semibold"
-                                :class="{
-                                    'text-emerald-700':
-                                        requestDetails.status === 'approved',
-                                    'text-red-700':
-                                        requestDetails.status === 'rejected',
-                                }"
-                            >
-                                {{
-                                    requestDetails.status === "approved"
-                                        ? "تمت الموافقة على الطلب"
-                                        : "تم رفض الطلب"
-                                }}
-                            </span>
-                        </div>
-
-                        <div class="p-3 bg-gray-50 rounded-lg text-gray-700">
-                            {{ requestDetails.admin_note || "لا توجد ملاحظات" }}
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Actions -->
-                <div class="flex justify-end mt-6 gap-6">
-                    <Button
-                        icon="pi pi-times"
-                        label="إغلاق"
-                        @click="showRequestDetailsModal = false"
-                    />
-                    <Button
-                        v-if="requestDetails.status !== 'pending'"
-                        severity="success"
-                        icon="pi pi-refresh"
-                        label="تغيير الحالة"
-                        @click="openChangeStatusModal()"
-                    />
-                </div>
-            </div>
-        </Dialog>
-
-        <!-- Change Investment Request Status Modal -->
-        <Dialog
-            v-model:visible="showChangeStatusModal"
-            modal
-            header="تغيير حالة طلب الاستثمار"
-            :style="{ width: isMobile ? '90%' : '50vw' }"
-            :closable="true"
-            :closeOnEscape="true"
-        >
-            <div class="p-4 font-BeinNormal">
-                <!-- Current Status Display -->
-                <div class="mb-4 text-center">
-                    <p class="text-gray-600 mb-2">الحالة الحالية</p>
-                    <div class="inline-block">
-                        <InvestmentRequestStatus
-                            :status="requestDetails.status"
-                            :statusOptions="investmentRequestsStatusOptions"
-                        />
-                    </div>
-                </div>
-
-                <!-- Status Selection -->
-                <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2">
-                        الحالة الجديدة
-                    </label>
-                    <Select
-                        v-model="changeRequestForm.new_status"
-                        :options="availableStatuses"
-                        optionLabel="label"
-                        optionValue="value"
-                        placeholder="اختر الحالة"
-                        class="w-full"
-                    />
-                </div>
-
-                <!-- Admin Notes -->
-                <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2">
-                        ملاحظات الإدارة
-                    </label>
-                    <Textarea
-                        v-model="changeRequestForm.admin_note"
-                        rows="3"
-                        class="w-full"
-                        placeholder="أدخل ملاحظاتك هنا..."
-                    />
-                </div>
-
-                <!-- Send Notification Option -->
-                <div class="mb-4">
-                    <div class="flex items-center">
-                        <Checkbox
-                            v-model="changeRequestForm.send_notification"
-                            :binary="true"
-                            id="sendNotification"
-                        />
-                        <label
-                            for="sendNotification"
-                            class="mr-2 text-gray-700"
-                        >
-                            إرسال إشعار للمالك
-                        </label>
-                    </div>
-                </div>
-
-                <!-- Warning Message -->
-                <div
-                    class="p-3 bg-amber-50 rounded-lg border border-amber-100 mb-4"
-                >
-                    <div class="flex items-start">
-                        <i
-                            class="pi pi-exclamation-triangle text-amber-500 ml-2 mt-1"
-                        ></i>
-                        <p class="text-sm text-amber-700">
-                            تغيير حالة الطلب سيؤثر على سير العمل الخاص بهذا
-                            العقار. يرجى التأكد من صحة المعلومات قبل الحفظ.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Action Buttons -->
-                <div class="flex justify-end gap-6 mt-6">
-                    <Button
-                        icon="pi pi-times"
-                        label="إلغاء"
-                        class="border-gray-400 text-gray-700 hover:bg-gray-50"
-                        @click="closeChangeStatusModal"
-                    />
-                    <Button
-                        icon="pi pi-check"
-                        label="حفظ التغييرات"
-                        severity="success"
-                        :loading="changeRequestForm.processing"
-                        @click="updateRequestStatus"
-                    />
-                </div>
-            </div>
-        </Dialog>
         <!-- Header Section -->
-
         <Header
             :isFontAwesome="true"
             icon="fa-regular fa-file-zipper"
@@ -694,7 +173,7 @@ const updateRequestStatus = () => {
                 showGridlines
                 tableStyle="min-width: 50rem"
                 class="border-none"
-                @row-click="(event) => viewRequestDetails(event.data)"
+                @row-click="(event) => viewRequestDetails(event.data.id)"
                 :rowHover="true"
                 :rowClass="() => 'cursor-pointer'"
             >
@@ -711,11 +190,18 @@ const updateRequestStatus = () => {
                         ></div>
                     </template>
                 </Column>
-                <Column field="created_at" header=" العقار">
+                <Column field="property" header="العقار" class="w-[450px]">
                     <template #body="slotProps">
-                        <div class="text-sm text-gray-600">
-                            <p>{{ slotProps.data.property.title }}</p>
-                            <p>{{ slotProps.data.property.address }}</p>
+                        <div class="flex flex-col">
+                            <div class="font-medium">
+                                {{ slotProps.data.property.title }}
+                            </div>
+                            <div class="text-sm text-gray-500">
+                                <p>
+                                    {{ slotProps.data.property.city }} -
+                                    {{ slotProps.data.property.address }}
+                                </p>
+                            </div>
                         </div>
                     </template>
                 </Column>
@@ -730,7 +216,7 @@ const updateRequestStatus = () => {
                     </template>
                 </Column>
 
-                <Column field="created_at" header="تاريخ  الطلب">
+                <Column field="created_at" header="تاريخ  الطلب" class="w-[250px]">
                     <template #body="slotProps">
                         <div class="text-sm text-gray-600">
                             <i class="pi pi-calendar-plus ml-1"></i>
@@ -739,7 +225,7 @@ const updateRequestStatus = () => {
                     </template>
                 </Column>
 
-                <Column field="created_at" header="  آخر تعديل">
+                <Column field="created_at" header="  آخر تعديل" class="w-[250px]">
                     <template #body="slotProps">
                         <div class="text-sm text-gray-600">
                             <i class="pi pi-calendar-plus ml-1"></i>

@@ -27,8 +27,9 @@ class InvestmentRequestSeeder extends Seeder
                 'suggested_nightly_rent' => fake()->numberBetween(100, 2000),
                 'owner_note' => fake()->sentence(),
                 'status' => InvestmentRequestStatus::Pending,
-                'admin_note' => null,
             ]);
+            $property->status = PropertyStatus::InvestmentRequested;
+            $property->save();
         }
     }
 }

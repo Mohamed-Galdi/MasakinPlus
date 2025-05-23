@@ -1,6 +1,6 @@
 <script setup>
 import OwnerLayout from "@/Layouts/OwnerLayout.vue";
-import { Link, useForm } from "@inertiajs/vue3";
+import { Link, router } from "@inertiajs/vue3";
 import { ref, computed } from "vue";
 import InvestmentRequestStatus from "@/Components/InvestmentRequestStatus.vue";
 import Dialog from "primevue/dialog";
@@ -10,6 +10,9 @@ import InputNumber from "primevue/inputnumber";
 import Header from "@/Components/Header.vue";
 import Toast from "primevue/toast";
 import { useToast } from "primevue/usetoast";
+import { useConfirm } from "primevue/useconfirm";
+import ConfirmDialog from "primevue/confirmdialog";
+import { set } from "lodash";
 
 defineOptions({
     layout: OwnerLayout,
@@ -20,53 +23,117 @@ const props = defineProps({
         type: Object,
         required: true,
     },
-    InvestmentRequestStatusOptions: {
+    investmentOffer: {
+        type: Object,
+        required: false,
+        default: null,
+    },
+    investmentRequestsStatusOptions: {
         type: Array,
+        required: true,
+    },
+    approved: {
+        type: String,
         required: true,
     },
 });
 
 const investmentRequest = ref(props.investmentRequest);
 
-const toast = useToast();
-
 const isMobile = computed(() => window.innerWidth <= 768);
 
-// ########################################################################################## update request
-const showUpdateRequestModal = ref(false);
-const updateRequestForm = useForm(() => ({
-    request_id: "",
-    suggested_valuation: investmentRequest.value.suggested_valuation,
-    suggested_investment_amount:
-        investmentRequest.value.suggested_investment_amount,
-    suggested_monthly_operating_cost:
-        investmentRequest.value.suggested_monthly_operating_cost,
-    suggested_nightly_rent: investmentRequest.value.suggested_nightly_rent,
-    owner_note: investmentRequest.value.owner_note,
-}));
+// ############################################## initialize Toast and Confirm
+const toast = useToast();
+const confirm = useConfirm();
 
-const submitUpdateRequest = () => {
-    updateRequestForm.request_id = investmentRequest.value.id;
-    updateRequestForm.put(route("owner.investment-requests.update"), {
-        preserveState: false,
-        onSuccess: () => {
-            showUpdateRequestModal.value = false;
-            toast.add({
-                severity: "success",
-                summary: "تم",
-                detail: "تم تحديث الطلب بنجاح",
-                life: 3000,
-            });
-            updateRequestForm.reset();
+// ############################################## Accept Offer
+const AcceptOffer = () => {
+    confirm.require({
+        group: "acceptOffer",
+        message: "هل أنت متأكد من أنك تريد قبول هذا العرض؟",
+        header: "تأكيد الموافقة",
+        rejectProps: {
+            label: "إلغاء",
+            severity: "secondary",
+            outlined: true,
         },
-        onError: () => {
-            const errorMessage = Object.values(updateRequestForm.errors)[0];
-            toast.add({
-                severity: "error",
-                summary: "خطأ",
-                detail: errorMessage,
-                life: 3000,
-            });
+        acceptProps: {
+            label: " تأكيد قبول العرض ",
+            severity: "success",
+        },
+        accept: () => {
+            router.post(
+                route("owner.investment-requests.acceptOffer", {
+                    id: props.investmentOffer.id,
+                }),
+                {},
+                {
+                    onSuccess: () => {
+                        toast.add({
+                            severity: "success",
+                            summary: "تم",
+                            detail: "تم قبول العرض بنجاح",
+                            life: 2000,
+                        });
+                        setTimeout(() => {
+                            router.visit(window.location.href);
+                        }, 1000);
+                        
+                    },
+                    onError: (errors) => {
+                        toast.add({
+                            severity: "error",
+                            summary: "خطأ",
+                            detail: errors.error,
+                            life: 3000,
+                        });
+                    },
+                }
+            );
+        },
+    });
+};
+
+// ############################################## Reject Offer
+const RejectOffer = () => {
+    confirm.require({
+        group: "rejectOffer",
+        message: "هل أنت متأكد من أنك تريد رفض هذا العرض؟",
+        header: "تأكيد الرفض",
+        rejectProps: {
+            label: "إلغاء",
+            severity: "secondary",
+            outlined: true,
+        },
+        acceptProps: {
+            label: "   تأكيد رفض العرض   ",
+            severity: "danger",
+        },
+        accept: () => {
+            router.post(
+                route("owner.investment-requests.rejectOffer", {
+                    id: props.investmentOffer.id,
+                }),
+                {},
+                {
+                    onBefore: () => {
+                        toast.add({
+                            severity: "success",
+                            summary: "تم",
+                            detail: "تم رفض العرض بنجاح",
+                            life: 3000,
+                        });
+                    },
+                    onError: (errors) => {
+                        toast.add({
+                            severity: "error",
+                            summary: "خطأ",
+                            detail: errors.error,
+                            life: 3000,
+                        });
+                    },
+                }
+            );
         },
     });
 };
@@ -110,144 +177,41 @@ const formatDate = (dateString) => {
                 </Link>
             </Header>
 
-            <!-- Update Investment Request Modal -->
-            <Dialog
-                v-model:visible="showUpdateRequestModal"
-                modal
-                header=" تعديل طلب فتح استثمار "
-                :style="{ width: isMobile ? '90%' : '50vw' }"
-                :closable="true"
-                :closeOnEscape="true"
+            <!-- Accept Offer Dialog -->
+            <ConfirmDialog
+                group="acceptOffer"
+                class="w-full md:w-1/2 lg:w-1/3 mx-8"
             >
-                <div class="p-4">
-                    <form
-                        @submit.prevent="submitUpdateRequest"
-                        class="font-BeinNormal"
-                    >
-                        <!-- Investment Amount -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div class="mb-6">
-                                <label class="block text-gray-700 mb-2">
-                                    قيمة العقار المقترحة<span
-                                        class="text-gray-500"
-                                    >
-                                        (ثمن العقار)</span
-                                    >
-                                </label>
-                                <InputNumber
-                                    v-model="
-                                        updateRequestForm.suggested_valuation
-                                    "
-                                    :min="0"
-                                    :step="1000"
-                                    placeholder="00.00"
-                                    class="w-full"
-                                    suffix=" ريال"
-                                />
-                            </div>
-                            <div class="mb-6">
-                                <label class="block text-gray-700 mb-2">
-                                    قيمة الاستثمار المقترحة<span
-                                        class="text-gray-500"
-                                    >
-                                        (المبلغ المطلوب جمعه )</span
-                                    >
-                                </label>
-                                <InputNumber
-                                    v-model="
-                                        updateRequestForm.suggested_investment_amount
-                                    "
-                                    :min="0"
-                                    placeholder="00.00"
-                                    :step="1000"
-                                    class="w-full"
-                                    suffix=" ريال"
-                                />
-                            </div>
-                        </div>
+                <template #message="slotProps">
+                    <div class="space-y-2">
+                        <p class="font-Bein">
+                            هل أنت متأكد من أنك تريد قبول هذا العرض؟
+                        </p>
+                        <p class="font-BeinNormal text-slate-600">
+                            بعد قبول العرض سيتم نشر العقار لإستقبال الإستتمارات
+                            وفق النسب الموضحة في عرض الاستثمار
+                        </p>
+                    </div>
+                </template>
+            </ConfirmDialog>
 
-                        <!-- Daily Rent Price -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div class="mb-6">
-                                <label class="block text-gray-700 mb-2">
-                                    مبلغ التشغيل الشهري المقترح
-                                </label>
-                                <InputNumber
-                                    v-model="
-                                        updateRequestForm.suggested_monthly_operating_cost
-                                    "
-                                    :min="0"
-                                    placeholder="00.00"
-                                    class="w-full"
-                                    suffix=" ريال"
-                                />
-                            </div>
-                            <div class="mb-6">
-                                <label class="block text-gray-700 mb-2"
-                                    >سعر الإيجار اليومي المقترح
-                                </label>
-                                <InputNumber
-                                    v-model="
-                                        updateRequestForm.suggested_nightly_rent
-                                    "
-                                    :min="0"
-                                    placeholder="00.00"
-                                    class="w-full"
-                                    suffix=" ريال"
-                                />
-                            </div>
-                        </div>
-
-                        <!-- Notes -->
-                        <div class="mb-4">
-                            <label class="block text-gray-700 mb-2"
-                                >ملاحظات</label
-                            >
-                            <Textarea
-                                v-model="updateRequestForm.owner_note"
-                                rows="3"
-                                class="w-full"
-                                placeholder="أضف أي ملاحظات أو تفاصيل إضافية عن عرض الاستثمار"
-                            />
-                        </div>
-
-                        <div
-                            class="bg-blue-50 rounded-lg p-4 border border-blue-100 font-BeinNormal"
-                        >
-                            <div class="flex items-center">
-                                <i
-                                    class="pi pi-check-circle text-blue-600 text-xl ml-2"
-                                ></i>
-                                <h3 class="text-md font-semibold text-blue-800">
-                                    ملاحظة
-                                </h3>
-                            </div>
-                            <p class="text-blue-700 mt-2 text-sm">
-                                سيتم تقييم العقار بناء على البيانات التي يتم
-                                إدخالها، و من خلالها سيتم تقديم عرض الإستثمار و
-                                التشغيل المناسب
-                            </p>
-                        </div>
-
-                        <div class="flex justify-end gap-2 mt-6">
-                            <Button
-                                type="button"
-                                class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50"
-                                @click="showUpdateRequestModal = false"
-                            >
-                                إلغاء
-                            </Button>
-                            <Button
-                                label=" إرسال الطلب "
-                                icon="pi pi-check"
-                                severity="success"
-                                type="submit"
-                                :loading="updateRequestForm.processing"
-                            />
-                        </div>
-                    </form>
-                </div>
-            </Dialog>
+            <!-- Reject Offer Dialog -->
+            <ConfirmDialog
+                group="rejectOffer"
+                class="w-full md:w-1/2 lg:w-1/3 mx-8"
+            >
+                <template #message="slotProps">
+                    <div class="space-y-2">
+                        <p class="font-Bein">
+                            هل أنت متأكد من أنك تريد رفض هذا العرض؟
+                        </p>
+                        <p class="font-BeinNormal text-slate-600">
+                            بعد رفض العرض سيتم إلغاء العرض و تحديث حالة العقار
+                            الى "غير جاحز"
+                        </p>
+                    </div>
+                </template>
+            </ConfirmDialog>
 
             <!-- Property & Investment Request -->
             <div class="flex md:flex-row flex-col gap-4">
@@ -353,7 +317,7 @@ const formatDate = (dateString) => {
                             </h3>
                             <InvestmentRequestStatus
                                 :status="investmentRequest.status"
-                                :statusOptions="InvestmentRequestStatusOptions"
+                                :statusOptions="investmentRequestsStatusOptions"
                             />
                         </div>
                         <p class="text-gray-500 text-sm">
@@ -420,14 +384,208 @@ const formatDate = (dateString) => {
                 </div>
             </div>
 
-            <!-- Investment Offer -->
-            <div class="bg-white rounded-lg p-4 border border-gray-200 mb-3">
-                <h3 class="text-lg font-semibold text-gray-800 mb-2">
-                    عرض الاستثمار
-                </h3>
+            <!-- Invesment Offer -->
+            <div
+                class="bg-white rounded-lg p-6 border-2 border-teal-600 mb-4 shadow-sm"
+            >
+                <!-- header -->
+                <div
+                    v-if="investmentOffer !== null"
+                    class="flex items-center justify-between mb-6"
+                >
+                    <div class="flex items-center gap-2">
+                        <h3
+                            class="text-lg font-semibold text-gray-800 font-BeinNormal"
+                        >
+                            عرض الاستثمار
+                        </h3>
+                    </div>
+                    <p class="text-sm text-slate-600">
+                        <span class="font-medium text-slate-700"
+                            >تاريخ الإنشاء:</span
+                        >
+                        {{ formatDate(investmentOffer.created_at) }}
+                    </p>
+                </div>
+                <!-- Empty state -->
+                <div
+                    v-if="investmentOffer === null"
+                    class="mb-3 flex flex-col items-center gap-4"
+                >
+                    <p class="text-slate-500 font-BeinNormal">
+                        عرض الاستثمار ليس متوفرا بعد. سيتم تجهيزه في أقرب وقت
+                        ممكن
+                    </p>
+                    <Icon
+                        icon="fa-solid fa-file-pen"
+                        class="w-16 h-16 text-slate-300 me-4"
+                    />
+                </div>
+                <!-- Offer Details -->
+                <div
+                    v-else
+                    class="font-BeinNormal space-y-6"
+                    ref="offerDetails"
+                >
+                    <!-- Key Metrics -->
+                    <div
+                        class="grid grid-cols-1 sm:grid-cols-2 gap-4 animate-fade-in"
+                    >
+                        <div class="border-b border-slate-200 pb-3">
+                            <p class="text-sm text-slate-600">قيمة العقار</p>
+                            <p class="text-lg font-semibold text-teal-800">
+                                {{
+                                    formatPrice(
+                                        investmentOffer.suggested_valuation
+                                    )
+                                }}
+                                ريال
+                            </p>
+                        </div>
+                        <div class="border-b border-slate-200 pb-3">
+                            <p class="text-sm text-slate-600">قيمة الاستثمار</p>
+                            <p class="text-lg font-semibold text-teal-800">
+                                {{
+                                    formatPrice(
+                                        investmentOffer.suggested_investment_amount
+                                    )
+                                }}
+                                ريال
+                            </p>
+                        </div>
+                        <div class="border-b border-slate-200 pb-3">
+                            <p class="text-sm text-slate-600">التشغيل الشهري</p>
+                            <p class="text-lg font-semibold text-teal-800">
+                                {{
+                                    formatPrice(
+                                        investmentOffer.suggested_monthly_operating_cost
+                                    )
+                                }}
+                                ريال
+                            </p>
+                        </div>
+                        <div class="border-b border-slate-200 pb-3">
+                            <p class="text-sm text-slate-600">الإيجار اليومي</p>
+                            <p class="text-lg font-semibold text-teal-800">
+                                {{
+                                    formatPrice(
+                                        investmentOffer.suggested_nightly_rent
+                                    )
+                                }}
+                                ريال
+                            </p>
+                        </div>
+                    </div>
+                    <!-- Shares Breakdown -->
+                    <div
+                        class="bg-slate-50 rounded-lg p-4 border border-slate-100"
+                    >
+                        <h4 class="text-md font-semibold text-slate-700 mb-3">
+                            توزيع الحصص
+                        </h4>
+                        <div class="flex flex-col sm:flex-row gap-4">
+                            <div class="flex-1">
+                                <p class="text-sm text-slate-600">
+                                    حصتك (المالك)
+                                </p>
+                                <p class="text-lg font-semibold text-teal-700">
+                                    {{
+                                        (
+                                            investmentOffer.owner_share * 100
+                                        ).toFixed(0)
+                                    }}%
+                                </p>
+                                <div class="h-2 bg-slate-200 rounded-full mt-2">
+                                    <div
+                                        class="h-full bg-teal-600 rounded-full transition-all duration-500"
+                                        :style="{
+                                            width: `${
+                                                investmentOffer.owner_share *
+                                                100
+                                            }%`,
+                                        }"
+                                    ></div>
+                                </div>
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-sm text-slate-600">
+                                    حصة المستثمرين
+                                </p>
+                                <p class="text-lg font-semibold text-slate-700">
+                                    {{
+                                        (
+                                            investmentOffer.investor_share * 100
+                                        ).toFixed(0)
+                                    }}%
+                                </p>
+                                <div class="h-2 bg-slate-200 rounded-full mt-2">
+                                    <div
+                                        class="h-full bg-slate-500 rounded-full transition-all duration-500"
+                                        :style="{
+                                            width: `${
+                                                investmentOffer.investor_share *
+                                                100
+                                            }%`,
+                                        }"
+                                    ></div>
+                                </div>
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-sm text-slate-600">حصة المنصة</p>
+                                <p class="text-lg font-semibold text-slate-700">
+                                    {{
+                                        (
+                                            investmentOffer.platform_fee_share *
+                                            100
+                                        ).toFixed(0)
+                                    }}%
+                                </p>
+                                <div class="h-2 bg-slate-200 rounded-full mt-2">
+                                    <div
+                                        class="h-full bg-slate-500 rounded-full transition-all duration-500"
+                                        :style="{
+                                            width: `${
+                                                investmentOffer.platform_fee_share *
+                                                100
+                                            }%`,
+                                        }"
+                                    ></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                <div class="mb-3">
-                    <p>لم يتم إنشاء عرض الاستثمار بعد</p>
+                    <!-- Accept Offer Button -->
+                    <div
+                        v-if="investmentRequest.status === approved"
+                        class="bg-teal-800 text-center p-2 rounded-lg text-slate-300"
+                    >
+                        <p>
+                            تم قبول العرض بتاريخ
+                            <span class="font-Bein text-white">
+                                :
+                                {{
+                                    formatDate(investmentRequest.updated_at)
+                                }}</span
+                            >
+                        </p>
+                    </div>
+                    <div v-else class="flex justify-end gap-8">
+                        <Button
+                            label=" قبول العرض"
+                            icon="pi pi-check"
+                            @click="AcceptOffer"
+                            severity="success"
+                            class="w-full"
+                        />
+                        <Button
+                            label=" رفض العرض"
+                            icon="pi pi-times"
+                            @click="RejectOffer"
+                            severity="danger"
+                            class="w-full"
+                        />
+                    </div>
                 </div>
             </div>
 
@@ -446,23 +604,12 @@ const formatDate = (dateString) => {
                 </div>
 
                 <!-- Admin Notes -->
-                <div>
+                <div v-if="investmentOffer !== null">
                     <p class="text-gray-600 text-sm mb-1">ملاحظات الإدارة:</p>
                     <div class="p-3 bg-gray-50 rounded-lg text-gray-700">
-                        {{ investmentRequest.admin_note || "لا توجد ملاحظات" }}
+                        {{ investmentOffer.admin_note || "لا توجد ملاحظات" }}
                     </div>
                 </div>
-            </div>
-
-            <!-- Actions -->
-            <div class="flex justify-end gap-2 mt-6">
-                <Button
-                    icon="pi pi-refresh"
-                    label="تعديل طلب الاستثمار"
-                    severity="success"
-                    class="border-emerald-700 text-emerald-700 hover:bg-emerald-50"
-                    @click="showUpdateRequestModal = !showUpdateRequestModal"
-                />
             </div>
         </div>
     </div>

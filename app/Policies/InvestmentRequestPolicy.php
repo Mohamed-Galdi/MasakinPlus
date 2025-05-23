@@ -23,10 +23,5 @@ class InvestmentRequestPolicy
             : Response::denyWithStatus(403, 'لا يحق لك إنشاء طلب استثمار لهذه الملكية.');
     }
 
-    public function update(User $user, InvestmentRequest $investmentRequest): Response
-    {
-        return $user->id === $investmentRequest->owner->id
-            ? Response::allow()
-            : Response::denyWithStatus(403, 'لا يحق لك تحديث طلب الاستثمار هذا.');
-    }
+   
 }

@@ -29,9 +29,9 @@ class PropertyController extends Controller
             })
             ->when($search, function ($query) use ($search) {
                 $query->where(function ($query) use ($search) {
-                    $query->where('title', 'like', '%'.$search.'%')
+                    $query->where('title', 'like', '%' . $search . '%')
                         ->orWhereHas('owner', function ($q) use ($search) {
-                            $q->where('name', 'like', '%'.$search.'%');
+                            $q->where('name', 'like', '%' . $search . '%');
                         });
                 });
             })
@@ -59,7 +59,7 @@ class PropertyController extends Controller
 
         $property->load(['amenities', 'images', 'owner' => function ($query) {
             $query->withCount('ownedProperties');
-        }, 'investmentRequests']);
+        }]);
 
         return inertia('Admin/Properties/view', compact('property', 'statusOptions'));
     }

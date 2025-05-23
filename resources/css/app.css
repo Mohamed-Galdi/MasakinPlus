@@ -93,6 +93,7 @@ background-color: #41a396 !important;
 border-color: #0d675b !important;
 }
 
+
 .p-galleria-indicator-list {
     padding: 2px !important;	
 }
@@ -141,6 +142,12 @@ border-color: #0d675b !important;
 .p-button-success{
     background-color: #0d675b !important;
     border-color: #0d675b !important;
+    color: white !important;
+}
+
+.p-button-success:hover{
+    background-color: #0c554b !important;
+    border-color: #1f8b7d !important;
     color: white !important;
 }
 

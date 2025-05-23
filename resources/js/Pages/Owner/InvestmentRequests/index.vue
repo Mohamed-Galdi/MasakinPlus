@@ -2,6 +2,7 @@
 import OwnerLayout from "@/Layouts/OwnerLayout.vue";
 import { ref, computed } from "vue";
 import { Link, router } from "@inertiajs/vue3";
+import { useForm } from "@inertiajs/vue3";
 import Dialog from "primevue/dialog";
 import Button from "primevue/button";
 import Textarea from "primevue/textarea";
@@ -9,7 +10,6 @@ import InputNumber from "primevue/inputnumber";
 import Select from "primevue/select";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
-import { useForm } from "@inertiajs/vue3";
 import Toast from "primevue/toast";
 import { useToast } from "primevue/usetoast";
 import InvestmentRequestStatus from "@/Components/InvestmentRequestStatus.vue";
@@ -28,7 +28,7 @@ const props = defineProps({
         type: Object,
         required: true,
     },
-    InvestmentRequestStatusOptions: {
+    investmentRequestsStatusOptions: {
         type: Array,
         required: true,
     },
@@ -38,8 +38,8 @@ const toast = useToast();
 
 const isMobile = computed(() => window.innerWidth <= 768);
 
-const InvestmentRequestStatusOptions = ref(
-    props.InvestmentRequestStatusOptions
+const investmentRequestsStatusOptions = ref(
+    props.investmentRequestsStatusOptions
 );
 
 // ########################################################################################## Create request
@@ -152,7 +152,10 @@ const formatDate = (dateString) => {
             :closeOnEscape="true"
         >
             <div class="p-4">
-                <form @submit.prevent="submitCreateRequest" class="font-BeinNormal">
+                <form
+                    @submit.prevent="submitCreateRequest"
+                    class="font-BeinNormal"
+                >
                     <!-- Property Selection -->
                     <div class="mb-6">
                         <label> العقار</label>
@@ -333,7 +336,7 @@ const formatDate = (dateString) => {
             >
                 <Column field="id" header="#" class="w-[60px]">
                     <template #body="slotProps">
-                        <span class="font-mono">#{{ slotProps.data.id }}</span>
+                        <span class="font-mono">{{ slotProps.data.id }}#</span>
                     </template>
                 </Column>
 
@@ -357,7 +360,7 @@ const formatDate = (dateString) => {
                     <template #body="slotProps">
                         <InvestmentRequestStatus
                             :status="slotProps.data.status"
-                            :statusOptions="InvestmentRequestStatusOptions"
+                            :statusOptions="investmentRequestsStatusOptions"
                         />
                     </template>
                 </Column>

@@ -27,7 +27,7 @@ return new class extends Migration
             $table->integer('bathrooms')->default(1);
             $table->decimal('latitude', 10, 6)->nullable();
             $table->decimal('longitude', 10, 6)->nullable();
-            $table->decimal('property_valuation', 12, 2)->default(0.00); // Price of the property
+            $table->decimal('valuation', 12, 2)->default(0.00); // Price of the property
             $table->decimal('investment_required', 12, 2)->default(0.00); // Required investment amount
             $table->decimal('monthly_operating_cost', 10, 2)->default(0.00); // Monthly operating cost
             $table->decimal('nightly_rent', 10, 2)->default(0.00)->nullable(); // Rent price per night

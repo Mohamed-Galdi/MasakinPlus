@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\InvestmentOffer;
 use App\Models\InvestmentRequest;
 use App\Models\Property;
+use App\Policies\InvestmentOfferPolicy;
 use App\Policies\InvestmentRequestPolicy;
 use App\Policies\PropertyOwnerPolicy;
 use Illuminate\Auth\Notifications\VerifyEmail;
@@ -37,5 +39,6 @@ class AppServiceProvider extends ServiceProvider
         });
         Gate::policy(Property::class, PropertyOwnerPolicy::class);
         Gate::policy(InvestmentRequest::class, InvestmentRequestPolicy::class);
+        Gate::policy(InvestmentOffer::class, InvestmentOfferPolicy::class);
     }
 }

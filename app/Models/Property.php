@@ -54,8 +54,13 @@ class Property extends Model
             ->withTimestamps();
     }
 
-    public function InvestmentRequests()
+    public function investmentRequest()
     {
-        return $this->hasMany(InvestmentRequest::class);
+        return $this->hasOne(InvestmentRequest::class);
+    }
+
+    public function investmentOffer()
+    {
+        return $this->hasOne(InvestmentOffer::class);
     }
 }
