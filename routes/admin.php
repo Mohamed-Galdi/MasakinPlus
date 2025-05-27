@@ -60,8 +60,19 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     });
 
     // Settings
-    Route::prefix('settings')->group(function () {
-        Route::get('/', [SettingsController::class, 'index'])->name('admin.settings.index');
+    Route::prefix('settings')->name('admin.settings.')->controller(SettingsController::class)->group(function () {
+        // Settings index
+        Route::get('/', 'index')->name('index');
+        // CMS
+        Route::prefix('content')->name('content.')->group(function () {
+            Route::get('/home',  'home')->name('home');
+            Route::get('/about',  'about')->name('about');
+            Route::get('/privacy',  'privacy')->name('privacy');
+        });
+        // Property Status Guide
+        Route::get('/property_status_guide',  'propertyStatusGuide')->name('property_status_guide');
+        // login type
+        Route::get('/setting_tab',  'settingTab')->name('setting_tab');
     });
 });
 
