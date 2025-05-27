@@ -62,7 +62,7 @@ setActiveTab();
                 >
                     <Link
                         :href="route(tab.route)"
-                        class="block px-4 py-3 text-center md:text-right text-sm font-medium text-slate-600 hover:text-teal-800 hover:bg-teal-50 transition-colors duration-200"
+                        class="block px-8 py-3 text-center md:text-right font-medium text-slate-600 hover:text-teal-800 hover:bg-teal-50 transition-colors duration-200"
                         :class="{
                             'text-teal-800 border-b-2 border-teal-800':
                                 activeTab === index,

@@ -304,7 +304,7 @@ const deleteProduct = (productId) => {
                 <div>
                     <p class="ms-1 text-sm text-slate-600">Product Image</p>
                     <FileUpload
-                        :initial-file="productImageToEdit"
+                        :initial-files="productImageToEdit"
                         @file-uploaded="handleFileUploaded"
                         @file-reverted="handleFileReverted"
                     />

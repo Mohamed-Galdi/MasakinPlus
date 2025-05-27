@@ -2,6 +2,9 @@
 import AdminLayout from "@/Layouts/AdminLayout.vue";
 import AdminSettingsLayout from "@/Layouts/AdminSettingsLayout.vue";
 import CMSLayout from "@/Layouts/CMSLayout.vue";
+import Accordion from "primevue/accordion";
+import AccordionTab from "primevue/accordiontab";
+import HomeHeroSection from "@/Components/AdminSettings/CMS/HomeHeroSection.vue";
 
 defineOptions({
     layout: (h, page) =>
@@ -9,16 +12,23 @@ defineOptions({
             h(AdminSettingsLayout, {}, () => h(CMSLayout, {}, () => page))
         ),
 });
+
+const props = defineProps({
+    hero: Object,
+});
 </script>
 
 <template>
-    <div class="text-center text-slate-500 mt-20">
-        <i class="pi pi-home text-4xl mb-4 text-slate-300"></i>
-        <h3 class="text-lg font-medium mb-2 text-slate-700">
-            محتوى الصفحة الرئيسية
-        </h3>
-        <p class="text-slate-500">
-            سيتم إضافة نموذج تحرير محتوى الصفحة الرئيسية هنا
-        </p>
+    <div class="space-y-6">
+        <Accordion :multiple="true" :activeIndex="[0]">
+            <!-- HERO SECTION -->
+            <AccordionTab header="القسم الرئيسي">
+                <HomeHeroSection :hero="props.hero" />
+            </AccordionTab>
+
+            <AccordionTab header="مميزات المنصة">
+                <p>تعديل المحتوى الخاص بمميزات المنصة هنا...</p>
+            </AccordionTab>
+        </Accordion>
     </div>
 </template>

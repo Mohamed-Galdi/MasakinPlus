@@ -164,7 +164,7 @@ function updateImage() {
             class="m-2"
         >
             <FileUpload
-                :initial-file="tempFile"
+                :initial-files="tempFile"
                 :allowedFileTypes="['image/png', 'image/jpeg', 'image/jpg']"
                 @file-uploaded="handleFileUploaded"
                 @file-reverted="handleFileReverted"

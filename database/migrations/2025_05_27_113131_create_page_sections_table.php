@@ -16,7 +16,6 @@ return new class extends Migration
             $table->foreignId('page_id')->constrained()->onDelete('cascade');
             $table->string('section_type'); // e.g. 'hero', 'features', 'gallery'
             $table->json('content'); // structure varies by section_type
-            $table->unsignedInteger('order')->default(0); // for sorting sections
             $table->timestamps();
         });
     }

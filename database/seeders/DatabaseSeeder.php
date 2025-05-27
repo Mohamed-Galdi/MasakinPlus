@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
             InvestorPropertiesSeeder::class,
             TicketSeeder::class,
             InvestmentRequestSeeder::class,
+            HomePageSeeder::class,
         ]);
     }
 }

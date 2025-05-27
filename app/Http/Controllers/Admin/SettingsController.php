@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\PageSectionType;
 use App\Enums\PropertyStatus;
 use App\Http\Controllers\Controller;
+use App\Models\Page;
+use App\Models\PageSection;
 use Illuminate\Http\Request;
 
 class SettingsController extends Controller
@@ -16,7 +19,12 @@ class SettingsController extends Controller
     // ################################## Content Management ##################################
     public function home()
     {
-        return inertia('Admin/Settings/ContentManagement/home');
+        $home = Page::where('title', 'home')->first();
+        $hero = PageSection::where('page_id', $home->id)->where('section_type', PageSectionType::HERO)->select('content')->first();
+
+        // dd($hero);
+
+        return inertia('Admin/Settings/ContentManagement/home', compact('hero'));
     }
 
     public function about()
