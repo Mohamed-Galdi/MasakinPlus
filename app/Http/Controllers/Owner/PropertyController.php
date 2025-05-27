@@ -72,6 +72,8 @@ class PropertyController extends Controller
             'longitude' => 'required|numeric|min:0',
             'amenities' => 'array',
             'images' => 'required|array',
+            'status' => 'required|string|max:255|in:investment,ready',
+            'nightly_rent' => 'nullable|numeric|min:0',
         ]);
 
         $property = new Property;
@@ -86,6 +88,8 @@ class PropertyController extends Controller
         $property->bathrooms = $request->bathrooms;
         $property->latitude = $request->latitude;
         $property->longitude = $request->longitude;
+        $property->status = $request->status === 'investment' ? PropertyStatus::Draft->value : PropertyStatus::RentRequested->value;
+        $property->nightly_rent = $request->nightly_rent;
         $property->save();
 
         foreach ($request->amenities as $amenity) {
@@ -108,17 +112,31 @@ class PropertyController extends Controller
         return '';
     }
 
+    public function show(Request $request, Property $property)
+    {
+        // authorization
+        Gate::authorize('show', $property);
+
+        $property->load('amenities', 'images');
+
+        $typeOptions = PropertyType::options();
+        $statusOptions = PropertyStatus::options();
+
+        return inertia('Owner/Properties/show', compact('property', 'typeOptions', 'statusOptions'));
+    }
+
     public function edit(Request $request, Property $property)
     {
         // authorization
         Gate::authorize('update', $property);
 
         $typeOptions = PropertyType::options();
+        $statusOptions = PropertyStatus::options();
         $amenities = Amenity::select('id', 'name')->get();
 
         $property->load('amenities', 'images');
 
-        return inertia('Owner/Properties/update', compact('property', 'typeOptions', 'amenities'));
+        return inertia('Owner/Properties/update', compact('property', 'typeOptions', 'statusOptions', 'amenities'));
     }
 
     public function update(Request $request, Property $property)

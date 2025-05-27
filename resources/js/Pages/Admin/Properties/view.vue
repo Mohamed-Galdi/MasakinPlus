@@ -303,11 +303,11 @@ const formatPrice = (price) => {
                             </div>
                             <div>
                                 <p class="text-gray-500 text-sm">
-                                    الإيجار اليومي
+                                    إجار الليلة
                                 </p>
                                 <p class="text-lg text-emerald-600">
                                     {{
-                                        property.nightly_rent
+                                        property.nightly_rent !== null
                                             ? formatPrice(
                                                   property.nightly_rent
                                               )

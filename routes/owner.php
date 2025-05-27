@@ -13,6 +13,7 @@ Route::prefix('/owner')->middleware(['auth', 'verified', 'owner'])->group(functi
         Route::get('/', 'index')->name('index');
         Route::get('/create', 'create')->name('create');
         Route::post('/create', 'store')->name('store');
+        Route::get('/{property}', 'show')->name('show');
         Route::get('/{property}/edit', 'edit')->name('edit');
         Route::put('/{property}', 'update')->name('update');
     });

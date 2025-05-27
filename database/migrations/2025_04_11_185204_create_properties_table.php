@@ -30,7 +30,7 @@ return new class extends Migration
             $table->decimal('valuation', 12, 2)->default(0.00); // Price of the property
             $table->decimal('investment_required', 12, 2)->default(0.00); // Required investment amount
             $table->decimal('monthly_operating_cost', 10, 2)->default(0.00); // Monthly operating cost
-            $table->decimal('nightly_rent', 10, 2)->default(0.00)->nullable(); // Rent price per night
+            $table->decimal('nightly_rent', 10, 2)->nullable(); // Rent price per night
             $table->decimal('owner_share', 5, 2)->default(0.00); // Proportion of the owner (e.g., 0.60 for 60%)
             $table->decimal('investor_share', 5, 2)->default(0.00); // Proportion of the investors
             $table->decimal('platform_fee_share', 5, 2)->default(0.00); // Proportion of the platform

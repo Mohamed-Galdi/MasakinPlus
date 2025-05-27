@@ -271,7 +271,7 @@ const textHelpers = useTextHelpers();
                         class="flex justify-between items-center border-t pt-3"
                     >
                         <div>
-                            <p class="text-sm text-gray-500">الإيجار اليومي</p>
+                            <p class="text-sm text-gray-500">إجار الليلة</p>
                             <p class="text-lg font-bold text-emerald-600">
                                 <template
                                     v-if="property.nightly_rent === null"
@@ -284,14 +284,24 @@ const textHelpers = useTextHelpers();
                                 </template>
                             </p>
                         </div>
-                        <!-- Professional Action Buttons -->
-                        <Link
-                            :href="route('owner.properties.edit', property.id)"
-                            class="flex items-center justify-center gap-2 py-2 px-3 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 rounded-md transition-all shadow-sm hover:shadow"
-                        >
-                            <i class="pi pi-pencil text-gray-600"></i>
-                            <span class="text-sm font-medium">تعديل</span>
-                        </Link>
+                        <!--  Edit Button -->
+                        <div class="flex items-center justify-center gap-2">
+                            <Link v-if="property.status === 'draft'"
+                                :href="route('owner.properties.edit', property.id)"
+                                class="flex items-center justify-center gap-2 py-2 px-3 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 rounded-md transition-all shadow-sm hover:shadow"
+                            >
+                                <i class="pi pi-pencil text-gray-600"></i>
+                                <span class="text-sm font-medium">تعديل</span>
+                            </Link>
+                            <!--  Show Button -->
+                            <Link
+                                :href="route('owner.properties.show', property.id)"
+                                class="flex items-center justify-center gap-2 py-2 px-3 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 rounded-md transition-all shadow-sm hover:shadow"
+                            >
+                                <i class="pi pi-eye text-gray-600"></i>
+                                <span class="text-sm font-medium">عرض</span>
+                            </Link>
+                        </div>
                     </div>
                 </div>
             </div>
