@@ -11,6 +11,8 @@ const props = defineProps({
     hero: Object,
     usersCards: Object,
     features: Object,
+    ourNumbers: Object,
+    faqs: Object,
 });
 </script>
 
@@ -30,10 +32,10 @@ const props = defineProps({
         <Features :features="props.features" />
 
         <!-- Our Numbers -->
-        <OurNumbers />
+        <OurNumbers :ourNumbers="props.ourNumbers" />
 
         <!-- FAQs -->
-        <FAQs />
+        <FAQs :faqs="props.faqs" />
 
         <!-- Footer -->
         <Footer />

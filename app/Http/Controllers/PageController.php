@@ -15,8 +15,10 @@ class PageController extends Controller
         $hero = PageSection::where('page_id', $home->id)->where('section_type', PageSectionType::HERO)->select('content')->first();
         $usersCards = PageSection::where('page_id', $home->id)->where('section_type', PageSectionType::USERS_CARDS)->select('content')->first();
         $features = PageSection::where('page_id', $home->id)->where('section_type', PageSectionType::FEATURES)->select('content')->first();
+        $ourNumbers = PageSection::where('page_id', $home->id)->where('section_type', PageSectionType::OUR_NUMBERS)->select('content')->first();
+        $faqs = PageSection::where('page_id', $home->id)->where('section_type', PageSectionType::FAQS)->select('content')->first();
 
-        return inertia('Home/Home', compact('hero', 'usersCards', 'features'));
+        return inertia('Home/Home', compact('hero', 'usersCards', 'features', 'ourNumbers', 'faqs'));
     }
 
     public function privacy()

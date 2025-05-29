@@ -252,6 +252,8 @@ return [
         'content.cards.*.title' => 'العنوان',
         'content.cards.*.listItems' => 'القيم التالية',
         'content.cards.*.icon' => 'الرمز',
+        'content.stats.*.label' => 'النص الوصفي',
+        'content.stats.*.number' => 'الرقم',
     ],
 
 ];

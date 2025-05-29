@@ -18,7 +18,9 @@ class ContentManagementController extends Controller
         $hero = PageSection::where('page_id', $home->id)->where('section_type', PageSectionType::HERO)->select('id', 'content')->first();
         $usersCards = PageSection::where('page_id', $home->id)->where('section_type', PageSectionType::USERS_CARDS)->select('id', 'content')->first();
         $features = PageSection::where('page_id', $home->id)->where('section_type', PageSectionType::FEATURES)->select('id', 'content')->first();
-        return inertia('Admin/Settings/ContentManagement/home', compact('hero', 'usersCards', 'features'));
+        $ourNumbers = PageSection::where('page_id', $home->id)->where('section_type', PageSectionType::OUR_NUMBERS)->select('id', 'content')->first();
+        $faqs = PageSection::where('page_id', $home->id)->where('section_type', PageSectionType::FAQS)->select('id', 'content')->first();
+        return inertia('Admin/Settings/ContentManagement/home', compact('hero', 'usersCards', 'features', 'ourNumbers', 'faqs'));
     }
 
     public function about()
@@ -92,6 +94,16 @@ class ContentManagementController extends Controller
                 'content.features.*.subtitle' => 'required|string|max:255',
                 'content.features.*.image' => 'nullable|string|max:255',
                 'content.features.*.cta' => 'required|string|max:255',
+            ],
+            'our-numbers' => [
+                'content.stats' => 'required|array|min:1',
+                'content.stats.*.label' => 'required|string|max:255',
+                'content.stats.*.number' => 'required|numeric',
+            ],
+            'faqs' => [
+                'content.questions' => 'required|array|min:1',
+                'content.questions.*.question' => 'required|string|max:255',
+                'content.questions.*.answer' => 'required|string|max:1500',
             ],
 
         ];

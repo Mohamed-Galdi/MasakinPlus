@@ -3,25 +3,17 @@ import { onMounted } from "vue";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-gsap.registerPlugin(ScrollTrigger);
+const props = defineProps({
+    ourNumbers: Object,
+});
 
-const stats = [
-    {
-        label: "لدينا حتى الآن أكثر من 45 مالك راضٍ",
-        number: 45,
-        icon: "fa-solid fa-home",
-    },
-    {
-        label: "لدينا أكثر من 68 مستثمر ناجح",
-        number: 68,
-        icon: "fa-solid fa-coins",
-    },
-    {
-        label: "لدينا أكثر من 180 مستأجر سعيد",
-        number: 180,
-        icon: "fa-solid fa-user",
-    },
-];
+const stats = ref(
+    props.ourNumbers?.content?.stats
+        ? JSON.parse(JSON.stringify(props.ourNumbers.content.stats))
+        : []
+);
+
+gsap.registerPlugin(ScrollTrigger);
 
 const animateNumber = (target, endValue) => {
     gsap.fromTo(
@@ -78,7 +70,7 @@ onMounted(() => {
     <div class="bg-white pb-12 pt-2">
         <div class="max-w-7xl mx-auto px-8">
             <h2
-                class="text-teal-800 font-Bein md:text-6xl text-4xl text-center mb-16 "
+                class="text-teal-800 font-Bein md:text-6xl text-4xl text-center mb-16"
             >
                 إنجازاتنا في <span class="text-yellow-500">أرقام</span>
             </h2>
@@ -105,9 +97,7 @@ onMounted(() => {
                         0
                     </p>
 
-                    <p
-                        class="text-yellow-500 font-Bein text-xl max-w-xs"
-                    >
+                    <p class="text-yellow-500 font-Bein text-xl max-w-xs">
                         {{ stat.label }}
                     </p>
                 </div>

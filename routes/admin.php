@@ -62,7 +62,7 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
 
     // Settings
     Route::prefix('settings')->name('admin.settings.')->group(function () {
-        Route::prefix('settings')->controller(SettingsController::class)->group(function () {
+        Route::controller(SettingsController::class)->group(function () {
             Route::get('/', 'index')->name('index');
             // Property Status Guide
             Route::get('/property_status_guide',  'propertyStatusGuide')->name('property_status_guide');
