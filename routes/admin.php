@@ -4,7 +4,8 @@ use App\Http\Controllers\Admin\AccountController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\InvestmentRequestController;
 use App\Http\Controllers\Admin\PropertyController;
-use App\Http\Controllers\Admin\SettingsController;
+use App\Http\Controllers\Admin\Settings\SettingsController;
+use App\Http\Controllers\Admin\Settings\ContentManagementController;
 use App\Http\Controllers\Admin\SupportController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AdminAuthenticatedSessionController;
@@ -60,19 +61,23 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     });
 
     // Settings
-    Route::prefix('settings')->name('admin.settings.')->controller(SettingsController::class)->group(function () {
-        // Settings index
-        Route::get('/', 'index')->name('index');
+    Route::prefix('settings')->name('admin.settings.')->group(function () {
+        Route::prefix('settings')->controller(SettingsController::class)->group(function () {
+            Route::get('/', 'index')->name('index');
+            // Property Status Guide
+            Route::get('/property_status_guide',  'propertyStatusGuide')->name('property_status_guide');
+            // setting tab
+            Route::get('/setting_tab',  'settingTab')->name('setting_tab');
+        });
         // CMS
-        Route::prefix('content')->name('content.')->group(function () {
+        Route::prefix('content')->name('content.')->controller(ContentManagementController::class)->group(function () {
             Route::get('/home',  'home')->name('home');
             Route::get('/about',  'about')->name('about');
             Route::get('/privacy',  'privacy')->name('privacy');
+            Route::put('/update-page-content',  'updatePageContent')->name('updatePageContent');
+            Route::put('/update-section-content',  'updateSectionContent')->name('updateSectionContent');
         });
-        // Property Status Guide
-        Route::get('/property_status_guide',  'propertyStatusGuide')->name('property_status_guide');
-        // login type
-        Route::get('/setting_tab',  'settingTab')->name('setting_tab');
+       
     });
 });
 

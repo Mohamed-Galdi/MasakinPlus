@@ -239,6 +239,11 @@ return [
         'suggested_investment_amount' => 'المبلغ المقترح للاستثمار',
         'suggested_monthly_operating_cost' => 'المبلغ الشهري المقترح للتشغيل',
         'suggested_nightly_rent' => 'السعر اليومي المقترح',
+        'content.slides.*.type' => 'النوع',
+        'content.slides.*.title' => 'العنوان',
+        'content.slides.*.description' => 'الوصف',
+        'content.slides.*.image' => 'الصورة',
+        'content.slides.*.buttonText' => 'نص الزر',
     ],
 
 ];

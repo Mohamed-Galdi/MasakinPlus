@@ -1,12 +1,13 @@
 <?php
 
 use App\Enums\PropertyStatus;
+use App\Http\Controllers\PageController;
 use Illuminate\Support\Facades\Route;
 
 // Home Pages
-Route::get('/', fn () => inertia('Home/Home'))->name('home');
-Route::get('/privacy-policy', fn () => inertia('Home/PrivacyPolicy'))->name('privacy-policy');
-Route::get('/about-us', fn () => inertia('Home/AboutUs'))->name('about-us');
+Route::get('/', [PageController::class, 'home'])->name('home');
+Route::get('/privacy-policy', [PageController::class, 'privacy'])->name('privacy-policy');
+Route::get('/about-us', [PageController::class, 'about'])->name('about-us');
 
 // Dashboard Redirection
 Route::get('/dashboard', function () {

@@ -3,6 +3,14 @@ import { ref, onMounted, onUnmounted } from "vue";
 import { gsap } from "gsap";
 import HomeButton from "@/Components/HomeButton.vue";
 import { Link } from "@inertiajs/vue3";
+
+const props = defineProps({
+    hero: {
+        type: Object,
+        required: true,
+    }
+});
+
 // Configuration variables
 const ANIMATION_CONFIG = {
     initialLoadStaggerDuration: 0.6,
@@ -11,32 +19,7 @@ const ANIMATION_CONFIG = {
     staggerDelay: 0.2,
 };
 
-const slides = [
-    {
-        type: "Property Owners",
-        title: "حقق اقصى استفادة من عقارك",
-        description:
-            "اجعل عقارك يبرز في السوق! انضم الى منصة متخصصة تربطك بالمستاجرين والمستثمرين بسهولة",
-        image: "/assets/home_images/owner.jpg",
-        buttonText: "سجل عقارك الان",
-    },
-    {
-        type: "Investors",
-        title: "فرص عقارية ذهبية بانتظارك",
-        description:
-            "استثمارات مدروسة وعوائد مضمونة! استثمر في عقارات مدارة بذكاء لتحقق ارباحا مستدامة.",
-        image: "/assets/home_images/investor.jpg",
-        buttonText: "اكتشف افضل الفرص العقارية",
-    },
-    {
-        type: "Tenants",
-        title: "سكنك المثالي بانتظارك",
-        description:
-            "اسهل طريقة للعثور على بيتك المثالي! تصفح خيارات متنوعة واحجز مسكنك في دقائق",
-        image: "/assets/home_images/tenant.jpg",
-        buttonText: "اكتشف افضل العروض",
-    },
-];
+const slides = JSON.parse(JSON.stringify(props.hero.content.slides));
 
 const currentSlide = ref(0);
 const dotsVisible = ref(false);

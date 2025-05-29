@@ -18,3 +18,9 @@ property_images/property_*/*
 !property_images/property_*/p*.1.avif
 !property_images/property_*/p*.2.avif
 !property_images/property_*/p*.3.avif
+
+# Keep hero section default images
+!sections/
+!sections/hero/
+!sections/hero/slide-[0-2]/
+!sections/hero/slide-[0-2]/hero-slide-[0-2]-default.jpg

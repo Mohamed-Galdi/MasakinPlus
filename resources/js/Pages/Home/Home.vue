@@ -6,12 +6,16 @@ import OurNumbers from "@/Partials/Home/OurNumbers.vue";
 import Teaser from "@/Partials/Home/Teaser.vue";
 import FAQs from "@/Partials/Home/FAQs.vue";
 import Footer from "@/Partials/Home/Footer.vue";
+
+const props = defineProps({
+    hero: Object,
+});
 </script>
 
 <template>
     <div>
         <!-- hero -->
-        <Hero />
+        <Hero :hero="props.hero" />
         <!-- <div class="h-screen bg-white w-full"></div> -->
 
         <!-- Teaser -->
