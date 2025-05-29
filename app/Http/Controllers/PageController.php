@@ -23,7 +23,8 @@ class PageController extends Controller
 
     public function privacy()
     {
-        return inertia('Home/PrivacyPolicy');
+        $content = Page::where('title', 'privacy')->first()->html_content;
+        return inertia('Home/PrivacyPolicy', compact('content'));
     }
 
     public function about()

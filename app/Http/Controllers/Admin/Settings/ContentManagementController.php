@@ -30,12 +30,16 @@ class ContentManagementController extends Controller
 
     public function privacy()
     {
-        return inertia('Admin/Settings/ContentManagement/privacy');
+        $content = Page::where('title', 'privacy')->first()->html_content;
+        return inertia('Admin/Settings/ContentManagement/privacy', compact('content'));
     }
 
     public function updatePageContent(Request $request)
     {
-        $page = Page::find($request->page_id);
+        $page = Page::where('title', $request->page)->first();
+        $page->html_content = $request->content;
+        $page->save();
+        return back()->with('success', 'تم تحديث الصفحة بنجاح');
     }
 
     public function updateSectionContent(Request $request)
