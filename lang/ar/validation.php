@@ -244,6 +244,14 @@ return [
         'content.slides.*.description' => 'الوصف',
         'content.slides.*.image' => 'الصورة',
         'content.slides.*.buttonText' => 'نص الزر',
+        'content.features.*.type' => 'النوع',
+        'content.features.*.title' => 'العنوان',
+        'content.features.*.subtitle' => 'الوصف',
+        'content.features.*.image' => 'الصورة',
+        'content.features.*.cta' => 'نص الزر',
+        'content.cards.*.title' => 'العنوان',
+        'content.cards.*.listItems' => 'القيم التالية',
+        'content.cards.*.icon' => 'الرمز',
     ],
 
 ];

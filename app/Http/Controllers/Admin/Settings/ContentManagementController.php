@@ -16,7 +16,9 @@ class ContentManagementController extends Controller
     {
         $home = Page::where('title', 'home')->first();
         $hero = PageSection::where('page_id', $home->id)->where('section_type', PageSectionType::HERO)->select('id', 'content')->first();
-        return inertia('Admin/Settings/ContentManagement/home', compact('hero'));
+        $usersCards = PageSection::where('page_id', $home->id)->where('section_type', PageSectionType::USERS_CARDS)->select('id', 'content')->first();
+        $features = PageSection::where('page_id', $home->id)->where('section_type', PageSectionType::FEATURES)->select('id', 'content')->first();
+        return inertia('Admin/Settings/ContentManagement/home', compact('hero', 'usersCards', 'features'));
     }
 
     public function about()
@@ -76,6 +78,21 @@ class ContentManagementController extends Controller
                 'content.slides.*.image' => 'nullable|string|max:255',
                 'content.slides.*.buttonText' => 'required|string|max:255',
             ],
+            'users-cards' => [
+                'content.cards' => 'required|array|min:1',
+                'content.cards.*.title' => 'required|string|max:255',
+                'content.cards.*.listItems' => 'required|array|min:1',
+                'content.cards.*.listItems.*' => 'required|string|max:255',
+                'content.cards.*.icon' => 'required|string|max:255',
+            ],
+            'features' => [
+                'content.features' => 'required|array|min:1',
+                'content.features.*.type' => 'required|string|max:255',
+                'content.features.*.title' => 'required|string|max:255',
+                'content.features.*.subtitle' => 'required|string|max:255',
+                'content.features.*.image' => 'nullable|string|max:255',
+                'content.features.*.cta' => 'required|string|max:255',
+            ],
 
         ];
 
@@ -92,6 +109,19 @@ class ContentManagementController extends Controller
                                 $slide['image'],
                                 "sections/hero/slide-{$index}",
                                 "hero-slide-{$index}"
+                            );
+                        }
+                    }
+                }
+                break;
+            case 'features':
+                if (isset($content['features'])) {
+                    foreach ($content['features'] as $index => $feature) {
+                        if (!empty($feature['image']) && !str_starts_with($feature['image'], '/storage/')) {
+                            $content['features'][$index]['image'] = '/' . $this->moveTempImage(
+                                $feature['image'],
+                                "sections/features/feature-{$index}",
+                                "feature-{$index}"
                             );
                         }
                     }

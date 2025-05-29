@@ -9,6 +9,8 @@ import Footer from "@/Partials/Home/Footer.vue";
 
 const props = defineProps({
     hero: Object,
+    usersCards: Object,
+    features: Object,
 });
 </script>
 
@@ -22,10 +24,10 @@ const props = defineProps({
         <Teaser />
 
         <!-- Users Cards -->
-        <UsersCards />
+        <UsersCards :usersCards="props.usersCards" />
 
         <!-- Features -->
-        <Features />
+        <Features :features="props.features" />
 
         <!-- Our Numbers -->
         <OurNumbers />

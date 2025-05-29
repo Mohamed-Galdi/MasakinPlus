@@ -10,29 +10,11 @@ import { Link } from "@inertiajs/vue3";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const slides = [
-    {
-        type: "Owners",
-        title: "تريد تحقيق اقصى استفادة من عقارك؟",
-        subtitle: "اعرض عقارك واستمتع بإدارة احترافية",
-        image: "/assets/home_images/owner.svg",
-        cta: "اعرض الآن",
-    },
-    {
-        type: "Investors",
-        title: "تريد الاستثمار في العقار دون امتلاكه؟",
-        subtitle: "استثمر بذكاء مع عوائد مضمونة",
-        image: "/assets/home_images/investor.svg",
-        cta: "استثمر الآن",
-    },
-    {
-        type: "Tenants",
-        title: "تبحث عن أفضل سكن بأفضل ثمن؟",
-        subtitle: "ابحث عن منزلك المثالي بسهولة",
-        image: "/assets/home_images/tenant.svg",
-        cta: "ابحث الآن",
-    },
-];
+const props = defineProps({
+    features: Object,
+});
+
+const slides = JSON.parse(JSON.stringify(props.features.content.features));
 
 const sectionRef = ref(null);
 const imageRef = ref(null);

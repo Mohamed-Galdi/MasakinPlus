@@ -24,3 +24,8 @@ property_images/property_*/*
 !sections/hero/
 !sections/hero/slide-[0-2]/
 !sections/hero/slide-[0-2]/hero-slide-[0-2]-default.jpg
+
+# Keep features section default images
+!sections/features/
+!sections/features/feature-[0-2]/
+!sections/features/feature-[0-2]/feature-[0-2]-default.svg

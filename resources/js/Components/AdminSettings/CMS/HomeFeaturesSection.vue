@@ -11,14 +11,14 @@ import Toast from "primevue/toast";
 const toast = useToast();
 
 const props = defineProps({
-    hero: Object,
+    features: Object,
 });
 
-// Initialize form with slides data
+// Initialize form with features data
 const form = useForm({
-    section_id: props.hero.id,
+    section_id : props.features.id,
     content: {
-        slides: JSON.parse(JSON.stringify(props.hero.content.slides)),
+        features: JSON.parse(JSON.stringify(props.features.content.features)),
     },
 });
 
@@ -27,29 +27,29 @@ const currentSlideIndex = ref(0);
 
 // Watch for changes in currentSlideIndex to ensure image field is set
 watch(currentSlideIndex, () => {
-    form.content.slides[currentSlideIndex.value].image =
-        form.content.slides[currentSlideIndex.value].image || null;
+    form.content.features[currentSlideIndex.value].image =
+        form.content.features[currentSlideIndex.value].image || null;
 });
 
 // Carousel navigation
 const nextSlide = () => {
     currentSlideIndex.value =
-        (currentSlideIndex.value + 1) % form.content.slides.length;
+        (currentSlideIndex.value + 1) % form.content.features.length;
 };
 
 const prevSlide = () => {
     currentSlideIndex.value =
-        (currentSlideIndex.value - 1 + form.content.slides.length) %
-        form.content.slides.length;
+        (currentSlideIndex.value - 1 + form.content.features.length) %
+        form.content.features.length;
 };
 
 // File upload handling
 function handleFileUploaded(fileFolder) {
-    form.content.slides[currentSlideIndex.value].image = fileFolder;
+    form.content.features[currentSlideIndex.value].image = fileFolder;
 }
 
 function handleFileReverted() {
-    form.content.slides[currentSlideIndex.value].image = null;
+    form.content.features[currentSlideIndex.value].image = null;
 }
 
 // Form submission
@@ -80,7 +80,7 @@ const submit = () => {
 </script>
 
 <template>
-    <div>
+   <div>
         <Toast position="top-center" />
         <form @submit.prevent="submit" class="space-y-6">
             <div class="relative">
@@ -95,7 +95,7 @@ const submit = () => {
                     <div class="text-center">
                         <span class="text-sm text-slate-600">
                             {{ currentSlideIndex + 1 }} /
-                            {{ form.content.slides.length }}
+                            {{ form.content.features.length }}
                         </span>
                     </div>
                     <Button
@@ -104,10 +104,10 @@ const submit = () => {
                         @click="nextSlide"
                     />
                 </div>
-
+    
                 <!-- Current Slide -->
                 <div
-                    v-if="form.content.slides.length > 0"
+                    v-if="form.content.features.length > 0"
                     class="p-6 border rounded-xl bg-white shadow space-y-4"
                 >
                     <div class="flex gap-4 items-center">
@@ -119,8 +119,7 @@ const submit = () => {
                                 >
                                 <InputText
                                     v-model="
-                                        form.content.slides[currentSlideIndex]
-                                            .title
+                                        form.content.features[currentSlideIndex].title
                                     "
                                     class="w-full"
                                 />
@@ -133,15 +132,15 @@ const submit = () => {
                                 >
                                 <Textarea
                                     v-model="
-                                        form.content.slides[currentSlideIndex]
-                                            .description
+                                        form.content.features[currentSlideIndex]
+                                            .subtitle
                                     "
                                     class="w-full"
                                     rows="3"
                                     autoResize
                                 />
                             </div>
-
+    
                             <div>
                                 <label
                                     class="block mb-1 text-sm font-semibold text-slate-600"
@@ -149,14 +148,16 @@ const submit = () => {
                                 >
                                 <InputText
                                     v-model="
-                                        form.content.slides[currentSlideIndex]
-                                            .buttonText
+                                        form.content.features[currentSlideIndex]
+                                            .cta
                                     "
                                     class="w-full"
                                 />
                             </div>
+    
+                            
                         </div>
-
+    
                         <div class="w-1/2">
                             <label
                                 class="block mb-1 text-sm font-semibold text-slate-600"
@@ -166,7 +167,7 @@ const submit = () => {
                             <FileUpload
                                 :key="currentSlideIndex"
                                 :initial-files="
-                                    form.content.slides[currentSlideIndex].image
+                                    form.content.features[currentSlideIndex].image
                                 "
                                 @file-uploaded="handleFileUploaded"
                                 @file-reverted="handleFileReverted"
@@ -175,7 +176,7 @@ const submit = () => {
                     </div>
                 </div>
             </div>
-
+    
             <div class="text-center">
                 <Button
                     severity="success"
@@ -187,5 +188,5 @@ const submit = () => {
                 />
             </div>
         </form>
-    </div>
+   </div>
 </template>
