@@ -6,27 +6,36 @@ import TimeLine from "@/Partials/About/TimeLine.vue";
 import Team from "@/Partials/About/Team.vue";
 import Contact from "@/Partials/About/Contact.vue";
 import Footer from "@/Partials/Home/Footer.vue";
+
+const props = defineProps({
+    hero: Object,
+    mission: Object,
+    howItWorks: Object,
+    timeline: Object,
+    team: Object,
+    contact: Object,
+});
 </script>
 
 <template>
     <div class="about-us-page">
         <!-- Modern Hero Section -->
-        <Hero />
+        <Hero :hero="props.hero" />
 
         <!-- Mission Section -->
-        <Mission />
+        <Mission :mission="props.mission" />
 
         <!-- How It Works Section - Redesigned -->
-        <HowItWorks />
+        <HowItWorks :howItWorks="props.howItWorks" />
 
         <!-- Timeline Section - Fixed -->
-        <TimeLine />
+        <TimeLine :timeline="props.timeline" />
 
         <!-- Team Section - Kept as is -->
-        <Team />
+        <Team :team="props.team" />
 
         <!-- Contact Section - Kept as is -->
-        <Contact />
+        <Contact :contact="props.contact" />
     </div>
     <Footer />
 </template>

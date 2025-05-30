@@ -1,4 +1,9 @@
 <script setup>
+const props = defineProps({
+    contact: Object,
+});
+
+const content = JSON.parse(JSON.stringify(props.contact.content.cards));
 </script>
 
 <template>
@@ -52,10 +57,10 @@
                                     </div>
                                     <div>
                                         <p class="font-bold">
-                                            الرياض، المملكة العربية السعودية
+                                           {{ content.address.title }}
                                         </p>
                                         <p class="text-teal-200 font-BeinNormal">
-                                            طريق الملك فهد
+                                            {{ content.address.description }}
                                         </p>
                                     </div>
                                 </div>
@@ -68,10 +73,10 @@
                                     </div>
                                     <div>
                                         <p class="font-bold text-end" dir="ltr">
-                                            +966 12 345 6789
+                                            {{ content.phone.title }}
                                         </p>
                                         <p class="text-teal-200 font-BeinNormal">
-                                            من الأحد إلى الخميس، ٩ ص - ٥ م
+                                            {{ content.phone.description }}
                                         </p>
                                     </div>
                                 </div>
@@ -84,10 +89,10 @@
                                     </div>
                                     <div>
                                         <p class="font-bold">
-                                            info@masakinplus.sa
+                                            {{ content.email.title }}
                                         </p>
                                         <p class="text-teal-200 font-BeinNormal">
-                                            تواصل معنا في أي وقت
+                                            {{ content.email.description }}
                                         </p>
                                     </div>
                                 </div>

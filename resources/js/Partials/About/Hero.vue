@@ -4,6 +4,12 @@ import { gsap } from "gsap";
 import HomeButton from "@/Components/HomeButton.vue";
 import { Link } from "@inertiajs/vue3";
 
+const props = defineProps({
+    hero: Object,
+});
+
+const content = JSON.parse(JSON.stringify(props.hero.content));
+
 // Refs
 const heroRef = ref(null);
 let tl = null;
@@ -99,32 +105,30 @@ onBeforeUnmount(() => {
                 <h1
                     class="hero-title font-BlueOcean text-white text-3xl lg:text-5xl"
                 >
-                    مساكن بلس
+                    {{ content.title }}
                 </h1>
                 <p
                     class="hero-subtitle text-xl lg:text-3xl text-gray-300 max-w-lg font-BeinNormal"
                 >
-                    نعيد تعريف الاستثمار العقاري في المملكة العربية السعودية من
-                    خلال منصة مبتكرة تربط بين أصحاب العقارات والمستثمرين
-                    والمستأجرين
+                    {{ content.subtitle }}
                 </p>
                 <div class="hero-cta flex flex-wrap gap-4 font-Bein">
-                    <Link href="#mission"
+                    <Link :href="content.primaryButton.link"
                         class="group relative overflow-hidden rounded-full bg-gradient-to-r from-teal-600 to-teal-800 px-8 py-4 font-bold transition-all duration-300"
                     >
                         <span
                             class="relative z-10 text-white group-hover:text-teal-700"
-                            >اكتشف رؤيتنا</span
+                            > {{ content.primaryButton.text }}</span
                         >
                         <span
                             class="absolute inset-0 bg-white translate-y-full group-hover:translate-y-0 transition-transform duration-300"
                         ></span>
                     </Link>
-                    <Link href="#contact"
+                    <Link :href="content.secondaryButton.link"
                         class="group hover:text-teal-800 relative overflow-hidden rounded-full border-2 border-white px-8 py-4 font-bold text-white transition-all duration-300"
                     >
                         <span class="relative z-10 flex items-center gap-2">
-                            تواصل معنا
+                            {{ content.secondaryButton.text }}
                             <i class="pi pi-arrow-left w-4 h-4" />
                         </span>
                         <span
@@ -143,7 +147,7 @@ onBeforeUnmount(() => {
                             class="absolute inset-0 bg-gradient-to-br from-teal-600/20 to-teal-800/20 mix-blend-overlay"
                         ></div>
                         <img
-                            src="/assets/about_us_images/about_us.jpeg"
+                            :src="content.image"
                             alt="مساكن بلس العقارية"
                             class="w-full h-full object-cover"
                             loading="eager"
@@ -153,13 +157,13 @@ onBeforeUnmount(() => {
                         class="absolute font-Bein bg-gradient-to-br text-white px-6 py-3 rounded-full shadow-lg"
                         :class="['-bottom-6 -left-6 from-teal-600 to-teal-800']"
                     >
-                        <span class="font-bold">منصة رائدة</span>
+                        <span class="font-bold">{{ content.terms.term1 }}</span>
                     </div>
                     <div
                         class="absolute font-Bein bg-gradient-to-br text-white px-6 py-3 rounded-full shadow-lg"
                         :class="['-top-6 -right-6 from-teal-700 to-teal-900']"
                     >
-                        <span class="font-bold">تقنية متطورة</span>
+                        <span class="font-bold">{{ content.terms.term2 }}</span>
                     </div>
                 </div>
             </div>

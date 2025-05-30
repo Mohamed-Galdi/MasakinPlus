@@ -3,36 +3,18 @@ import { ref, onMounted } from "vue";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
+const props = defineProps({
+    timeline: Object,
+});
+
+
+const milestones = JSON.parse(JSON.stringify(props.timeline.content.milestones));
+
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
 
 const timelineRef = ref(null);
-const milestones = ref([
-    {
-        year: "2022",
-        title: "انطلاقة الرؤية",
-        description:
-            "بدأت فكرة مساكن بلس بهدف إحداث ثورة في سوق العقارات عبر حلول رقمية مبتكرة.",
-    },
-    {
-        year: "2023",
-        title: "إطلاق المنصة رسميا",
-        description:
-            "تم إطلاق منصتنا الرقمية، موفرةً تجربة سلسة لأصحاب العقارات والمستثمرين والمستأجرين.",
-    },
-    {
-        year: "2024",
-        title: "التوسع على مستوى المملكة",
-        description:
-            "وسعنا نطاق خدماتنا لتشمل مختلف المدن السعودية، مما عزز من فرص الاستثمار والتأجير.",
-    },
-    {
-        year: "2025",
-        title: "شراكات استراتيجية كبرى",
-        description:
-            "عقدنا تحالفات مع كبرى الشركات العقارية والمستثمرين لتعزيز نمو السوق وزيادة العوائد.",
-    },
-]);
+
 
 // Animation function
 function setupScrollAnimations() {

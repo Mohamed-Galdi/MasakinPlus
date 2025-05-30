@@ -29,3 +29,11 @@ property_images/property_*/*
 !sections/features/
 !sections/features/feature-[0-2]/
 !sections/features/feature-[0-2]/feature-[0-2]-default.svg
+
+!sections/about/
+!sections/about/about-default.jpeg
+
+# keep team section default images
+!sections/team/
+!sections/team/member-[0-3]/
+!sections/team/member-[0-3]/member-[0-3]-default.jpg

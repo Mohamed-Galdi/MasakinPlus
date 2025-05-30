@@ -3,6 +3,12 @@ import { ref, onMounted } from "vue";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
+const props = defineProps({
+    mission: Object,
+});
+
+const content = JSON.parse(JSON.stringify(props.mission.content));
+
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
 
@@ -46,16 +52,12 @@ onMounted(() => {
                 <h2
                     class="mission-title text-2xl md:text-3xl font-bold mb-8 text-teal-800 leading-tight font-BlueOcean [word-spacing:1rem]"
                 >
-                    رؤيتنا و رسالتنا
+                    {{ content.title }}
                 </h2>
                 <p
                     class="mission-text text-xl leading-relaxed text-gray-700 font-BeinNormal"
                 >
-                    نسعى في مساكن بلس إلى إحداث ثورة في سوق العقارات السعودي من
-                    خلال منصة مبتكرة تجمع بين أصحاب العقارات والمستثمرين
-                    والمستأجرين. هدفنا هو تسهيل الاستثمار العقاري وجعله متاحا
-                    للجميع، مع توفير خيارات سكنية متنوعة تلبي احتياجات
-                    المستأجرين.
+                    {{ content.description }}
                 </p>
             </div>
         </div>

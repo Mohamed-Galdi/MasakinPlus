@@ -3,36 +3,15 @@ import { ref, onMounted } from "vue";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
+const props = defineProps({
+    team: Object,
+});
+
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
 
 const teamRef = ref(null);
-const team = ref([
-    {
-        name: "أحمد الفيصل",
-        position: "المؤسس والرئيس التنفيذي",
-        image: "assets/about_us_images/team/2222.jpg",
-        quote: "نسعى لتغيير مفهوم الاستثمار العقاري في المملكة",
-    },
-    {
-        name: "عبدالعزيز الدوسري ",
-        position: "مدير العمليات",
-        image: "assets/about_us_images/team/4444.jpg",
-        quote: "نبني جسرا بين أصحاب العقارات والمستثمرين",
-    },
-    {
-        name: "محمد القحطاني",
-        position: "رئيس قسم التطوير",
-        image: "assets/about_us_images/team/3333.jpg",
-        quote: "التكنولوجيا هي مفتاح تبسيط الاستثمار العقاري",
-    },
-    {
-        name: "فهد المطيري ",
-        position: "مدير التسويق",
-        image: "assets/about_us_images/team/1111.jpg",
-        quote: "نصنع مستقبلا أفضل للسوق العقاري السعودي",
-    },
-]);
+const team = JSON.parse(JSON.stringify(props.team.content.team));
 
 // Animation function
 function setupScrollAnimations() {

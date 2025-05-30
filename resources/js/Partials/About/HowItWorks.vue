@@ -1,6 +1,12 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 
+const props = defineProps({
+    howItWorks: Object,
+});
+
+const content = JSON.parse(JSON.stringify(props.howItWorks.content.cards));
+
 const connectionsRef = ref<HTMLElement | null>(null);
 
 onMounted(() => {
@@ -61,11 +67,10 @@ onMounted(() => {
                         class="w-12 h-12 text-teal-800 mb-4"
                     />
                     <h3 class="text-2xl font-bold text-teal-800 mb-3">
-                        أصحاب العقارات
+                        {{ content[1].title }}
                     </h3>
                     <p class="text-gray-800">
-                        زد من عائدات عقارك بسهولة من خلال منصة موثوقة تربطك
-                        بالمستأجرين والمستثمرين.
+                        {{ content[1].description }}
                     </p>
                 </div>
             </div>
@@ -82,11 +87,10 @@ onMounted(() => {
                         class="w-12 h-12 text-teal-800 mb-4"
                     />
                     <h3 class="text-2xl font-bold text-teal-800 mb-3">
-                        المستثمرون
+                        {{ content[0].title }}
                     </h3>
                     <p class="text-gray-800">
-                        استثمر في العقارات بسهولة واستمتع بعوائد ثابتة دون
-                        الحاجة إلى إدارتها.
+                        {{ content[0].description }}
                     </p>
                 </div>
             </div>
@@ -103,11 +107,10 @@ onMounted(() => {
                         class="w-12 h-12 text-teal-800 mb-4"
                     />
                     <h3 class="text-2xl font-bold text-teal-800 mb-3">
-                        المستأجرون
+                        {{ content[2].title }}
                     </h3>
                     <p class="text-gray-800">
-                        اكتشف عقارات مميزة بأسعار تنافسية واستأجر منزلك الجديد
-                        بكل سهولة وأمان.
+                        {{ content[2].description }}
                     </p>
                 </div>
             </div>
