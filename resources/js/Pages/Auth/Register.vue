@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { Head, useForm, Link } from "@inertiajs/vue3";
 import InputText from "primevue/inputtext";
 import FloatLabel from "primevue/floatlabel";
@@ -12,6 +12,25 @@ import Toast from "primevue/toast";
 import Avatar from "primevue/avatar";
 import AvatarGroup from "primevue/avatargroup";
 import AuthLayout from "@/Layouts/AuthLayout.vue";
+
+// ///////////////////////////////////////////
+import intlTelInput from "intl-tel-input";
+import { ar } from "intl-tel-input/i18n"; // Russian
+
+const iti = ref(null);
+
+onMounted(() => {
+    const input = document.querySelector("#phone");
+    iti.value = intlTelInput(input, {
+        i18n: ar,
+        initialCountry: "sa",
+        onlyCountries: ["sa", "ma", "ae", "kw", "eg", "bh", "qa", "om", "ae", "ye"],
+        countryOrder: ["sa", "ma", "ae", "kw","eg", "bh", "qa", "om", "ae", "ye"],
+        loadUtils: () => import("intl-tel-input/utils"),
+    });
+});
+
+// ///////////////////////////////////////////
 
 defineOptions({
     layout: AuthLayout,
@@ -28,6 +47,7 @@ const toast = useToast();
 
 const registerForm = useForm({
     accountType: "",
+    phone: "",
     username: "",
     email: "",
     password: "",
@@ -48,6 +68,16 @@ function submit() {
             severity: "error",
             summary: "خطأ",
             detail: "يجب الموافقة على الشروط والأحكام للمتابعة.",
+            life: 3000,
+        });
+        return;
+    }
+
+    if (!iti.value.isValidNumber()) {
+        toast.add({
+            severity: "error",
+            summary: "خطأ",
+            detail: "رقم الهاتف غير صحيح",
             life: 3000,
         });
         return;
@@ -155,6 +185,14 @@ function submit() {
                             class="w-full"
                         />
 
+                        <!-- phone -->
+                        <input
+                            type="phone"
+                            id="phone"
+                            v-model="registerForm.phone"
+                            class="w-full"
+                        />
+
                         <!-- username -->
                         <FloatLabel variant="on" class="w-full">
                             <InputText
@@ -241,4 +279,11 @@ function submit() {
     </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.iti {
+    --iti-path-flags-1x: url("path/to/flags.webp");
+    --iti-path-flags-2x: url("path/to/flags@2x.webp");
+    --iti-path-globe-1x: url("path/to/globe.webp");
+    --iti-path-globe-2x: url("path/to/globe@2x.webp");
+}
+</style>

@@ -1,12 +1,10 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\Auth\ConfirmablePasswordController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
 use App\Http\Controllers\Auth\EmailVerificationPromptController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\OTPLoginController;
-use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
@@ -27,6 +25,10 @@ Route::middleware('guest')->group(function () {
     // otp
     Route::get('/verify-otp', [OTPLoginController::class, 'showOTPForm'])->name('otp');
     Route::post('/verify-otp', [OTPLoginController::class, 'verifyOTP'])->name('otp.verify');
+
+    // phone otm
+    Route::get('/verify-phone-otp', [OTPLoginController::class, 'showPhoneOTPForm'])->name('phone.otp');
+    Route::post('/verify-phone-otp', [OTPLoginController::class, 'verifyPhoneOTP'])->name('phone.otp.verify');
 
     // forgot password
     Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])

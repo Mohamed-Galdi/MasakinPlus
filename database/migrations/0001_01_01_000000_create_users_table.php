@@ -15,6 +15,8 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('phone')->nullable();
+            $table->timestamp('phone_verified_at')->nullable();
             $table->string('image')->default('/storage/users_images/default-user-image.webp')->nullable();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
