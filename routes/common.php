@@ -5,7 +5,7 @@ use App\Http\Controllers\Common\UserAccountController;
 use App\Http\Controllers\Common\WalletController;
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('/user')->middleware(['auth', 'phone_verified', 'not-admin'])->group(function () {
+Route::prefix('/user')->middleware(['auth', 'not-admin'])->group(function () {
 
     // Users Account Management
     Route::prefix('/account')->controller(UserAccountController::class)->name('account.')->group(function () {

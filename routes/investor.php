@@ -4,7 +4,7 @@ use App\Http\Controllers\Investor\InvestmentController;
 use App\Http\Controllers\Investor\OfferController;
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('/investor')->middleware(['auth', 'phone_verified', 'investor'])->group(function () {
+Route::prefix('/investor')->middleware(['auth', 'investor'])->group(function () {
 
     Route::redirect('/', '/investor/offers')->name('investor.dashboard');
 

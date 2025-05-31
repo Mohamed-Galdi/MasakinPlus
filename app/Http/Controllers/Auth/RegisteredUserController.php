@@ -79,7 +79,7 @@ class RegisteredUserController extends Controller
         // Store the user ID in session for OTP verification
         session()->put('otp_user_id', $user->id);
 
-        $user->notify(new PhoneVerification($user->otp_code));
+        // $user->notify(new PhoneVerification($user->otp_code));
 
         return redirect(route('phone.otp'));
     }
