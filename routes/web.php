@@ -20,7 +20,7 @@ Route::get('/dashboard', function () {
         'owner' => redirect()->route('owner.dashboard'),
         default => redirect()->route('home'),
     };
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth', 'phone_verified'])->name('dashboard');
 
 Route::get('/test', function () {
     $statusOptions = PropertyStatus::options();

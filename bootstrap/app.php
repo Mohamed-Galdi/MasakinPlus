@@ -4,6 +4,7 @@ use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\InvestorMiddleware;
 use App\Http\Middleware\NotAdminMiddleware;
 use App\Http\Middleware\OwnerMiddleware;
+use App\Http\Middleware\PhoneVerificationMiddleware;
 use App\Http\Middleware\TenantMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -26,6 +27,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'investor' => InvestorMiddleware::class,
             'owner' => OwnerMiddleware::class,
             'tenant' => TenantMiddleware::class,
+            'phone_verified' => PhoneVerificationMiddleware::class,
         ]);
         //
     })

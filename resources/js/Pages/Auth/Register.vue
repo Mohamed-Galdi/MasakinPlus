@@ -12,10 +12,8 @@ import Toast from "primevue/toast";
 import Avatar from "primevue/avatar";
 import AvatarGroup from "primevue/avatargroup";
 import AuthLayout from "@/Layouts/AuthLayout.vue";
-
-// ///////////////////////////////////////////
 import intlTelInput from "intl-tel-input";
-import { ar } from "intl-tel-input/i18n"; // Russian
+import { ar } from "intl-tel-input/i18n"; 
 
 const iti = ref(null);
 
@@ -30,7 +28,6 @@ onMounted(() => {
     });
 });
 
-// ///////////////////////////////////////////
 
 defineOptions({
     layout: AuthLayout,
@@ -82,7 +79,8 @@ function submit() {
         });
         return;
     }
-
+    
+    registerForm.phone = iti.value.getNumber();
     registerForm.post(route("register"), {
         onError: () => {
             const errorMessage = Object.values(registerForm.errors)[0];
@@ -189,7 +187,6 @@ function submit() {
                         <input
                             type="phone"
                             id="phone"
-                            v-model="registerForm.phone"
                             class="w-full"
                         />
 
@@ -278,12 +275,3 @@ function submit() {
         </div>
     </div>
 </template>
-
-<style scoped>
-.iti {
-    --iti-path-flags-1x: url("path/to/flags.webp");
-    --iti-path-flags-2x: url("path/to/flags@2x.webp");
-    --iti-path-globe-1x: url("path/to/globe.webp");
-    --iti-path-globe-2x: url("path/to/globe@2x.webp");
-}
-</style>

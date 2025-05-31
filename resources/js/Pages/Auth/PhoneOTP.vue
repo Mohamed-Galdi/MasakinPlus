@@ -47,7 +47,7 @@ function resendOtp() {
             toast.add({
                 severity: "success",
                 summary: "تم",
-                detail: "تم إرسال رمز جديد إلى بريدك الإلكتروني",
+                detail: "تم إرسال رمز جديد إلى رقم هاتفك",
                 life: 3000,
             });
         },
@@ -86,7 +86,7 @@ function resendOtp() {
                             <h1
                             class="font-bold text-teal-800 font-Bein text-xl mb-2"
                         >
-                            أدخل الرمز المرسل إلى بريدك الإلكتروني للتحقق
+                            أدخل الرمز المرسل إلى رقم هاتفك
                         </h1>
 
                             <div

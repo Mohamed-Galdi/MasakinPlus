@@ -4,7 +4,7 @@ use App\Http\Controllers\Owner\InvestmentRequestController;
 use App\Http\Controllers\Owner\PropertyController;
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('/owner')->middleware(['auth', 'verified', 'owner'])->group(function () {
+Route::prefix('/owner')->middleware(['auth', 'phone_verified', 'owner'])->group(function () {
 
     Route::redirect('/', '/owner/properties')->name('owner.dashboard');
 
