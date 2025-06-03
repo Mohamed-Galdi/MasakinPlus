@@ -928,15 +928,28 @@ const formatPrice = (price) => {
                             </div>
 
                             <div class="flex flex-wrap gap-3 mt-3">
+                                <div class="flex items-center">
+                                    <Icon
+                                        icon="fa-solid fa-up-right-and-down-left-from-center"
+                                        class="ml-1 w-[0.9rem] h-[0.9rem] text-slate-500"
+                                    />
+                                    <span class="text-sm"
+                                        >{{
+                                            investmentRequest.property.area
+                                        }}
+                                        م²</span
+                                    >
+                                </div>
                                 <div
                                     class="flex items-center"
                                     v-if="
                                         investmentRequest.property.bedrooms > 0
                                     "
                                 >
-                                    <i
-                                        class="pi pi-home ml-1 text-gray-500"
-                                    ></i>
+                                    <Icon
+                                        icon="fa-solid fa-bed"
+                                        class="ml-1 w-[1rem] h-[1rem] text-slate-500"
+                                    />
                                     <span class="text-sm"
                                         >{{
                                             investmentRequest.property.bedrooms
@@ -950,25 +963,16 @@ const formatPrice = (price) => {
                                         investmentRequest.property.bathrooms > 0
                                     "
                                 >
-                                    <i
-                                        class="pi pi-inbox ml-1 text-gray-500"
-                                    ></i>
+                                    <Icon
+                                        icon="fa-solid fa-shower"
+                                        class="ml-1 w-[1rem] h-[1rem] text-slate-500"
+                                    />
+
                                     <span class="text-sm"
                                         >{{
                                             investmentRequest.property.bathrooms
                                         }}
                                         حمامات</span
-                                    >
-                                </div>
-                                <div class="flex items-center">
-                                    <i
-                                        class="pi pi-stop ml-1 text-gray-500"
-                                    ></i>
-                                    <span class="text-sm"
-                                        >{{
-                                            investmentRequest.property.area
-                                        }}
-                                        م²</span
                                     >
                                 </div>
                             </div>

@@ -219,22 +219,31 @@ const textHelpers = useTextHelpers();
                         >
                     </div>
 
-                    <div class="flex flex-wrap gap-4 mb-3">
+                    <div class="flex flex-wrap gap-4 my-4">
                         <div class="flex items-center">
-                            <i class="pi pi-home ml-1 text-gray-500"></i>
+                            <Icon
+                                icon="fa-solid fa-up-right-and-down-left-from-center"
+                                class="ml-1 w-[0.9rem] h-[0.9rem] text-slate-500"
+                            />
+                            <span class="text-sm">{{ property.area }} م²</span>
+                        </div>
+                        <div class="flex items-center">
+                            <Icon
+                                icon="fa-solid fa-bed"
+                                class="ml-1 w-[1rem] h-[1rem] text-slate-500"
+                            />
                             <span class="text-sm"
                                 >{{ property.bedrooms }} غرف</span
                             >
                         </div>
                         <div class="flex items-center">
-                            <i class="pi pi-inbox ml-1 text-gray-500"></i>
+                            <Icon
+                                icon="fa-solid fa-shower"
+                                class="ml-1 w-[1rem] h-[1rem] text-slate-500"
+                            />
                             <span class="text-sm"
                                 >{{ property.bathrooms }} حمامات</span
                             >
-                        </div>
-                        <div class="flex items-center">
-                            <i class="pi pi-stop ml-1 text-gray-500"></i>
-                            <span class="text-sm">{{ property.area }} م²</span>
                         </div>
                     </div>
 
@@ -253,9 +262,13 @@ const textHelpers = useTextHelpers();
                                     3
                                 )"
                                 :key="amenity.id"
-                                class="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded-full"
+                                class="bg-gray-100 text-gray-700 text-xs px-2 py-2 rounded-full flex items-center gap-1"
                             >
-                                {{ amenity.name }}
+                                <Icon
+                                    :icon="amenity.icon"
+                                    class="w-[0.9rem] h-[0.9rem] text-slate-700"
+                                />
+                                <p>{{ amenity.name }}</p>
                             </div>
                             <div
                                 v-if="property.amenities.length > 3"
@@ -273,9 +286,7 @@ const textHelpers = useTextHelpers();
                         <div>
                             <p class="text-sm text-gray-500">إجار الليلة</p>
                             <p class="text-lg font-bold text-emerald-600">
-                                <template
-                                    v-if="property.nightly_rent === null"
-                                >
+                                <template v-if="property.nightly_rent === null">
                                     لم يحدد بعد
                                 </template>
                                 <template v-else>
@@ -286,8 +297,11 @@ const textHelpers = useTextHelpers();
                         </div>
                         <!--  Edit Button -->
                         <div class="flex items-center justify-center gap-2">
-                            <Link v-if="property.status === 'draft'"
-                                :href="route('owner.properties.edit', property.id)"
+                            <Link
+                                v-if="property.status === 'draft'"
+                                :href="
+                                    route('owner.properties.edit', property.id)
+                                "
                                 class="flex items-center justify-center gap-2 py-2 px-3 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 rounded-md transition-all shadow-sm hover:shadow"
                             >
                                 <i class="pi pi-pencil text-gray-600"></i>
@@ -295,7 +309,9 @@ const textHelpers = useTextHelpers();
                             </Link>
                             <!--  Show Button -->
                             <Link
-                                :href="route('owner.properties.show', property.id)"
+                                :href="
+                                    route('owner.properties.show', property.id)
+                                "
                                 class="flex items-center justify-center gap-2 py-2 px-3 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 rounded-md transition-all shadow-sm hover:shadow"
                             >
                                 <i class="pi pi-eye text-gray-600"></i>

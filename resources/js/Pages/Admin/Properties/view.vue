@@ -83,7 +83,6 @@ const formatPrice = (price) => {
                 <p class="flex gap-1">العودة</p>
                 <i class="pi pi-arrow-left"></i>
             </Link>
-           
         </Header>
 
         <!-- Main Content -->
@@ -302,15 +301,11 @@ const formatPrice = (price) => {
                                 </p>
                             </div>
                             <div>
-                                <p class="text-gray-500 text-sm">
-                                    إجار الليلة
-                                </p>
+                                <p class="text-gray-500 text-sm">إجار الليلة</p>
                                 <p class="text-lg text-emerald-600">
                                     {{
                                         property.nightly_rent !== null
-                                            ? formatPrice(
-                                                  property.nightly_rent
-                                              )
+                                            ? formatPrice(property.nightly_rent)
                                             : "لم يحدد بعد"
                                     }}
                                 </p>
@@ -347,14 +342,18 @@ const formatPrice = (price) => {
                         >
                             لا توجد مرافقات
                         </div>
-                        <div v-else class="flex flex-wrap gap-2">
-                            <Tag
-                                v-for="amenity in property.amenities"
+                        <div class="flex flex-wrap gap-2">
+                            <div
+                                v-for="amenity in property.amenities.slice(0, 3)"
                                 :key="amenity.id"
-                                :value="amenity.name"
-                                rounded
-                                class="bg-gray-100 text-gray-700"
-                            />
+                                class="bg-gray-100 text-gray-700 text-xs px-2 py-2 rounded-full flex items-center gap-1 w-fit"
+                            >
+                                <Icon
+                                    :icon="amenity.icon"
+                                    class="w-[0.9rem] h-[0.9rem] text-slate-700"
+                                />
+                                <p>{{ amenity.name }}</p>
+                            </div>
                         </div>
                     </template>
                 </Card>

@@ -24,7 +24,7 @@ class PropertyController extends Controller
 
         $properties = auth()->user()->ownedProperties()
             ->with([
-                'amenities' => fn ($query) => $query->select('amenities.id', 'name'),
+                'amenities' => fn ($query) => $query->select('amenities.id', 'name', 'icon'),
                 'images' => fn ($query) => $query->select('property_images.id', 'property_id', 'path'),
             ])
             ->when($typeFilter && $typeFilter !== 'all', function ($query) use ($typeFilter) {
@@ -52,7 +52,7 @@ class PropertyController extends Controller
     public function create()
     {
         $typeOptions = PropertyType::options();
-        $amenities = Amenity::select('id', 'name')->get();
+        $amenities = Amenity::select('id', 'name', 'icon')->get();
 
         return inertia('Owner/Properties/create', compact('typeOptions', 'amenities'));
     }
@@ -132,7 +132,7 @@ class PropertyController extends Controller
 
         $typeOptions = PropertyType::options();
         $statusOptions = PropertyStatus::options();
-        $amenities = Amenity::select('id', 'name')->get();
+        $amenities = Amenity::select('id', 'name', 'icon')->get();
 
         $property->load('amenities', 'images');
 

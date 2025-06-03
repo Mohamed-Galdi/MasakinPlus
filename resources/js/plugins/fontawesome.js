@@ -20,7 +20,16 @@ import {
     faCircleDollarToSlot,
     faHouseCircleCheck,
     faFire,
-    faFilePen
+    faFilePen,
+    faWifi,
+    faSquareParking,
+    faFan,
+    faSeedling,
+    faPersonSwimming,
+    faDumbbell,
+    faShower,
+    faBed,
+    faUpRightAndDownLeftFromCenter
 
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -49,7 +58,16 @@ library.add(
     faFileZipper,
     faHouseCircleCheck,
     faFire,
-    faFilePen
+    faFilePen,
+    faWifi,
+    faSquareParking,
+    faFan,
+    faSeedling,
+    faPersonSwimming,
+    faDumbbell,
+    faShower,
+    faBed,
+    faUpRightAndDownLeftFromCenter
 );
 
 export { FontAwesomeIcon };

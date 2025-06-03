@@ -161,9 +161,11 @@ const propertyAmenities = computed(() => {
                                     <div
                                         class="text-center p-3 bg-gray-50 rounded-lg"
                                     >
-                                        <i
-                                            class="pi pi-home text-xl text-emerald-600 mb-2"
-                                        ></i>
+                                        <Icon
+                                            icon="fa-solid fa-up-right-and-down-left-from-center"
+                                            class="ml-1 w-[0.9rem] h-[0.9rem] text-slate-500"
+                                        />
+
                                         <p class="text-xs text-gray-600 mb-1">
                                             المساحة
                                         </p>
@@ -181,9 +183,10 @@ const propertyAmenities = computed(() => {
                                     <div
                                         class="text-center p-3 bg-gray-50 rounded-lg"
                                     >
-                                        <i
-                                            class="pi pi-moon text-xl text-emerald-600 mb-2"
-                                        ></i>
+                                        <Icon
+                                            icon="fa-solid fa-bed"
+                                            class="ml-1 w-[1rem] h-[1rem] text-slate-500"
+                                        />
                                         <p class="text-xs text-gray-600 mb-1">
                                             غرف النوم
                                         </p>
@@ -199,9 +202,11 @@ const propertyAmenities = computed(() => {
                                     <div
                                         class="text-center p-3 bg-gray-50 rounded-lg"
                                     >
-                                        <i
-                                            class="pi pi-droplet text-xl text-emerald-600 mb-2"
-                                        ></i>
+                                        <Icon
+                                            icon="fa-solid fa-shower"
+                                            class="ml-1 w-[1rem] h-[1rem] text-slate-500"
+                                        />
+
                                         <p class="text-xs text-gray-600 mb-1">
                                             الحمامات
                                         </p>
@@ -230,13 +235,17 @@ const propertyAmenities = computed(() => {
                                 </template>
                                 <template #content>
                                     <div class="flex flex-wrap gap-2">
-                                        <span
+                                        <div
                                             v-for="amenity in propertyAmenities"
                                             :key="amenity.id"
-                                            class="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded-full cursor-pointer"
+                                            class="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded-full cursor-pointer flex gap-1 items-center"
                                         >
-                                            {{ amenity.name }}
-                                        </span>
+                                            <Icon
+                                                :icon="amenity.icon"
+                                                class="w-[0.9rem] h-[0.9rem] text-slate-700"
+                                            />
+                                            <p>{{ amenity.name }}</p>
+                                        </div>
                                     </div>
                                 </template>
                             </Card>

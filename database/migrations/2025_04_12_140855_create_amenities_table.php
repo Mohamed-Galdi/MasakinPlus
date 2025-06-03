@@ -15,17 +15,18 @@ return new class extends Migration
         Schema::create('amenities', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique()->index();
+            $table->string('icon')->nullable();
             $table->timestamps();
         });
 
         // Seed default Arabic amenities
         $amenities = [
-            ['name' => 'واي فاي'],
-            ['name' => 'موقف سيارات'],
-            ['name' => 'مكيفات'],
-            ['name' => 'حديقة'],
-            ['name' => 'مسبح'],
-            ['name' => 'صالة رياضية'],
+            ['name' => 'واي فاي', 'icon' => 'fa-solid fa-wifi'],
+            ['name' => 'موقف سيارات', 'icon' => 'fa-solid fa-square-parking'],
+            ['name' => 'مكيفات', 'icon' => 'fa-solid fa-fan'],
+            ['name' => 'حديقة', 'icon' => 'fa-solid fa-seedling'],
+            ['name' => 'مسبح', 'icon' => 'fa-solid fa-person-swimming'],
+            ['name' => 'صالة رياضية', 'icon' => 'fa-solid fa-dumbbell'],
         ];
 
         Amenity::insert($amenities);

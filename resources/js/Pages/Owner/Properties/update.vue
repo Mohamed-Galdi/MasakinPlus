@@ -46,7 +46,7 @@ const propertyTypes = ref(props.typeOptions);
 const availableAmenities = ref(props.amenities);
 
 const propertyAmenities = property.value.amenities.map((amenity) => {
-    return { id: amenity.id, name: amenity.name };
+    return { id: amenity.id, name: amenity.name, icon: amenity.icon };
 });
 
 const propertyImages = property.value.images.map((image) => {
@@ -69,6 +69,7 @@ const propertyForm = useForm({
     newImages: [], // New images added during update
     removedImages: [], // Images removed during update
 });
+
 
 // ############################################## File upload
 // Track new and removed images
@@ -338,7 +339,19 @@ function submitUpdateProperty() {
                         optionLabel="name"
                         placeholder="اختر المرافق المتوفرة"
                         class="w-full"
-                    />
+                    >
+                        <template #option="slotProps">
+                            <div
+                                class="flex items-center gap-2 font-BeinNormal"
+                            >
+                                <Icon
+                                    :icon="slotProps.option.icon"
+                                    class="w-[0.9rem] h-[0.9rem] text-slate-700"
+                                />
+                                <p>{{ slotProps.option.name }}</p>
+                            </div>
+                        </template>
+                    </MultiSelect>
                 </div>
             </div>
 

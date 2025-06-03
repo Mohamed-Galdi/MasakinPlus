@@ -154,7 +154,8 @@ function submitCreateProperty() {
                         <div class="text-center p-4">
                             <div class="mb-2">
                                 <i
-                                    class="pi pi-chart-line text-emerald-600" style="font-size: 2rem;"
+                                    class="pi pi-chart-line text-emerald-600"
+                                    style="font-size: 2rem"
                                 ></i>
                             </div>
                             <h4 class="text-lg font-bold mb-2 text-gray-800">
@@ -188,7 +189,8 @@ function submitCreateProperty() {
                         <div class="text-center p-4">
                             <div class="mb-2">
                                 <i
-                                    class="pi pi-home text-emerald-600" style="font-size: 2rem;"
+                                    class="pi pi-home text-emerald-600"
+                                    style="font-size: 2rem"
                                 ></i>
                             </div>
                             <h4 class="text-lg font-bold mb-2 text-gray-800">
@@ -200,9 +202,7 @@ function submitCreateProperty() {
                                 الإدارة.
                             </p>
                             <div class="mt-3 p-2 bg-orange-50 rounded-md">
-                                <span
-                                    class="text-sm text-orange-700 font-Bein"
-                                >
+                                <span class="text-sm text-orange-700 font-Bein">
                                     يحتاج مراجعة وموافقة الإدارة
                                 </span>
                             </div>
@@ -373,7 +373,14 @@ function submitCreateProperty() {
                         optionLabel="name"
                         placeholder="اختر المرافق المتوفرة"
                         class="w-full"
-                    />
+                    >
+                        <template #option="slotProps">
+                            <div class="flex items-center gap-2 font-BeinNormal">
+                                <Icon :icon="slotProps.option.icon" class="w-[0.9rem] h-[0.9rem] text-slate-700" />
+                                <p>{{ slotProps.option.name }}</p>
+                            </div>
+                        </template>
+                    </MultiSelect>
                 </div>
             </div>
 
