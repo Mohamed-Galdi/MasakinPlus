@@ -249,7 +249,7 @@ class InvestorPropertiesSeeder extends Seeder
                     $targetAudience,
                     $addedVal,
                     $city,
-                    $viewDescription.' '.$view,
+                    $viewDescription . ' ' . $view,
                     $secDesc,
                     $neighborhood,
                 ],
@@ -292,7 +292,7 @@ class InvestorPropertiesSeeder extends Seeder
                 'owner_id' => $ownerId,
                 'title' => $title,
                 'description' => $description,
-                'type' => $typeLabel, // Use the Arabic label, not the enum value
+                'type' => $typeLabel,
                 'city' => $city,
                 'address' => "{$neighborhood}، {$city}",
                 'area' => $area,
@@ -303,6 +303,33 @@ class InvestorPropertiesSeeder extends Seeder
                 'latitude' => fake()->randomFloat(4, 24.0, 26.0),
                 'longitude' => fake()->randomFloat(4, 45.0, 50.0),
             ];
+
+            // Add investment-related fields only for OpenForInvestment status
+            if ($status === PropertyStatus::OpenForInvestment->value) {
+                $valuation = round(fake()->numberBetween(500000, 800000) / 10000) * 10000;
+                $investmentRequired = round(fake()->numberBetween(80000, 120000) / 10000) * 10000;
+                $monthlyOperatingCost = round(fake()->numberBetween(2000, 4000) / 100) * 100;
+
+                // Generate shares ensuring total = 100%
+                $platformShare = fake()->randomFloat(2, 0.03, 0.12); // 3% to 12%
+                $ownerShare = fake()->randomFloat(2, 0.65, 0.85); // 65% to 85%
+                $investorShare = round(1.00 - $ownerShare - $platformShare, 2); // Remaining percentage
+
+                // Ensure investor share is positive (adjust if needed)
+                if ($investorShare < 0.05) {
+                    $ownerShare = 1.00 - $platformShare - 0.05;
+                    $investorShare = 0.05;
+                }
+
+                $propertyData = array_merge($propertyData, [
+                    'valuation' => $valuation,
+                    'investment_required' => $investmentRequired,
+                    'monthly_operating_cost' => $monthlyOperatingCost,
+                    'owner_share' => $ownerShare,
+                    'investor_share' => $investorShare,
+                    'platform_fee_share' => $platformShare,
+                ]);
+            }
 
             $property = Property::create($propertyData);
 
@@ -328,6 +355,5 @@ class InvestorPropertiesSeeder extends Seeder
         if (! empty($imagesToInsert)) {
             PropertyImage::insert($imagesToInsert);
         }
-
     }
 }

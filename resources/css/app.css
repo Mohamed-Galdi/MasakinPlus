@@ -178,3 +178,11 @@ border-color: #0d675b !important;
 .iti__arrow{
     display: none;
 }
+
+.filter-input .p-inputnumber-input {
+    width: 12px;
+}
+
+.p-progressbar-value{
+    background-color: #0d675b !important;
+}

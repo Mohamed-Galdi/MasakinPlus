@@ -73,7 +73,7 @@ function logout() {
     <div class="min-h-screen bg-gray-100 font-Bein">
         <!-- Top Navigation Bar -->
         <header class="bg-white shadow-sm">
-            <div class="max-w-7xl mx-auto">
+            <div class="max-w-[95rem] mx-auto">
                 <div
                     class="flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8"
                 >
@@ -254,7 +254,7 @@ function logout() {
         </header>
 
         <!-- Page Content -->
-        <main class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+        <main class="max-w-[95rem] mx-auto py-6 px-4 sm:px-6 lg:px-8">
             <slot />
         </main>
     </div>

@@ -2,6 +2,7 @@
 
 use App\Enums\PropertyStatus;
 use App\Http\Controllers\PageController;
+use App\Models\Property;
 use Illuminate\Support\Facades\Route;
 
 // Home Pages
@@ -23,9 +24,9 @@ Route::get('/dashboard', function () {
 })->middleware(['auth'])->name('dashboard');
 
 Route::get('/test', function () {
-    $statusOptions = PropertyStatus::options();
+   
 
-    return inertia('Home/Test', compact('statusOptions'));
+    return inertia('Home/Test');
 })->name('test');
 
 require __DIR__.'/auth.php';

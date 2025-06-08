@@ -10,7 +10,7 @@ class OfferController extends Controller
 {
     public function index()
     {
-        $properties = Property::where('status', PropertyStatus::OpenForInvestment)->get();
+        $properties = Property::where('status', PropertyStatus::OpenForInvestment)->with('images', 'amenities')->paginate(9);
 
         return inertia('Investor/Offers/index', compact('properties'));
     }
