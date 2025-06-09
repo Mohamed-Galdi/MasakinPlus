@@ -24,14 +24,13 @@ Route::get('/dashboard', function () {
 })->middleware(['auth'])->name('dashboard');
 
 Route::get('/test', function () {
-   
-
-    return inertia('Home/Test');
+    $properties = Property::where('status', PropertyStatus::OpenForInvestment)->with('images', 'amenities')->paginate(1);
+    return inertia('Home/Test', compact('properties'));
 })->name('test');
 
-require __DIR__.'/auth.php';
-require __DIR__.'/admin.php';
-require __DIR__.'/owner.php';
-require __DIR__.'/investor.php';
-require __DIR__.'/tenant.php';
-require __DIR__.'/common.php';
+require __DIR__ . '/auth.php';
+require __DIR__ . '/admin.php';
+require __DIR__ . '/owner.php';
+require __DIR__ . '/investor.php';
+require __DIR__ . '/tenant.php';
+require __DIR__ . '/common.php';

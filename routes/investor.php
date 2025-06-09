@@ -11,6 +11,7 @@ Route::prefix('/investor')->middleware(['auth', 'investor'])->group(function () 
     // offers
     Route::prefix('offers')->name('investor.offers.')->controller(OfferController::class)->group(function () {
         Route::get('/', 'index')->name('index');
+        Route::get('/{id}', 'show')->name('show');
     });
 
     // Investment

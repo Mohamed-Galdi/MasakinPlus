@@ -1,11 +1,13 @@
 <script setup>
 import InvestorLayout from "@/Layouts/InvestorLayout.vue";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { Link } from "@inertiajs/vue3";
 import Button from "primevue/button";
 import Slider from "primevue/slider";
 import InputNumber from "primevue/inputnumber";
 import MultiSelect from "primevue/multiselect";
+import PropertiesMapView from "@/Components/PropertiesMapView.vue";
+import PropertiesCardsView from "@/Components/PropertiesCardsView.vue";
 
 defineOptions({
     layout: InvestorLayout,
@@ -20,8 +22,18 @@ const props = defineProps({
 
 const properties = ref(props.properties.data);
 const investorPercentageFilter = ref(10);
-const currentView = ref("cards"); // 'cards' or 'map'
+const currentView = ref(localStorage.getItem("masakin:currentView") || "cards");
 const isFilterOpen = ref(false); // State for mobile filter toggle
+
+watch(currentView, (newView) => {
+    localStorage.setItem("masakin:currentView", newView);
+
+    watch(currentView, (newView) => {
+    localStorage.setItem("masakin:currentView", newView);
+});
+
+});
+
 
 // Helper functions
 const formatPrice = (price) => {
@@ -120,199 +132,17 @@ const isFilterActive = () => {
             <!-- Main Content Area -->
             <div class="flex-1">
                 <!-- Cards View -->
-                <div
-                    v-if="currentView === 'cards'"
-                    class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6"
-                >
-                    <div
-                        v-for="property in properties"
-                        :key="property.id"
-                        class="bg-white relative rounded-xl overflow-hidden border-2 border-slate-200"
-                    >
-                        <!-- Hero Image with Gradient Overlay -->
-                        <div class="relative h-52 overflow-hidden">
-                            <img
-                                :src="'/' + property.images[0]?.path"
-                                :alt="property.title"
-                                class="w-full h-full object-cover"
-                            />
-                            <div
-                                class="absolute flex justify-end top-2 left-2 w-full gap-4 text-white text-sm"
-                            >
-                                <div
-                                    class="text-slate-100 bg-slate-800/50 px-2 py-[1px] rounded-md flex items-center gap-2"
-                                >
-                                    <p>{{ property.type }}</p>
-                                </div>
-                                <div
-                                    class="text-slate-100 bg-slate-800/50 px-2 rounded-md flex items-center gap-2"
-                                >
-                                    <i
-                                        class="pi pi-map-marker"
-                                        style="font-size: 0.9rem"
-                                    ></i>
-                                    <p>{{ property.city }}</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="p-3 space-y-3">
-                            <!-- title -->
-                            <div>
-                                <p class="text-slate-700 font-BeinNormal">
-                                    {{ property.title }}
-                                </p>
-                            </div>
-
-                            <!-- progress bar -->
-                            <div class="max-w-md mx-auto p-3">
-                                <!-- Funded Amount -->
-                                <div class="relative mb-2">
-                                    <div
-                                        class="absolute -top-4"
-                                        :style="{
-                                            left: `${90 - percentageFunded}%`,
-                                        }"
-                                    >
-                                        <div
-                                            class="flex items-start gap-1 text-sm"
-                                        >
-                                            <p class="text-teal-700">
-                                                {{ formatPrice(currentFunded) }}
-                                            </p>
-                                            <img
-                                                src="/assets/rs-green.svg"
-                                                alt=""
-                                                class="w-4 h-4"
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Progress Bar with Percentage -->
-                                <div
-                                    class="relative h-6 rounded-full bg-slate-200 overflow-hidden"
-                                >
-                                    <div
-                                        class="h-full bg-gradient-to-l from-teal-800 to-teal-400 flex items-center justify-center"
-                                        :style="{
-                                            width: `${percentageFunded}%`,
-                                        }"
-                                    >
-                                        <span
-                                            class="text-xs font-bold text-white"
-                                            >{{
-                                                percentageFunded.toFixed(0)
-                                            }}%</span
-                                        >
-                                    </div>
-                                </div>
-
-                                <!-- Investment Details -->
-                                <div class="flex justify-between text-sm mt-2">
-                                    <div>
-                                        <p class="text-xs text-slate-500">
-                                            المبلغ المطلوب
-                                        </p>
-                                        <div class="flex items-start gap-1">
-                                            <p class="text-teal-700">
-                                                {{ formatPrice(totalRequired) }}
-                                            </p>
-                                            <img
-                                                src="/assets/rs-green.svg"
-                                                alt=""
-                                                class="w-4 h-4"
-                                            />
-                                        </div>
-                                    </div>
-                                    <div class="text-right">
-                                        <p class="text-xs text-slate-500">
-                                            المتبقي
-                                        </p>
-                                        <div class="flex items-start gap-1">
-                                            <p class="text-teal-700">
-                                                {{ formatPrice(remaining) }}
-                                            </p>
-                                            <img
-                                                src="/assets/rs-green.svg"
-                                                alt=""
-                                                class="w-4 h-4"
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- revenue -->
-                            <div
-                                class="max-w-sm mx-auto p-3 bg-white rounded-lg shadow-md border-t-4 border-yellow-400"
-                                dir="rtl"
-                            >
-                                <div class="text-center">
-                                    <p
-                                        class="text-sm text-slate-600 mb-2 font-medium"
-                                    >
-                                        مداخل العقار المتوقعة (شهريا)
-                                    </p>
-                                    <div
-                                        class="flex items-center justify-center gap-1 text-3xl"
-                                    >
-                                        <p class="text-teal-700">
-                                            {{ formatPrice(expectedRevenue) }}
-                                        </p>
-                                        <img
-                                            src="/assets/rs-green.svg"
-                                            alt=""
-                                            class="w-5 h-5"
-                                        />
-                                    </div>
-                                    <div>
-                                        <p class="text-xs text-slate-600 mt-2">
-                                            حصة المستثمرين: {{ percentage }}%
-                                        </p>
-                                        <div
-                                            class="flex justify-center items-center gap-1"
-                                        >
-                                            <p class="text-teal-700">
-                                                {{
-                                                    formatPrice(investorRevenue)
-                                                }}
-                                            </p>
-                                            <img
-                                                src="/assets/rs-green.svg"
-                                                alt=""
-                                                class="w-4 h-4"
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- cta button -->
-                            <button
-                                class="relative w-full py-2 px-8 text-teal-700 overflow-hidden bg-slate-50 rounded-full transition-all duration-400 ease-in-out hover:scale-100 hover:text-white before:absolute before:top-0 before:-right-full before:w-full before:h-full before:bg-gradient-to-r before:from-teal-400 before:to-teal-800 before:transition-all before:duration-500 before:ease-in-out before:z-[-1] before:rounded-full hover:before:right-0 border border-teal-700"
-                            >
-                                {{ buttonText }}
-                            </button>
-                        </div>
-                    </div>
+                <div v-if="currentView === 'cards'">
+                    <PropertiesCardsView :properties="properties" />
                 </div>
 
-                <!-- Map View Placeholder -->
-                <div
-                    v-else
-                    class="bg-white rounded-lg shadow-lg p-8 text-center min-h-[600px] flex items-center justify-center"
-                >
-                    <div>
-                        <i class="pi pi-map text-6xl text-slate-400 mb-4"></i>
-                        <h3 class="text-xl font-medium text-slate-700 mb-2">
-                            عرض الخريطة
-                        </h3>
-                        <p class="text-slate-500">
-                            سيتم إضافة عرض الخريطة هنا لاحقاً
-                        </p>
-                    </div>
-                </div>
+                <!-- Map View -->
+                <keep-alive>
+                    <PropertiesMapView
+                        v-if="currentView === 'map'"
+                        :properties="properties"
+                    />
+                </keep-alive>
 
                 <!-- Empty State for Cards -->
                 <div
@@ -352,9 +182,9 @@ const isFilterActive = () => {
                                 props.properties.from
                             }}</span>
                             إلى
-                            <span class="text-teal-600 font-bold text-lg"
-                                >{{ props.properties.to }}</span
-                            >
+                            <span class="text-teal-600 font-bold text-lg">{{
+                                props.properties.to
+                            }}</span>
                             من أصل {{ props.properties.total }} عقار
                         </p>
                     </div>
