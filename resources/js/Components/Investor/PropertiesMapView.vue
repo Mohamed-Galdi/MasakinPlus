@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, onBeforeUnmount, nextTick } from "vue";
+import { ref, onMounted, onBeforeUnmount, nextTick, watch } from "vue";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { gsap } from "gsap";
@@ -18,7 +18,6 @@ const activeProperty = ref(null);
 
 const formatPrice = (price) => parseFloat(price).toLocaleString("ar-SA");
 
-// Dummy investment data (to be replaced later)
 const dummyInvestment = {
     percentageFunded: 40,
     currentFunded: 40000,
@@ -27,10 +26,23 @@ const dummyInvestment = {
     expectedRevenue: 12000,
 };
 
+
 const initMap = () => {
     if (map.value) return;
 
     mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
+    if (!mapboxgl.accessToken) {
+        console.error("Mapbox token missing");
+        return;
+    }
+
+    if (mapboxgl.getRTLTextPluginStatus() === 'unavailable') {
+        mapboxgl.setRTLTextPlugin(
+            "https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.3.0/mapbox-gl-rtl-text.js",
+            null,
+            true
+        );
+    }
 
     map.value = new mapboxgl.Map({
         container: "map-view",
@@ -39,34 +51,42 @@ const initMap = () => {
         attributionControl: false,
     });
 
-    
-    mapboxgl.setRTLTextPlugin(
-        "https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.3.0/mapbox-gl-rtl-text.js",
-        null,
-        true
-    );
-
     map.value.setMaxBounds([
         [34.0, 16.0],
         [56.0, 33.0],
     ]);
 
+    map.value.on("load", () => {
+        addMarkers();
+    });
+
+    map.value.on("click", hidePopup);
+};
+
+const addMarkers = () => {
+    if (!map.value || !props.properties.length) return;
+
     const bounds = new mapboxgl.LngLatBounds();
 
     props.properties.forEach((property) => {
+        const lng = parseFloat(property.longitude);
+        const lat = parseFloat(property.latitude);
+        if (isNaN(lng) || isNaN(lat)) return;
+
         const el = document.createElement("div");
         el.innerHTML = `<img src="/assets/property-on-map.svg" alt="" class="w-8 h-8 hover:scale-125 ease-in-out duration-150">`;
         el.style.cursor = "pointer";
 
-        const marker = new mapboxgl.Marker({ element: el })
-            .setLngLat([property.longitude, property.latitude])
+        const markerEl = el.firstChild;
+
+        const marker = new mapboxgl.Marker({ element: markerEl })
+            .setLngLat([lng, lat])
             .addTo(map.value);
 
         markers.value.push({ marker, property });
+        bounds.extend([lng, lat]);
 
-        bounds.extend([property.longitude, property.latitude]);
-
-        el.addEventListener("click", (e) => {
+        markerEl.addEventListener("click", (e) => {
             e.stopPropagation();
             if (activeProperty.value?.id === property.id) {
                 hidePopup();
@@ -77,9 +97,7 @@ const initMap = () => {
         });
     });
 
-    map.value.on("click", hidePopup);
-
-    if (props.properties.length > 0) {
+    if (!bounds.isEmpty()) {
         map.value.fitBounds(bounds, { padding: 50, maxZoom: 15 });
     }
 };
@@ -146,9 +164,7 @@ const showPopup = (property, marker) => {
         <button class="popup-button relative w-full text-teal-700 overflow-hidden bg-slate-50 rounded-full transition-all duration-400 ease-in-out hover:scale-100 hover:text-white border border-teal-700">
           <a href="/investor/offers/${
               property.id
-          }" class="flex justify-center py-1 px-4">
-            إستكشف العقار
-          </a>
+          }" class="flex justify-center py-1 px-4">إستكشف العقار</a>
         </button>
       </div>
     </div>
@@ -163,7 +179,6 @@ const showPopup = (property, marker) => {
         .setHTML(popupContent)
         .addTo(map.value);
 
-    // Safe DOM binding via popup.getElement()
     nextTick(() => {
         const el = popup.value.getElement();
 
@@ -219,6 +234,7 @@ onMounted(() => {
 onBeforeUnmount(() => {
     if (map.value) map.value.remove();
     markers.value = [];
+    popup.value = null;
 });
 
 const resizeMap = () => {

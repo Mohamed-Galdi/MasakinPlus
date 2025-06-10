@@ -300,8 +300,8 @@ class InvestorPropertiesSeeder extends Seeder
                 'bathrooms' => $bathrooms,
                 'status' => $status,
                 'nightly_rent' => round(fake()->numberBetween(200, 1500) / 50) * 50,
-                'latitude' => fake()->randomFloat(4, 24.0, 26.0),
-                'longitude' => fake()->randomFloat(4, 45.0, 50.0),
+                'latitude' => fake()->randomFloat(6, 24.5, 25.0),
+                'longitude' => fake()->randomFloat(6, 46.5, 47.0),
             ];
 
             // Add investment-related fields only for OpenForInvestment status
