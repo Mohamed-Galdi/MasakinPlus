@@ -63,4 +63,9 @@ class Property extends Model
     {
         return $this->hasOne(InvestmentOffer::class);
     }
+
+    public function investments()
+    {
+        return $this->hasMany(Investment::class);
+    }
 }

@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 use App\Enums\UserType;
+use App\Models\User;
+use App\Models\Wallet;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -72,20 +74,21 @@ class UsersSeeder extends Seeder
         $hashedPassword = Hash::make('password123');
         $batchSize = 10;
         $users = [];
+        $allEmails = []; // Track all emails for wallet creation
 
         foreach ($userTypes as $type) {
             for ($i = 0; $i < 12; $i++) {
                 $firstName = $arabicFirstNames[array_rand($arabicFirstNames)];
                 $lastName = $arabicLastNames[array_rand($arabicLastNames)];
-                $fullName = $firstName.' '.$lastName;
+                $fullName = $firstName . ' ' . $lastName;
 
                 // Create unique email based on name and a random number
-                $emailName = Str::slug($firstName.$lastName.rand(100, 999), '');
-                $email = $emailName.'@example.com';
+                $emailName = Str::slug($firstName . $lastName . rand(100, 999), '');
+                $email = $emailName . '@example.com';
 
                 $createdAt = Carbon::now()->subDays(rand(1, 365));
 
-                $users[] = [
+                $userData = [
                     'name' => $fullName,
                     'email' => $email,
                     'email_verified_at' => Carbon::now(),
@@ -96,9 +99,12 @@ class UsersSeeder extends Seeder
                     'updated_at' => $createdAt,
                 ];
 
+                $users[] = $userData;
+                $allEmails[] = $email; // Store email for later wallet creation
+
                 // Insert in batches to improve performance
                 if (count($users) >= $batchSize) {
-                    DB::table('users')->insert($users);
+                    User::insert($users);
                     $users = [];
                 }
             }
@@ -106,7 +112,24 @@ class UsersSeeder extends Seeder
 
         // Insert any remaining users
         if (count($users) > 0) {
-            DB::table('users')->insert($users);
+            User::insert($users);
+        }
+
+        // Now create wallets for all the newly inserted users
+        $newUsers = User::whereIn('email', $allEmails)->get();
+
+        $wallets = $newUsers->map(function ($user) {
+            return [
+                'user_id' => $user->id,
+                'balance' => 0,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+        })->toArray();
+
+        // Bulk insert wallets
+        if (!empty($wallets)) {
+            Wallet::insert($wallets);
         }
     }
 }

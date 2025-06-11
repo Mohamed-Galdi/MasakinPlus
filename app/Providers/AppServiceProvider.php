@@ -14,6 +14,8 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
+use App\Models\User;
+use App\Observers\UserObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -22,7 +24,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        
     }
 
     /**
@@ -40,5 +42,6 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(Property::class, PropertyOwnerPolicy::class);
         Gate::policy(InvestmentRequest::class, InvestmentRequestPolicy::class);
         Gate::policy(InvestmentOffer::class, InvestmentOfferPolicy::class);
+        User::observe(UserObserver::class);
     }
 }

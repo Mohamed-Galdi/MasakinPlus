@@ -454,7 +454,7 @@ const totalWithdraws = computed(() => {
                 </template>
             </Card>
 
-            <!-- Quick Stats -->
+            <!-- Deposits Stats -->
             <Card class="shadow-sm">
                 <template #header>
                     <div
@@ -481,7 +481,7 @@ const totalWithdraws = computed(() => {
                 </template>
             </Card>
 
-            <!-- Quick Stats -->
+            <!-- Withdraws Stats -->
             <Card class="shadow-sm">
                 <template #header>
                     <div
