@@ -126,11 +126,6 @@ function clearFilters() {
 }
 // //////////////////////////////////////////////////////////////////////////////////////////////////
 
-// Helper functions
-const formatPrice = (price) => {
-    return parseFloat(price).toLocaleString("ar-SA");
-};
-
 // Define dynamic values
 const totalRequired = 90000; // Total investment required in SAR
 const currentFunded = 49000; // Current amount funded in SAR
@@ -229,7 +224,7 @@ const toggleFilter = () => {
                                 >
                                     <div class="flex items-start gap-1 text-sm">
                                         <p class="text-teal-700">
-                                            {{ formatPrice(currentFunded) }}
+                                            {{ $formatCurrency(currentFunded) }}
                                         </p>
                                         <img
                                             src="/assets/rs-green.svg"
@@ -267,7 +262,7 @@ const toggleFilter = () => {
                                     <div class="flex items-start gap-1">
                                         <p class="text-teal-700">
                                             {{
-                                                formatPrice(
+                                                $formatCurrency(
                                                     property.investment_required
                                                 )
                                             }}
@@ -285,7 +280,7 @@ const toggleFilter = () => {
                                     </p>
                                     <div class="flex items-start gap-1">
                                         <p class="text-teal-700">
-                                            {{ formatPrice(remaining) }}
+                                            {{ $formatCurrency(remaining) }}
                                         </p>
                                         <img
                                             src="/assets/rs-green.svg"
@@ -312,7 +307,7 @@ const toggleFilter = () => {
                                     class="flex items-center justify-center gap-1 text-3xl"
                                 >
                                     <p class="text-teal-700">
-                                        {{ formatPrice(expectedRevenue) }}
+                                        {{ $formatCurrency(expectedRevenue) }}
                                     </p>
                                     <img
                                         src="/assets/rs-green.svg"
@@ -328,7 +323,9 @@ const toggleFilter = () => {
                                         class="flex justify-center items-center gap-1"
                                     >
                                         <p class="text-teal-700">
-                                            {{ formatPrice(investorRevenue) }}
+                                            {{
+                                                $formatCurrency(investorRevenue)
+                                            }}
                                         </p>
                                         <img
                                             src="/assets/rs-green.svg"

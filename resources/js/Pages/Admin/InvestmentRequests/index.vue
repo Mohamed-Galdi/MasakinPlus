@@ -71,25 +71,13 @@ const resetFilters = () => {
     statusFilter.value = "";
 };
 // ########################################################################################## utils
-// Format date
-const formatDate = (dateString) => {
-    if (!dateString) return "";
-    const date = new Date(dateString);
-    return new Intl.DateTimeFormat("ar-SA", {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-        hour: "numeric",
-        minute: "numeric",
-    }).format(date);
-};
+
 
 // ############################################## View request details
 
 const viewRequestDetails = (id) => {
     router.get(route("admin.investment-requests.show", id), {});
 };
-
 </script>
 
 <template>
@@ -216,20 +204,28 @@ const viewRequestDetails = (id) => {
                     </template>
                 </Column>
 
-                <Column field="created_at" header="تاريخ  الطلب" class="w-[250px]">
+                <Column
+                    field="created_at"
+                    header="تاريخ  الطلب"
+                    class="w-[250px]"
+                >
                     <template #body="slotProps">
                         <div class="text-sm text-gray-600">
                             <i class="pi pi-calendar-plus ml-1"></i>
-                            {{ formatDate(slotProps.data.created_at) }}
+                            {{ $formatDate(slotProps.data.created_at) }}
                         </div>
                     </template>
                 </Column>
 
-                <Column field="created_at" header="  آخر تعديل" class="w-[250px]">
+                <Column
+                    field="created_at"
+                    header="  آخر تعديل"
+                    class="w-[250px]"
+                >
                     <template #body="slotProps">
                         <div class="text-sm text-gray-600">
                             <i class="pi pi-calendar-plus ml-1"></i>
-                            {{ formatDate(slotProps.data.updated_at) }}
+                            {{ $formatDate(slotProps.data.updated_at) }}
                         </div>
                     </template>
                 </Column>

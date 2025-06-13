@@ -73,16 +73,6 @@ const clearFilters = () => {
     statusFilter.value = "";
 };
 
-// Check if any filter is active
-const isFilterActive = () => {
-    return typeFilter.value !== "" || statusFilter.value !== "";
-};
-
-// Format price with commas
-const formatPrice = (price) => {
-    return parseFloat(price).toLocaleString("ar-SA");
-};
-
 // Transform property images to Galleria format
 const getGalleriaImages = (propertyImages) => {
     if (!propertyImages || propertyImages.length === 0) {
@@ -290,7 +280,7 @@ const textHelpers = useTextHelpers();
                                     لم يحدد بعد
                                 </template>
                                 <template v-else>
-                                    {{ formatPrice(property.nightly_rent) }}
+                                    {{ $formatCurrency(property.nightly_rent) }}
                                     ريال
                                 </template>
                             </p>

@@ -66,18 +66,6 @@ const resetFilters = () => {
 };
 
 // ########################################################################################## utils
-// Format date
-const formatDate = (dateString) => {
-    if (!dateString) return "";
-    const date = new Date(dateString);
-    return new Intl.DateTimeFormat("ar-SA", {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-        hour: "numeric",
-        minute: "numeric",
-    }).format(date);
-};
 
 // Get last message content (for description in table)
 const getLastMessageContent = (ticket) => {
@@ -290,7 +278,7 @@ const sendReply = () => {
                                 'p-4 rounded-lg max-w-[75%] animate-fade-in',
                                 message.sender === 'admin'
                                     ? 'bg-gray-100 text-gray-900 self-end'
-                                    :'bg-teal-50 text-teal-900 self-start' ,
+                                    : 'bg-teal-50 text-teal-900 self-start',
                             ]"
                         >
                             <p class="text-sm font-medium mb-1">
@@ -369,8 +357,6 @@ const sendReply = () => {
 
         <!-- Main Content -->
         <div class="flex flex-col md:flex-row gap-6">
-            
-
             <!-- Right Content Area -->
             <div class="md:w-3/4 w-full">
                 <!-- Filters Section -->
@@ -502,7 +488,7 @@ const sendReply = () => {
                             <template #body="slotProps">
                                 <div class="text-sm">
                                     <i class="pi pi-calendar ml-1"></i>
-                                    {{ formatDate(slotProps.data.created_at) }}
+                                    {{ $formatDate(slotProps.data.created_at) }}
                                 </div>
                             </template>
                         </Column>
@@ -516,7 +502,7 @@ const sendReply = () => {
                                 <div class="text-sm">
                                     <i class="pi pi-clock ml-1"></i>
                                     {{
-                                        formatDate(
+                                        $formatDate(
                                             slotProps.data.last_message_at
                                         )
                                     }}

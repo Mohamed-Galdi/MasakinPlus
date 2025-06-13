@@ -397,16 +397,7 @@ const getActivityIconClass = (type) => {
     }
 };
 
-// Format date
-const formatDate = (dateString) => {
-    if (!dateString) return "";
-    const date = new Date(dateString);
-    return new Intl.DateTimeFormat("ar-SA", {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-    }).format(date);
-};
+
 </script>
 
 <template>

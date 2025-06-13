@@ -86,18 +86,6 @@ const resetFilters = () => {
 };
 
 // ########################################################################################## utils
-// Format date
-const formatDate = (dateString) => {
-    if (!dateString) return "";
-    const date = new Date(dateString);
-    return new Intl.DateTimeFormat("ar-SA", {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-        hour: "numeric",
-        minute: "numeric",
-    }).format(date);
-};
 
 // User Type
 const getUserTypeArabic = (type) => {
@@ -594,7 +582,7 @@ const sendReply = () => {
                     <template #body="slotProps">
                         <div class="text-sm">
                             <i class="pi pi-calendar ml-1"></i>
-                            {{ formatDate(slotProps.data.created_at) }}
+                            {{ $formatDate(slotProps.data.created_at) }}
                         </div>
                     </template>
                 </Column>
@@ -607,7 +595,7 @@ const sendReply = () => {
                     <template #body="slotProps">
                         <div class="text-sm">
                             <i class="pi pi-clock ml-1"></i>
-                            {{ formatDate(slotProps.data.last_message_at) }}
+                            {{ $formatDate(slotProps.data.last_message_at) }}
                         </div>
                     </template>
                 </Column>

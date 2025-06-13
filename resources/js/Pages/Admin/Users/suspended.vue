@@ -89,17 +89,6 @@ const getTypeSeverity = (type) => {
     }
 };
 
-// Function to format date
-const formatDate = (dateString) => {
-    if (!dateString) return "";
-    const date = new Date(dateString);
-    return new Intl.DateTimeFormat("ar-SA", {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-    }).format(date);
-};
-
 // Function to get user type in Arabic
 const getUserTypeArabic = (type) => {
     switch (type) {
@@ -128,7 +117,7 @@ const viewUser = (user) => {
             title="المستخدمين المحضورين"
             subtitle=" إدارة حسابات المستخدمين في النظام"
         >
-             <Link
+            <Link
                 :href="route('admin.users.index')"
                 class="btn bg-slate-200 hover:bg-slate-100 text-slate-800"
             >
@@ -271,7 +260,7 @@ const viewUser = (user) => {
                     <template #body="slotProps">
                         <div class="text-sm text-gray-600">
                             <i class="pi pi-calendar-plus ml-1"></i>
-                            {{ formatDate(slotProps.data.created_at) }}
+                            {{ $formatDate(slotProps.data.created_at) }}
                         </div>
                     </template>
                 </Column>
@@ -280,10 +269,7 @@ const viewUser = (user) => {
                         <div class="text-sm text-red-600 flex gap-1">
                             <i class="pi pi-ban"></i>
                             <p class>
-                                {{
-                                    formatDate(slotProps.data.suspended_at) ||
-                                    "--"
-                                }}
+                                {{ slotProps.data.suspended_at ? $formatDate(slotProps.data.suspended_at) : '--' }}
                             </p>
                         </div>
                     </template>

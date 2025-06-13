@@ -50,17 +50,6 @@ const getTypeSeverity = (type) => {
     }
 };
 
-// Function to format date
-const formatDate = (dateString) => {
-    if (!dateString) return "";
-    const date = new Date(dateString);
-    return new Intl.DateTimeFormat("ar-SA", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-    }).format(date);
-};
-
 // Function to get user type in Arabic
 const getUserTypeArabic = (type) => {
     switch (type) {
@@ -306,7 +295,7 @@ const sendTicket = () => {
 
         <!-- Header Section -->
         <Header icon="pi-user" :title="user.name" :subtitle="user.email">
-             <Link
+            <Link
                 :href="route('admin.users.index')"
                 class="btn bg-slate-200 hover:bg-slate-100 text-slate-800"
             >
@@ -458,7 +447,7 @@ const sendTicket = () => {
                                     >تاريخ التسجيل</span
                                 >
                                 <span class="text-sm">{{
-                                    formatDate(user.created_at)
+                                    $formatDate(user.created_at)
                                 }}</span>
                             </div>
                         </div>
@@ -471,7 +460,7 @@ const sendTicket = () => {
                                 >
                                 <span class="text-sm">{{
                                     user.updated_at
-                                        ? formatDate(user.updated_at)
+                                        ? $formatDate(user.updated_at)
                                         : "لم يتم التحديث"
                                 }}</span>
                             </div>
@@ -485,7 +474,7 @@ const sendTicket = () => {
                                 >
                                 <span class="text-sm">{{
                                     user.email_verified_at
-                                        ? formatDate(user.email_verified_at)
+                                        ? $formatDate(user.email_verified_at)
                                         : "غير متحقق"
                                 }}</span>
                             </div>
@@ -578,7 +567,7 @@ const sendTicket = () => {
                                             تاريخ التعليق
                                         </h4>
                                         <p class="text-sm text-red-600 m-0">
-                                            {{ formatDate(user.suspended_at) }}
+                                            {{ $formatDate(user.suspended_at) }}
                                         </p>
                                     </div>
                                 </div>

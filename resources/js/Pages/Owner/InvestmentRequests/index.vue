@@ -101,24 +101,6 @@ const submitCreateRequest = () => {
 const viewRequestDetails = (request) => {
     router.get(route("owner.investment-requests.show", request.id), {});
 };
-
-// ########################################################################################## utils
-// Format currency
-const formatPrice = (price) => {
-    return parseFloat(price).toLocaleString("ar-SA");
-};
-// Format date
-const formatDate = (dateString) => {
-    if (!dateString) return "";
-    const date = new Date(dateString);
-    return new Intl.DateTimeFormat("ar-SA", {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-        hour: "numeric",
-        minute: "numeric",
-    }).format(date);
-};
 </script>
 
 <template>
@@ -373,7 +355,7 @@ const formatDate = (dateString) => {
                     <template #body="slotProps">
                         <div class="text-sm">
                             <i class="pi pi-calendar ml-1"></i>
-                            {{ formatDate(slotProps.data.created_at) }}
+                            {{ $formatDate(slotProps.data.created_at) }}
                         </div>
                     </template>
                 </Column>
@@ -385,7 +367,7 @@ const formatDate = (dateString) => {
                     <template #body="slotProps">
                         <div class="text-sm">
                             <i class="pi pi-calendar ml-1"></i>
-                            {{ formatDate(slotProps.data.updated_at) }}
+                            {{ $formatDate(slotProps.data.updated_at) }}
                         </div>
                     </template>
                 </Column>

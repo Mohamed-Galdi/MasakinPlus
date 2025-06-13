@@ -16,7 +16,6 @@ const markers = ref([]);
 const popup = ref(null);
 const activeProperty = ref(null);
 
-const formatPrice = (price) => parseFloat(price).toLocaleString("ar-SA");
 
 const dummyInvestment = {
     percentageFunded: 40,
@@ -25,7 +24,6 @@ const dummyInvestment = {
     remaining: 60000,
     expectedRevenue: 12000,
 };
-
 
 const initMap = () => {
     if (map.value) return;
@@ -36,7 +34,7 @@ const initMap = () => {
         return;
     }
 
-    if (mapboxgl.getRTLTextPluginStatus() === 'unavailable') {
+    if (mapboxgl.getRTLTextPluginStatus() === "unavailable") {
         mapboxgl.setRTLTextPlugin(
             "https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.3.0/mapbox-gl-rtl-text.js",
             null,
@@ -133,7 +131,7 @@ const showPopup = (property, marker) => {
                 90 - percentageFunded
             }%;">
               <div class="flex items-start gap-1 text-sm">
-                <p class="text-teal-700">${formatPrice(currentFunded)}</p>
+                <p class="text-teal-700">${currentFunded}</p>
                 <img src="/assets/rs-green.svg" alt="" class="w-4 h-4" />
               </div>
             </div>
@@ -145,11 +143,11 @@ const showPopup = (property, marker) => {
           </div>
           <div class="flex justify-between text-sm mt-1">
             <div class="flex items-start gap-1">
-              <p class="text-teal-700">${formatPrice(totalRequired)}</p>
+              <p class="text-teal-700">${totalRequired}</p>
               <img src="/assets/rs-green.svg" alt="" class="w-4 h-4" />
             </div>
             <div class="flex items-start gap-1">
-              <p class="text-teal-700">${formatPrice(remaining)}</p>
+              <p class="text-teal-700">${remaining}</p>
               <img src="/assets/rs-green.svg" alt="" class="w-4 h-4" />
             </div>
           </div>
@@ -157,7 +155,7 @@ const showPopup = (property, marker) => {
         <div class="flex items-center gap-2">
           <p class="text-xs text-slate-600">مداخل العقار المتوقعة (شهريا):</p>
           <div class="flex items-center justify-center gap-1 text-xl">
-            <p class="text-teal-700">${formatPrice(expectedRevenue)}</p>
+            <p class="text-teal-700">${expectedRevenue}</p>
             <img src="/assets/rs-green.svg" alt="" class="w-4 h-4" />
           </div>
         </div>

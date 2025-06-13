@@ -78,7 +78,6 @@ const AcceptOffer = () => {
                         setTimeout(() => {
                             router.visit(window.location.href);
                         }, 1000);
-                        
                     },
                     onError: (errors) => {
                         toast.add({
@@ -136,24 +135,6 @@ const RejectOffer = () => {
             );
         },
     });
-};
-
-// ########################################################################################## utils
-// Format currency
-const formatPrice = (price) => {
-    return parseFloat(price).toLocaleString("ar-SA");
-};
-// Format date
-const formatDate = (dateString) => {
-    if (!dateString) return "";
-    const date = new Date(dateString);
-    return new Intl.DateTimeFormat("ar-SA", {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-        hour: "numeric",
-        minute: "numeric",
-    }).format(date);
 };
 </script>
 
@@ -322,7 +303,7 @@ const formatDate = (dateString) => {
                         </div>
                         <p class="text-gray-500 text-sm">
                             تم إنشاء الطلب في
-                            {{ formatDate(investmentRequest.created_at) }}
+                            {{ $formatDate(investmentRequest.created_at) }}
                         </p>
                     </div>
 
@@ -333,7 +314,7 @@ const formatDate = (dateString) => {
                             </p>
                             <p class="text-xl font-bold text-teal-700">
                                 {{
-                                    formatPrice(
+                                    $formatCurrency(
                                         investmentRequest.suggested_valuation
                                     )
                                 }}
@@ -346,7 +327,7 @@ const formatDate = (dateString) => {
                             </p>
                             <p class="text-xl font-bold text-teal-700">
                                 {{
-                                    formatPrice(
+                                    $formatCurrency(
                                         investmentRequest.suggested_investment_amount
                                     )
                                 }}
@@ -359,7 +340,7 @@ const formatDate = (dateString) => {
                             </p>
                             <p class="text-xl font-bold text-teal-700">
                                 {{
-                                    formatPrice(
+                                    $formatCurrency(
                                         investmentRequest.suggested_monthly_operating_cost
                                     )
                                 }}
@@ -373,7 +354,7 @@ const formatDate = (dateString) => {
                             </p>
                             <p class="text-xl font-bold text-teal-700">
                                 {{
-                                    formatPrice(
+                                    $formatCurrency(
                                         investmentRequest.suggested_nightly_rent
                                     )
                                 }}
@@ -404,7 +385,7 @@ const formatDate = (dateString) => {
                         <span class="font-medium text-slate-700"
                             >تاريخ الإنشاء:</span
                         >
-                        {{ formatDate(investmentOffer.created_at) }}
+                        {{ $formatDate(investmentOffer.created_at) }}
                     </p>
                 </div>
                 <!-- Empty state -->
@@ -435,7 +416,7 @@ const formatDate = (dateString) => {
                             <p class="text-sm text-slate-600">قيمة العقار</p>
                             <p class="text-lg font-semibold text-teal-800">
                                 {{
-                                    formatPrice(
+                                    $formatCurrency(
                                         investmentOffer.suggested_valuation
                                     )
                                 }}
@@ -446,7 +427,7 @@ const formatDate = (dateString) => {
                             <p class="text-sm text-slate-600">قيمة الاستثمار</p>
                             <p class="text-lg font-semibold text-teal-800">
                                 {{
-                                    formatPrice(
+                                    $formatCurrency(
                                         investmentOffer.suggested_investment_amount
                                     )
                                 }}
@@ -457,7 +438,7 @@ const formatDate = (dateString) => {
                             <p class="text-sm text-slate-600">التشغيل الشهري</p>
                             <p class="text-lg font-semibold text-teal-800">
                                 {{
-                                    formatPrice(
+                                    $formatCurrency(
                                         investmentOffer.suggested_monthly_operating_cost
                                     )
                                 }}
@@ -468,7 +449,7 @@ const formatDate = (dateString) => {
                             <p class="text-sm text-slate-600">الإيجار اليومي</p>
                             <p class="text-lg font-semibold text-teal-800">
                                 {{
-                                    formatPrice(
+                                    $formatCurrency(
                                         investmentOffer.suggested_nightly_rent
                                     )
                                 }}
@@ -565,7 +546,7 @@ const formatDate = (dateString) => {
                             <span class="font-Bein text-white">
                                 :
                                 {{
-                                    formatDate(investmentRequest.updated_at)
+                                    $formatDate(investmentRequest.updated_at)
                                 }}</span
                             >
                         </p>

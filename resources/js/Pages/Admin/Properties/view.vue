@@ -45,27 +45,6 @@ const getGalleriaImages = (images) => {
         alt: `Property image ${image.order}`,
     }));
 };
-
-// Format date
-const formatDate = (dateString) => {
-    if (!dateString) return "";
-    const date = new Date(dateString);
-    return new Intl.DateTimeFormat("ar-SA", {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-        hour: "numeric",
-        minute: "numeric",
-    }).format(date);
-};
-
-// Format price
-const formatPrice = (price) => {
-    return new Intl.NumberFormat("ar-SA", {
-        style: "currency",
-        currency: "SAR",
-    }).format(price);
-};
 </script>
 
 <template>
@@ -244,7 +223,7 @@ const formatPrice = (price) => {
                                     تاريخ التسجيل
                                 </p>
                                 <p class="text-gray-700">
-                                    {{ formatDate(property.owner.created_at) }}
+                                    {{ $formatDate(property.owner.created_at) }}
                                 </p>
                             </div>
                             <div
@@ -305,7 +284,9 @@ const formatPrice = (price) => {
                                 <p class="text-lg text-emerald-600">
                                     {{
                                         property.nightly_rent !== null
-                                            ? formatPrice(property.nightly_rent)
+                                            ? $formatCurrency(
+                                                  property.nightly_rent
+                                              )
                                             : "لم يحدد بعد"
                                     }}
                                 </p>
@@ -315,7 +296,7 @@ const formatPrice = (price) => {
                                     تاريخ الإضافة
                                 </p>
                                 <p class="text-lg">
-                                    {{ formatDate(property.created_at) }}
+                                    {{ $formatDate(property.created_at) }}
                                 </p>
                             </div>
                             <div class="col-span-2">
@@ -344,7 +325,10 @@ const formatPrice = (price) => {
                         </div>
                         <div class="flex flex-wrap gap-2">
                             <div
-                                v-for="amenity in property.amenities.slice(0, 3)"
+                                v-for="amenity in property.amenities.slice(
+                                    0,
+                                    3
+                                )"
                                 :key="amenity.id"
                                 class="bg-gray-100 text-gray-700 text-xs px-2 py-2 rounded-full flex items-center gap-1 w-fit"
                             >
