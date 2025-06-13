@@ -16,4 +16,12 @@ enum TxStatus: string
             self::Failed => 'فشل',
         };
     }
+    public function severity(): string
+    {
+        return match ($this) {
+            self::Pending => 'info',
+            self::Completed => 'success',
+            self::Failed => 'danger',
+        };
+    }
 }

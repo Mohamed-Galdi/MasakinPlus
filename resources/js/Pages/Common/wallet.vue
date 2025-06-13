@@ -1,13 +1,10 @@
 <script setup>
-import { ref, computed, watch } from "vue";
+import { ref } from "vue";
 import DynamicLayout from "@/Layouts/DynamicLayout.vue";
-import { Link, router, usePage } from "@inertiajs/vue3";
-import { debounce } from "lodash";
+import { Link } from "@inertiajs/vue3";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import Button from "primevue/button";
-import InputText from "primevue/inputtext";
-import Select from "primevue/select";
 import Dialog from "primevue/dialog";
 import InputNumber from "primevue/inputnumber";
 import { useForm } from "@inertiajs/vue3";
@@ -17,7 +14,6 @@ import Card from "primevue/card";
 import FloatLabel from "primevue/floatlabel";
 import Badge from "primevue/badge";
 import Divider from "primevue/divider";
-import DatePicker from "primevue/datepicker";
 import Header from "@/Components/Header.vue";
 import MoyasarPaymentForm from "@/Components/MoyasarPaymentForm.vue";
 
@@ -32,188 +28,28 @@ const props = defineProps({
     },
     transactions: {
         type: Object,
-        default: () => ({
-            data: [],
-            links: [],
-            from: 1,
-            to: 1,
-            total: 0,
-        }),
+        required: false,
     },
-    search: {
-        type: String,
-        default: "",
-    },
-    dateRange: {
-        type: Array,
-        default: () => [],
-    },
-    transactionType: {
-        type: String,
-        default: "",
-    },
+    money_in: {},
+    money_out:  {},
 });
 
 const toast = useToast();
 
-// ########################################################################################## Filters
-const search = ref(props.search);
-const dateRange = ref(props.dateRange);
-const transactionType = ref(props.transactionType);
-
-const transactionTypes = ref([
-    { label: "الكل", value: "" },
-    { label: "إيداع", value: "deposit" },
-    { label: "سحب", value: "withdraw" },
-    { label: "تحويل", value: "transfer" },
-]);
-
-watch(
-    [search, dateRange, transactionType],
-    debounce(([searchValue, dateRangeValue, typeValue]) => {
-        router.get(
-            route("wallet.index"),
-            {
-                search: searchValue,
-                dateRange: dateRangeValue,
-                transactionType: typeValue,
-            },
-            {
-                preserveState: true,
-                preserveScroll: true,
-            }
-        );
-    }, 500)
-);
-
-// Reset filters
-const resetFilters = () => {
-    search.value = "";
-    dateRange.value = [];
-    transactionType.value = "";
-};
-
-// ########################################################################################## Utils
-// Format currency
-const formatCurrency = (amount) => {
-    return new Intl.NumberFormat("ar-SA", {
-        style: "currency",
-        currency: "SAR",
-    }).format(amount);
-};
-
-// Format date
-const formatDate = (dateString) => {
-    if (!dateString) return "";
-    const date = new Date(dateString);
-    return new Intl.DateTimeFormat("ar-SA", {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-        hour: "numeric",
-        minute: "numeric",
-    }).format(date);
-};
-
-// Get transaction type in Arabic
-const getTransactionTypeArabic = (type) => {
-    switch (type) {
-        case "deposit":
-            return "إيداع";
-        case "withdraw":
-            return "سحب";
-        case "transfer":
-            return "تحويل";
-        default:
-            return type;
-    }
-};
-
-// Get transaction status
-const getTransactionStatus = (status) => {
-    switch (status) {
-        case "completed":
-            return "مكتمل";
-        case "pending":
-            return "قيد المعالجة";
-        case "failed":
-            return "فشل";
-        default:
-            return status;
-    }
-};
-
-// Get transaction status severity
-const getStatusSeverity = (status) => {
-    switch (status) {
-        case "completed":
-            return "success";
-        case "pending":
-            return "warning";
-        case "failed":
-            return "danger";
-        default:
-            return "info";
-    }
-};
-
-// Get transaction icon
-const getTransactionIcon = (type) => {
-    switch (type) {
-        case "deposit":
-            return "pi pi-arrow-down";
-        case "withdraw":
-            return "pi pi-arrow-up";
-        case "transfer":
-            return "pi pi-exchange";
-        default:
-            return "pi pi-circle";
-    }
-};
-
-// Get transaction amount class
-const getAmountClass = (type) => {
-    switch (type) {
-        case "deposit":
-            return "text-green-600";
-        case "withdraw":
-            return "text-red-600";
-        case "transfer":
-            return "text-blue-600";
-        default:
-            return "";
-    }
-};
-
 // ########################################################################################## Deposit Dialog
 const showDepositDialog = ref(false);
 const showPaymentDialog = ref(false);
-const selectedMethodLabel = computed(() => {
-    return (
-        paymentMethods.value.find((m) => m.value === depositForm.payment_method)
-            ?.label || ""
-    );
-});
 
-const callbackUrl = route("wallet.index");
-console.log(callbackUrl);
 const depositForm = useForm({
     amount: null,
-    payment_method: "credit_card",
 });
 
-const paymentMethods = ref([
-    { label: "بطاقة الائتمان", value: "creditcard" },
-    { label: "STC Pay", value: "stcpay" },
-    { label: "Apple Pay", value: "applepay" },
-]);
-
 const showPayment = () => {
-    if(depositForm.amount <= 10){
+    if (depositForm.amount < 100) {
         toast.add({
             severity: "error",
             summary: "خطأ",
-            detail: "المبلغ المطلوب للإيداع يجب أن يكون موجب على الأقل من 10 ريال",
+            detail: "المبلغ المطلوب للإيداع يجب أن يكون موجب على الأقل من 100 ريال",
             life: 3000,
         });
         return;
@@ -222,64 +58,6 @@ const showPayment = () => {
     showPaymentDialog.value = true;
     showDepositDialog.value = false;
 };
-
-// ########################################################################################## Withdraw Dialog
-const showWithdrawDialog = ref(false);
-const withdrawForm = useForm({
-    amount: null,
-    bank_account: "",
-});
-
-const submitWithdraw = () => {
-    withdrawForm.post(route("wallet.withdraw"), {
-        onSuccess: () => {
-            toast.add({
-                severity: "success",
-                summary: "نجاح",
-                detail: "تم إرسال طلب السحب بنجاح",
-                life: 3000,
-            });
-            showWithdrawDialog.value = false;
-            withdrawForm.reset();
-        },
-        onError: (errors) => {
-            const errorMessage = Object.values(errors)[0];
-            toast.add({
-                severity: "error",
-                summary: "خطأ",
-                detail: errorMessage,
-                life: 3000,
-            });
-        },
-    });
-};
-
-// ########################################################################################## Stats
-const pendingTransactions = computed(() => {
-    return props.transactions.data.filter(
-        (transaction) => transaction.status === "pending"
-    ).length;
-});
-
-const totalDeposits = computed(() => {
-    return props.transactions.data
-        .filter(
-            (transaction) =>
-                transaction.type === "deposit" &&
-                transaction.status === "completed"
-        )
-        .reduce((sum, transaction) => sum + transaction.amount, 0);
-});
-
-const totalWithdraws = computed(() => {
-    return props.transactions.data
-        .filter(
-            (transaction) =>
-                transaction.type === "withdraw" &&
-                transaction.status === "completed"
-        )
-        .reduce((sum, transaction) => sum + transaction.amount, 0);
-});
 </script>
 
 <template>
@@ -299,7 +77,7 @@ const totalWithdraws = computed(() => {
                     <InputNumber
                         id="amount"
                         v-model="depositForm.amount"
-                        :min="1"
+                        :min="100"
                         :minFractionDigits="2"
                         :maxFractionDigits="2"
                         class="w-full"
@@ -329,70 +107,9 @@ const totalWithdraws = computed(() => {
             <div class="p-4">
                 <MoyasarPaymentForm
                     :amount="depositForm.amount * 100"
-                    description="Balance deposit for User #123"
+                    description=" إداع في محفظة MasakinPlus"
                     callback-url="http://127.0.0.1:8000/user/wallet"
                 />
-            </div>
-        </Dialog>
-
-        <!-- Withdraw Dialog -->
-        <Dialog
-            v-model:visible="showWithdrawDialog"
-            modal
-            header="سحب رصيد"
-            :style="{ width: '450px' }"
-            :rtl="true"
-        >
-            <div class="p-4">
-                <form @submit.prevent="submitWithdraw" class="space-y-6">
-                    <div>
-                        <FloatLabel variant="on" class="w-full">
-                            <InputNumber
-                                id="withdraw_amount"
-                                v-model="withdrawForm.amount"
-                                :min="0"
-                                :max="450"
-                                :minFractionDigits="2"
-                                :maxFractionDigits="2"
-                                class="w-full"
-                                placeholder="0.00"
-                            />
-                            <label for="withdraw_amount">المبلغ</label>
-                        </FloatLabel>
-                        <small class="text-gray-500">
-                            الحد الأقصى للسحب:
-                            {{ formatCurrency(450) }}
-                        </small>
-                    </div>
-
-                    <div>
-                        <FloatLabel variant="on" class="w-full">
-                            <InputText
-                                id="bank_account"
-                                v-model="withdrawForm.bank_account"
-                                class="w-full"
-                            />
-                            <label for="bank_account">رقم الحساب البنكي</label>
-                        </FloatLabel>
-                    </div>
-
-                    <div class="flex justify-end gap-2">
-                        <Button
-                            type="button"
-                            label="إلغاء"
-                            icon="pi pi-times"
-                            outlined
-                            @click="showWithdrawDialog = false"
-                        />
-                        <Button
-                            type="submit"
-                            label="سحب"
-                            icon="pi pi-check"
-                            :loading="withdrawForm.processing"
-                            class="bg-teal-700 hover:bg-teal-800"
-                        />
-                    </div>
-                </form>
             </div>
         </Dialog>
 
@@ -423,9 +140,14 @@ const totalWithdraws = computed(() => {
                 <template #content>
                     <div class="text-center py-4">
                         <div class="text-3xl font-bold text-teal-800 mb-2">
-                            {{ formatCurrency(450) }}
+                            {{ $formatCurrency(wallet.balance) }}
                         </div>
-                        <div class="text-sm text-gray-500">آخر تحديث:</div>
+                        <div class="text-sm text-slate-700">
+                            آخر تحديث:
+                            <span class="text-slate-500">{{
+                                $formatDate(wallet.updated_at)
+                            }}</span>
+                        </div>
                     </div>
                     <div class="flex gap-2 mt-4">
                         <Button
@@ -441,7 +163,6 @@ const totalWithdraws = computed(() => {
                             class="flex-1"
                             outlined
                             :disabled="450 <= 0"
-                            @click="showWithdrawDialog = true"
                         />
                     </div>
                 </template>
@@ -465,7 +186,7 @@ const totalWithdraws = computed(() => {
                 <template #content>
                     <div class="text-center py-4">
                         <div class="text-2xl font-bold text-green-600 mb-2">
-                            {{ formatCurrency(totalDeposits) }}
+                            {{ $formatCurrency(money_in) }}
                         </div>
                         <div class="text-sm text-gray-500">
                             إجمالي الإيداعات المكتملة
@@ -491,8 +212,8 @@ const totalWithdraws = computed(() => {
                 </template>
                 <template #content>
                     <div class="text-center py-4">
-                        <div class="text-2xl font-bold text-red-600 mb-2">
-                            {{ formatCurrency(totalWithdraws) }}
+                        <div class="text-2xl font-bold text-yellow-500 mb-2">
+                            {{ $formatCurrency(money_out) }}
                         </div>
                         <div class="text-sm text-gray-500">
                             إجمالي المسحوبات المكتملة
@@ -515,65 +236,9 @@ const totalWithdraws = computed(() => {
                         class="pi pi-arrow-right-arrow-left text-gray-100"
                         style="font-size: 1.5rem"
                     ></i>
-                    <Badge
-                        v-if="pendingTransactions > 0"
-                        :value="pendingTransactions"
-                        severity="warning"
-                    ></Badge>
                 </div>
             </template>
             <template #content>
-                <!-- Filters -->
-                <div class="filter-section mb-4">
-                    <div class="flex flex-wrap items-center gap-4">
-                        <!-- Search -->
-                        <div class="search-container flex-1 min-w-[250px]">
-                            <span class="p-input-icon-right w-full">
-                                <InputText
-                                    v-model="search"
-                                    class="w-full rounded-lg border-gray-200"
-                                    placeholder="البحث في المعاملات..."
-                                />
-                            </span>
-                        </div>
-
-                        <!-- Date Range -->
-                        <div class="w-full md:w-auto">
-                            <DatePicker
-                                v-model="dateRange"
-                                selectionMode="range"
-                                placeholder="نطاق التاريخ"
-                                :showIcon="true"
-                                class="w-full md:w-auto"
-                                dir="rtl"
-                            />
-                        </div>
-
-                        <!-- Transaction Type -->
-                        <div class="w-full md:w-auto">
-                            <Select
-                                v-model="transactionType"
-                                :options="transactionTypes"
-                                optionLabel="label"
-                                optionValue="value"
-                                placeholder="نوع المعاملة"
-                                class="w-full md:w-auto"
-                            />
-                        </div>
-
-                        <!-- Reset Button -->
-                        <div>
-                            <Button
-                                icon="pi pi-filter-slash"
-                                label="إعادة ضبط"
-                                outlined
-                                severity="secondary"
-                                @click="resetFilters"
-                            />
-                        </div>
-                    </div>
-                </div>
-
                 <!-- Empty State -->
                 <div
                     v-if="props.transactions.data.length === 0"
@@ -627,18 +292,8 @@ const totalWithdraws = computed(() => {
                         >
                             <template #body="slotProps">
                                 <div class="flex items-center gap-2">
-                                    <i
-                                        :class="
-                                            getTransactionIcon(
-                                                slotProps.data.type
-                                            )
-                                        "
-                                    ></i>
-                                    <span>{{
-                                        getTransactionTypeArabic(
-                                            slotProps.data.type
-                                        )
-                                    }}</span>
+                                    <i :class="slotProps.data.type_icon"></i>
+                                    <span>{{ slotProps.data.type_label }}</span>
                                 </div>
                             </template>
                         </Column>
@@ -649,20 +304,18 @@ const totalWithdraws = computed(() => {
                             class="w-[150px]"
                         >
                             <template #body="slotProps">
-                                <span
-                                    :class="getAmountClass(slotProps.data.type)"
-                                >
-                                    {{
-                                        slotProps.data.type === "withdraw"
-                                            ? "-"
-                                            : "+"
-                                    }}
-                                    {{ formatCurrency(slotProps.data.amount) }}
+                                <span :class="slotProps.data.type_color">
+                                    {{ slotProps.data.type_sign }}
+                                    {{ $formatCurrency(slotProps.data.amount) }}
                                 </span>
                             </template>
                         </Column>
 
-                        <Column field="description" header="الوصف">
+                        <Column
+                            field="description"
+                            header="الوصف"
+                            class="w-[200px]"
+                        >
                             <template #body="slotProps">
                                 <div>{{ slotProps.data.description }}</div>
                             </template>
@@ -675,14 +328,8 @@ const totalWithdraws = computed(() => {
                         >
                             <template #body="slotProps">
                                 <Badge
-                                    :value="
-                                        getTransactionStatus(
-                                            slotProps.data.status
-                                        )
-                                    "
-                                    :severity="
-                                        getStatusSeverity(slotProps.data.status)
-                                    "
+                                    :value="slotProps.data.status_label"
+                                    :severity="slotProps.data.status_severity"
                                 />
                             </template>
                         </Column>
@@ -695,7 +342,7 @@ const totalWithdraws = computed(() => {
                             <template #body="slotProps">
                                 <div class="text-sm">
                                     <i class="pi pi-calendar ml-1"></i>
-                                    {{ formatDate(slotProps.data.created_at) }}
+                                    {{ $formatDate(slotProps.data.created_at) }}
                                 </div>
                             </template>
                         </Column>
