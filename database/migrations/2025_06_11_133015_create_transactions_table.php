@@ -19,7 +19,7 @@ return new class extends Migration
             $table->enum('type', array_column(TxType::cases(), 'value'));
             $table->decimal('amount', 15, 2); // positive = credit, negative = debit
             $table->enum('status', array_column(TxStatus::cases(), 'value'));
-            $table->morphs('source'); // source_type + source_id
+            $table->morphs('transactionable');
             $table->string('description')->nullable();
             $table->timestamps();
         });

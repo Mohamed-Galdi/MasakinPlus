@@ -14,6 +14,10 @@
         @routes
         @vite(['resources/js/app.js', "resources/js/Pages/{$page['component']}.vue"])
         @inertiaHead
+
+        {{-- moyasar --}}
+        <link rel="stylesheet" href="https://unpkg.com/moyasar-payment-form@2.0.11/dist/moyasar.css" />
+        <script src="https://unpkg.com/moyasar-payment-form@2.0.11/dist/moyasar.umd.js"></script>
     </head>
     <body class="font-sans antialiased">
         @inertia

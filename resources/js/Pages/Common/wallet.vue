@@ -19,6 +19,7 @@ import Badge from "primevue/badge";
 import Divider from "primevue/divider";
 import DatePicker from "primevue/datepicker";
 import Header from "@/Components/Header.vue";
+import MoyasarPaymentForm from "@/Components/MoyasarPaymentForm.vue";
 
 defineOptions({
     layout: DynamicLayout,
@@ -186,39 +187,40 @@ const getAmountClass = (type) => {
 
 // ########################################################################################## Deposit Dialog
 const showDepositDialog = ref(false);
+const showPaymentDialog = ref(false);
+const selectedMethodLabel = computed(() => {
+    return (
+        paymentMethods.value.find((m) => m.value === depositForm.payment_method)
+            ?.label || ""
+    );
+});
+
+const callbackUrl = route("wallet.index");
+console.log(callbackUrl);
 const depositForm = useForm({
     amount: null,
     payment_method: "credit_card",
 });
 
 const paymentMethods = ref([
-    { label: "بطاقة الائتمان", value: "credit_card" },
-    { label: "التحويل البنكي", value: "bank_transfer" },
-    { label: "المحفظة الإلكترونية", value: "e_wallet" },
+    { label: "بطاقة الائتمان", value: "creditcard" },
+    { label: "STC Pay", value: "stcpay" },
+    { label: "Apple Pay", value: "applepay" },
 ]);
 
-const submitDeposit = () => {
-    depositForm.post(route("wallet.deposit"), {
-        onSuccess: () => {
-            toast.add({
-                severity: "success",
-                summary: "نجاح",
-                detail: "تم إرسال طلب الإيداع بنجاح",
-                life: 3000,
-            });
-            showDepositDialog.value = false;
-            depositForm.reset();
-        },
-        onError: (errors) => {
-            const errorMessage = Object.values(errors)[0];
-            toast.add({
-                severity: "error",
-                summary: "خطأ",
-                detail: errorMessage,
-                life: 3000,
-            });
-        },
-    });
+const showPayment = () => {
+    if(depositForm.amount <= 10){
+        toast.add({
+            severity: "error",
+            summary: "خطأ",
+            detail: "المبلغ المطلوب للإيداع يجب أن يكون موجب على الأقل من 10 ريال",
+            life: 3000,
+        });
+        return;
+    }
+
+    showPaymentDialog.value = true;
+    showDepositDialog.value = false;
 };
 
 // ########################################################################################## Withdraw Dialog
@@ -289,57 +291,47 @@ const totalWithdraws = computed(() => {
             v-model:visible="showDepositDialog"
             modal
             header="إيداع رصيد"
-            :style="{ width: '450px' }"
+            :style="{ width: '40rem' }"
+            :rtl="true"
+        >
+            <div class="p-4 space-y-4">
+                <FloatLabel variant="on" class="w-full">
+                    <InputNumber
+                        id="amount"
+                        v-model="depositForm.amount"
+                        :min="1"
+                        :minFractionDigits="2"
+                        :maxFractionDigits="2"
+                        class="w-full"
+                        suffix=" ر.س"
+                    />
+                    <label for="amount">المبلغ</label>
+                </FloatLabel>
+                <Button
+                    @click="showPayment"
+                    label="الإنتقال للدفع "
+                    icon="pi pi-check"
+                    :loading="depositForm.processing"
+                    severity="success"
+                    class="w-full"
+                />
+            </div>
+        </Dialog>
+
+        <!-- Payment Dialog -->
+        <Dialog
+            v-model:visible="showPaymentDialog"
+            modal
+            header="إيداع رصيد"
+            :style="{ width: '40rem' }"
             :rtl="true"
         >
             <div class="p-4">
-                <form @submit.prevent="submitDeposit" class="space-y-6">
-                    <div>
-                        <FloatLabel variant="on" class="w-full">
-                            <InputNumber
-                                id="amount"
-                                v-model="depositForm.amount"
-                                :min="0"
-                                :minFractionDigits="2"
-                                :maxFractionDigits="2"
-                                class="w-full"
-                                placeholder="0.00"
-                            />
-                            <label for="amount">المبلغ</label>
-                        </FloatLabel>
-                    </div>
-
-                    <div>
-                        <FloatLabel variant="on" class="w-full">
-                            <Select
-                                id="payment_method"
-                                v-model="depositForm.payment_method"
-                                :options="paymentMethods"
-                                optionLabel="label"
-                                optionValue="value"
-                                class="w-full"
-                            />
-                            <label for="payment_method">طريقة الدفع</label>
-                        </FloatLabel>
-                    </div>
-
-                    <div class="flex justify-end gap-2">
-                        <Button
-                            type="button"
-                            label="إلغاء"
-                            icon="pi pi-times"
-                            outlined
-                            @click="showDepositDialog = false"
-                        />
-                        <Button
-                            type="submit"
-                            label="إيداع"
-                            icon="pi pi-check"
-                            :loading="depositForm.processing"
-                            class="bg-teal-700 hover:bg-teal-800"
-                        />
-                    </div>
-                </form>
+                <MoyasarPaymentForm
+                    :amount="depositForm.amount * 100"
+                    description="Balance deposit for User #123"
+                    callback-url="http://127.0.0.1:8000/user/wallet"
+                />
             </div>
         </Dialog>
 
@@ -441,6 +433,7 @@ const totalWithdraws = computed(() => {
                             icon="pi pi-arrow-up"
                             class="flex-1 bg-teal-700 hover:bg-teal-800"
                             @click="showDepositDialog = true"
+                            severity="success"
                         />
                         <Button
                             label="سحب"

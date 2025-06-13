@@ -15,6 +15,6 @@ class Deposit extends Model
 
     public function transaction()
     {
-        return $this->morphOne(Transaction::class, 'source');
+        return $this->morphOne(Transaction::class, 'transactionable');
     }
 }
