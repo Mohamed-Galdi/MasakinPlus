@@ -22,7 +22,7 @@ const navigationItems = ref([
     },
     {
         name: "إستثماراتي",
-        href: route("investor.investment.index"),
+        href: route("investor.investments.index"),
         icon: "fa-solid fa-house-circle-check",
     },
     {

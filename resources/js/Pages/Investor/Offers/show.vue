@@ -110,7 +110,7 @@ const toast = useToast();
 
 const invest = () => {
     router.post(
-        route("investor.investment.invest"),
+        route("investor.investments.invest"),
         {
             amount: investmentAmount.value,
             property_id: property.value.id,

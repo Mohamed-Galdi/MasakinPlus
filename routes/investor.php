@@ -15,9 +15,10 @@ Route::prefix('/investor')->middleware(['auth', 'investor'])->group(function () 
     });
 
     // Investment
-    Route::prefix('investment')->name('investor.investment.')->controller(InvestmentController::class)->group(function () {
+    Route::prefix('investment')->name('investor.investments.')->controller(InvestmentController::class)->group(function () {
         Route::get('/', 'index')->name('index');
         Route::post('/invest', 'invest')->name('invest');
+        Route::get('/{property}', 'show')->name('show');
 
     });
 
