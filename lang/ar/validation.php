@@ -276,6 +276,7 @@ return [
         'content.team.*.position' => 'المنصب',
         'content.team.*.image' => 'الصورة',
         'content.team.*.quote' => 'الاقتباس',  
+        'amount' => 'المبلغ',
     ],
 
 ];

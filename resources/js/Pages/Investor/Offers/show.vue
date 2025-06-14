@@ -1,11 +1,14 @@
 <script setup>
 import { ref, computed, watch } from "vue";
-import { Link } from "@inertiajs/vue3";
+import { router } from "@inertiajs/vue3";
 import InvestorLayout from "@/Layouts/InvestorLayout.vue";
 import Galleria from "primevue/galleria";
 import Slider from "primevue/slider";
 import PropertyMapView from "@/Components/PropertyMapView.vue";
 import Card from "primevue/card";
+import { usePage } from "@inertiajs/vue3";
+import { useToast } from "primevue/usetoast";
+import Toast from "primevue/toast";
 
 defineOptions({
     layout: InvestorLayout,
@@ -21,24 +24,13 @@ const props = defineProps({
 
 const property = ref(props.property);
 
-// Financial data
-const currentFunded = ref(54000); // Current amount funded in SAR
-const percentageFunded = computed(
-    () => (currentFunded.value / property.value.investment_required) * 100
-);
-const remaining = computed(
-    () => property.value.investment_required - currentFunded.value
-);
-
 // Investment input and slider
-const investmentAmount = ref(10000);
-const sliderValue = ref(10000);
-
+const investmentAmount = ref(0);
+const sliderValue = ref(1000);
 // Sync slider and input
 watch(sliderValue, (newValue) => {
     investmentAmount.value = newValue;
 });
-
 watch(investmentAmount, (newValue) => {
     // Ensure investment amount is within valid range
     if (newValue < 0) {
@@ -50,34 +42,22 @@ watch(investmentAmount, (newValue) => {
     sliderValue.value = investmentAmount.value;
 });
 
-// Investment validation
-const isInvestmentValid = computed(() => {
-    return (
-        investmentAmount.value >= 1000 &&
-        investmentAmount.value <= remaining.value
-    );
-});
-
-// Calculate expected monthly revenue (assuming 26 nights occupancy)
-const expectedRevenue = computed(() => property.value.nightly_rent * 26);
-
-// Calculate investor share
-const calculateInvestorShare = (revenue, share) => {
-    const percentage = (share * 100).toFixed(0);
-    const investorRevenue = (revenue * share).toFixed(2);
-    return { percentage, investorRevenue };
-};
-
-const { percentage, investorRevenue } = calculateInvestorShare(
-    expectedRevenue.value,
-    property.value.investor_share
+// Financial data
+const currentFunded = ref(property.value.total_funded);
+const percentageFunded = ref(property.value.percentage_funded);
+const remaining = ref(property.value.remaining_investment);
+const expectedRevenue = ref(property.value.expected_monthly_income);
+const percentage = ref(
+    parseFloat((property.value.investor_share * 100).toFixed(2))
 );
+const investorRevenue = ref(property.value.investors_monthly_share);
 
-// Calculate user's investment metrics
+// User's percentage (form 0 to 1)
 const userInvestmentPercentage = computed(
     () => investmentAmount.value / property.value.investment_required
 );
 
+// User's monthly earnings (ex: 5000 rs * 0.2(all investors share) * 0.5(user investment percentage))
 const userMonthlyEarnings = computed(
     () =>
         expectedRevenue.value *
@@ -85,6 +65,7 @@ const userMonthlyEarnings = computed(
         userInvestmentPercentage.value
 );
 
+// User's annual return
 const annualReturnPercentage = computed(() => {
     if (investmentAmount.value <= 0) return 0;
     return (
@@ -93,24 +74,19 @@ const annualReturnPercentage = computed(() => {
     ).toFixed(1);
 });
 
-// Calculate new funding progress after investment
+// Additional computed properties for the  progress bar
 const newTotalFunded = computed(
     () => currentFunded.value + investmentAmount.value
 );
-
 const newPercentageFunded = computed(
     () => (newTotalFunded.value / property.value.investment_required) * 100
 );
-
-// Additional computed properties for the  progress bar
 const investmentPercentage = computed(
     () => (investmentAmount.value / property.value.investment_required) * 100
 );
-
 const remainingAfterInvestment = computed(
     () => remaining.value - investmentAmount.value
 );
-
 const remainingPercentage = computed(
     () =>
         (remainingAfterInvestment.value / property.value.investment_required) *
@@ -124,9 +100,46 @@ const getGalleriaImages = (images) => {
         alt: `صورة العقار ${image.order}`,
     }));
 };
+const formatPrice = (price) => {
+    return parseFloat(price).toLocaleString("ar-SA");
+};
+
+// ///////////////////////////////////////////////////////////// Investment
+const page = usePage();
+const toast = useToast();
+
+const invest = () => {
+    router.post(
+        route("investor.investment.invest"),
+        {
+            amount: investmentAmount.value,
+            property_id: property.value.id,
+        },
+        {
+            onSuccess: () => {
+                toast.add({
+                    severity: "success",
+                    summary: "تم",
+                    detail: "تم استثمارك بنجاح",
+                    life: 3000,
+                });
+            },
+            onError: () => {
+                const firstError = Object.values(page.props.errors)[0];
+                toast.add({
+                    severity: "error",
+                    summary: "خطأ",
+                    detail: firstError,
+                    life: 3000,
+                });
+            },
+        }
+    );
+};
 </script>
 <template>
     <div class="max-w-7xl mx-auto">
+        <Toast position="top-center" />
         <!-- Main Content -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <!-- Left Column: Investment, Images, Map, Tabs -->
@@ -156,7 +169,7 @@ const getGalleriaImages = (images) => {
                                     class="text-xs bg-slate-100 text-teal-700 px-2 py-1 rounded-full"
                                 >
                                     المتبقي:
-                                    {{ $formatCurrency(remaining) }} ريال
+                                    {{ formatPrice(remaining) }} ريال
                                 </span>
                             </div>
 
@@ -196,7 +209,7 @@ const getGalleriaImages = (images) => {
                                 >
                                     <span>1,000</span>
                                     <span>{{
-                                        $formatCurrency(remaining)
+                                        formatPrice(remaining)
                                     }}</span>
                                 </div>
                             </div>
@@ -241,8 +254,7 @@ const getGalleriaImages = (images) => {
                                         class="absolute inset-0 flex items-center justify-center"
                                     >
                                         <span
-                                            v-if="newPercentageFunded > 15"
-                                            class="text-xs font-bold text-white"
+                                            class="text-xs font-bold text-slate-600 [text-shadow:_1px_1px_0_white,_-1px_-1px_0_white,_1px_-1px_0_white,_-1px_1px_0_white]"
                                         >
                                             {{
                                                 newPercentageFunded.toFixed(0)
@@ -283,7 +295,7 @@ const getGalleriaImages = (images) => {
                                     </div>
                                     <span class="font-semibold text-slate-700">
                                         {{
-                                            $formatCurrency(
+                                            formatPrice(
                                                 property.investment_required
                                             )
                                         }}
@@ -304,7 +316,7 @@ const getGalleriaImages = (images) => {
                                                 class="font-bold text-teal-700 text-lg"
                                             >
                                                 {{
-                                                    $formatCurrency(
+                                                    formatPrice(
                                                         currentFunded
                                                     )
                                                 }}
@@ -331,7 +343,7 @@ const getGalleriaImages = (images) => {
                                                 class="font-bold text-yellow-500 text-lg"
                                             >
                                                 {{
-                                                    $formatCurrency(
+                                                    formatPrice(
                                                         investmentAmount
                                                     )
                                                 }}
@@ -360,7 +372,7 @@ const getGalleriaImages = (images) => {
                                                 class="font-bold text-slate-600 text-lg"
                                             >
                                                 {{
-                                                    $formatCurrency(
+                                                    formatPrice(
                                                         remainingAfterInvestment
                                                     )
                                                 }}
@@ -406,7 +418,7 @@ const getGalleriaImages = (images) => {
                                             class="text-2xl font-bold text-green-700"
                                         >
                                             {{
-                                                $formatCurrency(
+                                                formatPrice(
                                                     Math.round(
                                                         userMonthlyEarnings
                                                     )
@@ -431,7 +443,7 @@ const getGalleriaImages = (images) => {
                                             class="text-2xl font-bold text-green-700"
                                         >
                                             {{
-                                                $formatCurrency(
+                                                formatPrice(
                                                     Math.round(
                                                         userMonthlyEarnings * 12
                                                     )
@@ -462,10 +474,10 @@ const getGalleriaImages = (images) => {
 
                         <!-- Investment Button -->
                         <button
+                            @click="invest"
                             class="w-full bg-gradient-to-r from-teal-600 to-teal-800 hover:from-teal-700 hover:to-teal-900 text-white font-bold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 text-lg"
-                            :disabled="!isInvestmentValid"
                         >
-                            استثمر {{ $formatCurrency(investmentAmount) }} ريال
+                            استثمر {{ formatPrice(investmentAmount) }} ريال
                         </button>
                     </div>
                 </div>
@@ -563,7 +575,7 @@ const getGalleriaImages = (images) => {
                                 <div class="flex items-center gap-1">
                                     <p class="font-semibold text-teal-800">
                                         {{
-                                            $formatCurrency(
+                                            formatPrice(
                                                 property.investment_required
                                             )
                                         }}
@@ -579,7 +591,7 @@ const getGalleriaImages = (images) => {
                                 <p class="text-xs text-slate-600">المتبقي</p>
                                 <div class="flex items-center gap-1">
                                     <p class="font-semibold text-teal-800">
-                                        {{ $formatCurrency(remaining) }}
+                                        {{ formatPrice(remaining) }}
                                     </p>
                                     <img
                                         src="/assets/rs-green.svg"
@@ -603,7 +615,7 @@ const getGalleriaImages = (images) => {
                                 <p
                                     class="text-3xl font-extrabold text-teal-800"
                                 >
-                                    {{ $formatCurrency(expectedRevenue) }}
+                                    {{ formatPrice(expectedRevenue) }}
                                 </p>
                                 <img
                                     src="/assets/rs-green.svg"
@@ -613,7 +625,7 @@ const getGalleriaImages = (images) => {
                             </div>
                             <p class="text-xs text-slate-600 mt-2">
                                 حصة المستثمرين: {{ percentage }}% ({{
-                                    $formatCurrency(investorRevenue)
+                                    formatPrice(investorRevenue)
                                 }}
                                 ريال)
                             </p>
@@ -630,7 +642,7 @@ const getGalleriaImages = (images) => {
                             </p>
                             <div class="flex items-center gap-1">
                                 <p class="text-sm font-medium text-teal-800">
-                                    {{ $formatCurrency(property.valuation) }}
+                                    {{ formatPrice(property.valuation) }}
                                 </p>
                                 <img
                                     src="/assets/rs-green.svg"
@@ -648,7 +660,7 @@ const getGalleriaImages = (images) => {
                             <div class="flex items-center gap-1">
                                 <p class="text-sm font-medium text-teal-800">
                                     {{
-                                        $formatCurrency(
+                                        formatPrice(
                                             property.monthly_operating_cost
                                         )
                                     }}
@@ -668,7 +680,7 @@ const getGalleriaImages = (images) => {
                             </p>
                             <div class="flex items-center gap-1">
                                 <p class="text-sm font-medium text-teal-800">
-                                    {{ $formatCurrency(property.nightly_rent) }}
+                                    {{ formatPrice(property.nightly_rent) }}
                                 </p>
                                 <img
                                     src="/assets/rs-green.svg"

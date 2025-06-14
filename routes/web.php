@@ -24,8 +24,10 @@ Route::get('/dashboard', function () {
 })->middleware(['auth'])->name('dashboard');
 
 Route::get('/test', function () {
-    $properties = Property::where('status', PropertyStatus::OpenForInvestment)->with('images', 'amenities')->paginate(1);
-    return inertia('Home/Test', compact('properties'));
+    $property = Property::with('images', 'amenities', 'investments')
+        ->where('id', '019769df-cbc5-7147-9af1-c682f41cbe4f')
+        ->first();
+    return inertia('Home/Test', compact('property'));
 })->name('test');
 
 require __DIR__ . '/auth.php';

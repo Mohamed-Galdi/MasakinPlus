@@ -34,6 +34,7 @@ return new class extends Migration
             $table->decimal('owner_share', 5, 2)->default(0.00); // Proportion of the owner (e.g., 0.60 for 60%)
             $table->decimal('investor_share', 5, 2)->default(0.00); // Proportion of the investors
             $table->decimal('platform_fee_share', 5, 2)->default(0.00); // Proportion of the platform
+            $table->integer('expected_occupancy')->default(28); // Expected occupancy
             $table->timestamps();
         });
     }

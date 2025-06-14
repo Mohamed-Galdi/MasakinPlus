@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, onBeforeUnmount, nextTick, watch } from "vue";
+import { ref, onMounted, onBeforeUnmount, nextTick } from "vue";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { gsap } from "gsap";
@@ -16,13 +16,8 @@ const markers = ref([]);
 const popup = ref(null);
 const activeProperty = ref(null);
 
-
-const dummyInvestment = {
-    percentageFunded: 40,
-    currentFunded: 40000,
-    totalRequired: 100000,
-    remaining: 60000,
-    expectedRevenue: 12000,
+const formatPrice = (price) => {
+    return parseFloat(price).toLocaleString("ar-SA");
 };
 
 const initMap = () => {
@@ -104,12 +99,12 @@ const showPopup = (property, marker) => {
     if (popup.value) popup.value.remove();
 
     const {
-        percentageFunded,
-        currentFunded,
-        totalRequired,
-        remaining,
-        expectedRevenue,
-    } = dummyInvestment;
+        percentage_funded,
+        total_funded,
+        investment_required,
+        remaining_investment,
+        expected_monthly_income,
+    } = property;
 
     const popupContent = `
     <div class="popup-card relative w-72 bg-white border-2 border-teal-800 rounded-lg overflow-hidden font-BeinNormal">
@@ -128,26 +123,26 @@ const showPopup = (property, marker) => {
         <div class="max-w-md mx-auto p-2">
           <div class="relative mb-1">
             <div class="absolute -top-4" style="left: ${
-                90 - percentageFunded
+                90 - percentage_funded
             }%;">
               <div class="flex items-start gap-1 text-sm">
-                <p class="text-teal-700">${currentFunded}</p>
+                <p class="text-teal-700">${formatPrice(total_funded)}</p>
                 <img src="/assets/rs-green.svg" alt="" class="w-4 h-4" />
               </div>
             </div>
           </div>
           <div class="relative h-4 rounded-full bg-slate-200 overflow-hidden">
-            <div class="h-full bg-gradient-to-l from-teal-800 to-teal-400 flex items-center justify-center" style="width: ${percentageFunded}%;">
-              <span class="text-xs font-bold text-white">${percentageFunded}%</span>
+            <div class="h-full bg-gradient-to-l from-teal-800 to-teal-400 flex items-center justify-center" style="width: ${percentage_funded}%;">
+              <span class="text-xs text-white">${(percentage_funded).toFixed(1)}%</span>
             </div>
           </div>
           <div class="flex justify-between text-sm mt-1">
             <div class="flex items-start gap-1">
-              <p class="text-teal-700">${totalRequired}</p>
+              <p class="text-teal-700">${formatPrice(investment_required)}</p>
               <img src="/assets/rs-green.svg" alt="" class="w-4 h-4" />
             </div>
             <div class="flex items-start gap-1">
-              <p class="text-teal-700">${remaining}</p>
+              <p class="text-teal-700">${formatPrice(remaining_investment)}</p>
               <img src="/assets/rs-green.svg" alt="" class="w-4 h-4" />
             </div>
           </div>
@@ -155,7 +150,7 @@ const showPopup = (property, marker) => {
         <div class="flex items-center gap-2">
           <p class="text-xs text-slate-600">مداخل العقار المتوقعة (شهريا):</p>
           <div class="flex items-center justify-center gap-1 text-xl">
-            <p class="text-teal-700">${expectedRevenue}</p>
+            <p class="text-teal-700">${formatPrice(expected_monthly_income)}</p>
             <img src="/assets/rs-green.svg" alt="" class="w-4 h-4" />
           </div>
         </div>

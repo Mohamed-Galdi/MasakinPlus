@@ -26,10 +26,10 @@ class OfferController extends Controller
 
         $typeOptions = Cache::remember('property_type_options', now()->addDays(7), fn() => PropertyType::options());
 
-        $baseQuery = Property::with('images', 'amenities')
+        $baseQuery = Property::with('images', 'amenities', 'investments')
             ->where('status', PropertyStatus::OpenForInvestment);
 
-        $mapProperties = $baseQuery->get(['id', 'latitude', 'longitude', 'title']);
+        $mapProperties = $baseQuery->get();
 
         $properties = $baseQuery->when($filters['typeFilter'] ?? null, fn($query, $typeFilter) =>
         $query->where('type', $typeFilter))

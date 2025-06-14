@@ -35,6 +35,7 @@ class OwnerPropertiesSeeder extends Seeder
 
             $data['latitude'] = fake()->latitude(16.5, 32.5);
             $data['longitude'] = fake()->longitude(34.5, 55.5);
+            $data['expected_occupancy'] = fake()->numberBetween(24, 29);
 
             $amenities = $data['amenities'];
             unset($data['amenities']);

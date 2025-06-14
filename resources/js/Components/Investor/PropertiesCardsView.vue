@@ -56,6 +56,9 @@ const props = defineProps({
 
 const toast = useToast();
 
+const formatPrice = (price) => {
+    return parseFloat(price).toLocaleString("ar-SA");
+};
 // //////////////////////////////////////////// Filters ////////////////////////////////////////////
 const typeOptions = ref(props.typeOptions);
 const cityFilter = ref(props.cityFilter);
@@ -124,28 +127,6 @@ function clearFilters() {
         isFilterOpen.value = false;
     }
 }
-// //////////////////////////////////////////////////////////////////////////////////////////////////
-
-// Define dynamic values
-const totalRequired = 90000; // Total investment required in SAR
-const currentFunded = 49000; // Current amount funded in SAR
-const percentageFunded = (currentFunded / totalRequired) * 100; // Percentage funded
-const remaining = totalRequired - currentFunded; // Remaining amount in SAR
-const expectedRevenue = 10000; // Expected monthly revenue in SAR
-const investorShare = 0.28; // Investor share percentage (28%)
-const buttonText = "استثمر الآن";
-
-const calculateInvestorShare = (revenue, share) => {
-    const percentage = (share * 100).toFixed(0); // Whole number percentage (e.g., 28)
-    const investorRevenue = (revenue * share).toFixed(2); // Two decimal places (e.g., 2800.00)
-    return { percentage, investorRevenue };
-};
-
-// // Calculate investor share values
-const { percentage, investorRevenue } = calculateInvestorShare(
-    expectedRevenue,
-    investorShare
-);
 
 // Filter on Mobile
 const isFilterOpen = ref(false);
@@ -219,12 +200,18 @@ const toggleFilter = () => {
                                 <div
                                     class="absolute -top-4"
                                     :style="{
-                                        left: `${90 - percentageFunded}%`,
+                                        left: `${
+                                            90 - property.percentage_funded
+                                        }%`,
                                     }"
                                 >
                                     <div class="flex items-start gap-1 text-sm">
                                         <p class="text-teal-700">
-                                            {{ $formatCurrency(currentFunded) }}
+                                            {{
+                                                formatPrice(
+                                                    property.total_funded
+                                                )
+                                            }}
                                         </p>
                                         <img
                                             src="/assets/rs-green.svg"
@@ -242,12 +229,14 @@ const toggleFilter = () => {
                                 <div
                                     class="h-full bg-gradient-to-l from-teal-800 to-teal-400 flex items-center justify-center"
                                     :style="{
-                                        width: `${percentageFunded}%`,
+                                        width: `${property.percentage_funded}%`,
                                     }"
                                 >
                                     <span class="text-xs font-bold text-white"
                                         >{{
-                                            percentageFunded.toFixed(0)
+                                            property.percentage_funded.toFixed(
+                                                0
+                                            )
                                         }}%</span
                                     >
                                 </div>
@@ -262,7 +251,7 @@ const toggleFilter = () => {
                                     <div class="flex items-start gap-1">
                                         <p class="text-teal-700">
                                             {{
-                                                $formatCurrency(
+                                                formatPrice(
                                                     property.investment_required
                                                 )
                                             }}
@@ -280,7 +269,11 @@ const toggleFilter = () => {
                                     </p>
                                     <div class="flex items-start gap-1">
                                         <p class="text-teal-700">
-                                            {{ $formatCurrency(remaining) }}
+                                            {{
+                                                formatPrice(
+                                                    property.remaining_investment
+                                                )
+                                            }}
                                         </p>
                                         <img
                                             src="/assets/rs-green.svg"
@@ -307,7 +300,11 @@ const toggleFilter = () => {
                                     class="flex items-center justify-center gap-1 text-3xl"
                                 >
                                     <p class="text-teal-700">
-                                        {{ $formatCurrency(expectedRevenue) }}
+                                        {{
+                                            formatPrice(
+                                                property.expected_monthly_income
+                                            )
+                                        }}
                                     </p>
                                     <img
                                         src="/assets/rs-green.svg"
@@ -317,14 +314,21 @@ const toggleFilter = () => {
                                 </div>
                                 <div>
                                     <p class="text-xs text-slate-600 mt-2">
-                                        حصة المستثمرين: {{ percentage }}%
+                                        حصة المستثمرين:
+                                        {{
+                                            (
+                                                property.investor_share * 100
+                                            ).toFixed(2)
+                                        }}%
                                     </p>
                                     <div
                                         class="flex justify-center items-center gap-1"
                                     >
                                         <p class="text-teal-700">
                                             {{
-                                                $formatCurrency(investorRevenue)
+                                                formatPrice(
+                                                    property.investors_monthly_share
+                                                )
                                             }}
                                         </p>
                                         <img
@@ -347,7 +351,7 @@ const toggleFilter = () => {
                                 "
                                 class="flex justify-center py-2 px-8"
                             >
-                                {{ buttonText }}
+                                استثمار الآن
                             </a>
                         </button>
                     </div>
