@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Investment;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -15,6 +16,7 @@ class DatabaseSeeder extends Seeder
             InvestorPropertiesSeeder::class,
             TicketSeeder::class,
             InvestmentRequestSeeder::class,
+            InvestmentSeeder::class,
             HomePageSeeder::class,
             AboutPageSeeder::class,
             PrivacyPageSeeder::class,
